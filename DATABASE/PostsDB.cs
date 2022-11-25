@@ -1,20 +1,51 @@
 using LOGIC;
+using Dapper;
+using MySqlConnector;
 namespace DATABASE;
-public class PostsDB : IData<Message>
+public class PostsDB : IData<Post>
 {
-    public int Create(Message obj)
+    public int Create(Post obj)
     {
-        throw new NotImplementedException();
+        int rowsEffected = 0;
+        string query = "";
+        using (MySqlConnection con = new MySqlConnection("connectionstring"))
+        {
+            rowsEffected = con.ExecuteScalar<int>(query, param: obj);
+        }
+        return rowsEffected;
     }
-    public int Delete(Message obj)
+    public int Delete(Post obj)
     {
-        throw new NotImplementedException();
+        int rowsEffected = 0;
+        string query = "";
+        using (MySqlConnection con = new MySqlConnection("connectionstring"))
+        {
+            rowsEffected = con.ExecuteScalar<int>(query, param: obj);
+        }
+        return rowsEffected;
     }
-    public List<Message> Get()
+    public List<Post> Get()
     {
-        throw new NotImplementedException();
+        List<Post> posts = new();
+        string query = "";
+        using (MySqlConnection con = new MySqlConnection("connectionstring"))
+        {
+            posts = con.Query<Post>(query).ToList();
+        }
+        return posts;
     }
-    public int Update(Message obj)
+    public int Update(Post obj)
+    {
+        int rowsEffected = 0;
+        string query = "";
+        using (MySqlConnection con = new MySqlConnection("connectionstring"))
+        {
+            rowsEffected = con.ExecuteScalar<int>(query, param: obj);
+        }
+        return rowsEffected; throw new NotImplementedException();
+    }
+
+    public Post GetById()
     {
         throw new NotImplementedException();
     }
