@@ -8,7 +8,8 @@ public class PostsDB : IData<Post>
     public int Create(Post obj)
     {
         int rowsEffected = 0;
-        string query = "";
+        string query = "INSERT INTO posts (content, users_id, posts_types_id) " +
+        "VALUES(@Content, @UserId, 1);";
         using (MySqlConnection con = new MySqlConnection("connectionstring"))
         {
             rowsEffected = con.ExecuteScalar<int>(query, param: obj);
@@ -18,7 +19,7 @@ public class PostsDB : IData<Post>
     public int Delete(Post obj)
     {
         int rowsEffected = 0;
-        string query = "";
+        string query = "DELETE FROM posts WHERE id = @Id;";
         using (MySqlConnection con = new MySqlConnection("connectionstring"))
         {
             rowsEffected = con.ExecuteScalar<int>(query, param: obj);
@@ -28,7 +29,8 @@ public class PostsDB : IData<Post>
     public List<Post> Get()
     {
         List<Post> posts = new();
-        string query = "";
+        string query = "SELECT id, content, date_created as 'DateCreated', users_id as 'UserId' " +
+        "FROM posts WHERE posts_types_id = 1;";
         using (MySqlConnection con = new MySqlConnection("connectionstring"))
         {
             posts = con.Query<Post>(query).ToList();
@@ -38,12 +40,12 @@ public class PostsDB : IData<Post>
     public int Update(Post obj)
     {
         int rowsEffected = 0;
-        string query = "";
+        string query = "UPDATE posts SET content = @Content WHERE id = @Id;";
         using (MySqlConnection con = new MySqlConnection("connectionstring"))
         {
             rowsEffected = con.ExecuteScalar<int>(query, param: obj);
         }
-        return rowsEffected; throw new NotImplementedException();
+        return rowsEffected; 
     }
     public Post GetById()
     {
