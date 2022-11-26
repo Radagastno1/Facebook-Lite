@@ -1,9 +1,9 @@
 namespace UI;
-
 public class UserPage
 {
     public void ShowUserOverView()
     {
+        //ska denna vara i main? som main menyn typ när man loggat in?
         string[] overviewOptions = new string[]
         { "[PUBLISH]","[SEARCH]","[CHAT]", "[MY PAGE]","[SETTINGS]" };
         int menuOptions = 0;
@@ -12,7 +12,7 @@ public class UserPage
             Console.Clear();
             for (int i = 0; i < overviewOptions.Length; i++)
             {
-                Console.WriteLine((i == menuOptions ? ">>" : "") + overviewOptions[i]);
+                Console.WriteLine((i == menuOptions ? "\t>>" : "\t") + overviewOptions[i]);
             }
             ConsoleKeyInfo keyPressed = Console.ReadKey();
 
