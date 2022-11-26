@@ -1,9 +1,9 @@
+using CORE;
 namespace UI;
-public class UserPage
+public class UserService
 {
     public void ShowUserOverView()
     {
-        //ska denna vara i main? som main menyn typ när man loggat in?
         string[] overviewOptions = new string[]
         { "[PUBLISH]","[SEARCH]","[CHAT]", "[MY PAGE]","[SETTINGS]" };
         int menuOptions = 0;
@@ -46,6 +46,18 @@ public class UserPage
                 }
             }
         }
+    }
 
+    public User UserSignUp()
+    {
+        string firstName = ConsoleInput.GetString("First name: ");
+        string lastName = ConsoleInput.GetString("Last name: ");
+        string email = ConsoleInput.GetEmail("Email: ");
+        string password = ConsoleInput.GetPassword("Password: ");
+        //validera date metod i consoleinput
+        string birthDate = ConsoleInput.GetString("Birthdate(YYYY-MM-DD): ");
+        //visa genders alternativ
+        User user = new(firstName, lastName, email, password, birthDate);
+        return user;
     }
 }

@@ -1,11 +1,30 @@
 {
   "version": 3,
   "targets": {
-    "net6.0": {}
+    "net6.0": {
+      "core/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/core.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "core/1.0.0": {
+      "type": "project",
+      "path": "../core/core.csproj",
+      "msbuildProject": "../core/core.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net6.0": []
+    "net6.0": [
+      "core >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\angel\\.nuget\\packages\\": {}
@@ -13,11 +32,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\UI\\UI.csproj",
+      "projectUniqueName": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\ui\\UI.csproj",
       "projectName": "UI",
-      "projectPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\UI\\UI.csproj",
+      "projectPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\ui\\UI.csproj",
       "packagesPath": "C:\\Users\\angel\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\UI\\obj\\",
+      "outputPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\ui\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\angel\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -33,7 +52,11 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\core\\core.csproj": {
+              "projectPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\core\\core.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

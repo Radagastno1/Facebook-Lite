@@ -1,0 +1,12 @@
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\core\bin\Debug\net6.0\core.deps.json
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\core\bin\Debug\net6.0\core.dll
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\core\bin\Debug\net6.0\core.pdb
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\core\obj\Debug\net6.0\core.csproj.AssemblyReference.cache
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\core\obj\Debug\net6.0\core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\core\obj\Debug\net6.0\core.AssemblyInfoInputs.cache
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\core\obj\Debug\net6.0\core.AssemblyInfo.cs
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\core\obj\Debug\net6.0\core.csproj.CoreCompileInputs.cache
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\core\obj\Debug\net6.0\core.dll
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\core\obj\Debug\net6.0\refint\core.dll
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\core\obj\Debug\net6.0\core.pdb
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\core\obj\Debug\net6.0\ref\core.dll

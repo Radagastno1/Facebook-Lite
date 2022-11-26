@@ -1,6 +1,6 @@
 using CORE;
 namespace LOGIC;
-public class UserManager : IManager<User>
+public class UserManager : IManager<User>, IManager<Post>
 {
     IData<User> _userData;
     IData<Post> _postData;
@@ -13,6 +13,10 @@ public class UserManager : IManager<User>
     //hämta mina medd - messagemanager
     //radera post - usermanager
     //radera medd - usermanager
+    int IManager<User>.Create(User obj)
+    {
+        throw new NotImplementedException();
+    }
     public List<User> GetBySearch(string search)
     {
          List<User> searchedUsers = new();
@@ -31,27 +35,43 @@ public class UserManager : IManager<User>
         {
             Console.WriteLine(e);
         }
-       
         return searchedUsers;
     }
-
     public User GetOne()
     {
         throw new NotImplementedException();
     }
-
     public int Remove(User user)
     {
         return _userData.Delete(user);
     }
-
     public User Update()
     {
         throw new NotImplementedException();
     }
 
-    public int Create(Post post)
+    int IManager<Post>.Create(Post obj)
     {
-        return _postData.Create(post);
+        throw new NotImplementedException();
+    }
+
+    List<Post> IManager<Post>.GetBySearch(string search)
+    {
+        throw new NotImplementedException();
+    }
+
+    int IManager<Post>.Remove(Post obj)
+    {
+        throw new NotImplementedException();
+    }
+
+    Post IManager<Post>.GetOne()
+    {
+        throw new NotImplementedException();
+    }
+
+    Post IManager<Post>.Update()
+    {
+        throw new NotImplementedException();
     }
 }

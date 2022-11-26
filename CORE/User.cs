@@ -7,11 +7,19 @@ public class User
     public string LastName { get; set; }
     public string Email { get; set; }
     public string PassWord { get; set; }
-    public DateOnly BirthDate { get; set; }
+    public string BirthDate { get; set; }
     public Genders Gender { get; private set; }
     public Roles Role { get; private set; }
     public string AboutMe { get; private set; }
     public User() { }
+    public User(string aFirstName, string aLastName, string aEmail, string aPassWord, string aBirthDate)
+    {
+        FirstName = aFirstName;
+        LastName = aLastName;
+        Email = aEmail;
+        PassWord = aPassWord;
+        BirthDate = aBirthDate;
+    }
     public void SetGender(int enumNumber)
     {
         if (Enum.IsDefined(typeof(Genders), enumNumber))

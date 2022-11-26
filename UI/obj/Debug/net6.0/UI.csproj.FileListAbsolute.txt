@@ -13,3 +13,6 @@ C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\ui\obj\Debu
 C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\ui\obj\Debug\net6.0\UI.pdb
 C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\ui\obj\Debug\net6.0\UI.genruntimeconfig.cache
 C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\ui\obj\Debug\net6.0\ref\UI.dll
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\ui\bin\Debug\net6.0\core.dll
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\ui\bin\Debug\net6.0\core.pdb
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\ui\obj\Debug\net6.0\UI.csproj.CopyComplete
