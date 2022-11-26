@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\logic\logic.csproj" />
+    <ProjectReference Include="..\core\core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

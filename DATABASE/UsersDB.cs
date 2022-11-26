@@ -1,4 +1,5 @@
 using LOGIC;
+using CORE;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
@@ -49,7 +50,6 @@ public class UsersDB : IData<User>
         }
         return rowsEffected;
     }
-
     public User GetById()
     {
         throw new NotImplementedException();

@@ -1,4 +1,4 @@
-namespace LOGIC;
+namespace CORE;
 public class User
 {
     public readonly int ID;

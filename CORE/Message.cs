@@ -1,4 +1,4 @@
-namespace LOGIC;
+namespace CORE;
 public class Message
 {
     public readonly int ID;

@@ -1,4 +1,5 @@
 using LOGIC;
+using CORE;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
@@ -44,7 +45,6 @@ public class PostsDB : IData<Post>
         }
         return rowsEffected; throw new NotImplementedException();
     }
-
     public Post GetById()
     {
         throw new NotImplementedException();

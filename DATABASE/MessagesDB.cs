@@ -1,4 +1,5 @@
 using LOGIC;
+using CORE;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
