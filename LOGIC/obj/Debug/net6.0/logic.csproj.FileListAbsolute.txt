@@ -1,0 +1,15 @@
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\logic\bin\Debug\net6.0\logic.deps.json
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\logic\bin\Debug\net6.0\logic.dll
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\logic\bin\Debug\net6.0\logic.pdb
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\logic\bin\Debug\net6.0\core.dll
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\logic\bin\Debug\net6.0\core.pdb
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\logic\obj\Debug\net6.0\logic.csproj.AssemblyReference.cache
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\logic\obj\Debug\net6.0\logic.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\logic\obj\Debug\net6.0\logic.AssemblyInfoInputs.cache
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\logic\obj\Debug\net6.0\logic.AssemblyInfo.cs
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\logic\obj\Debug\net6.0\logic.csproj.CoreCompileInputs.cache
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\logic\obj\Debug\net6.0\logic.csproj.CopyComplete
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\logic\obj\Debug\net6.0\logic.dll
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\logic\obj\Debug\net6.0\refint\logic.dll
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\logic\obj\Debug\net6.0\logic.pdb
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\logic\obj\Debug\net6.0\ref\logic.dll

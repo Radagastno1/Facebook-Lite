@@ -1,0 +1,17 @@
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\database\bin\Debug\net6.0\database.deps.json
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\database\bin\Debug\net6.0\database.dll
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\database\bin\Debug\net6.0\database.pdb
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\database\bin\Debug\net6.0\core.dll
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\database\bin\Debug\net6.0\logic.dll
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\database\bin\Debug\net6.0\logic.pdb
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\database\bin\Debug\net6.0\core.pdb
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\database\obj\Debug\net6.0\database.csproj.AssemblyReference.cache
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\database\obj\Debug\net6.0\database.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\database\obj\Debug\net6.0\database.AssemblyInfoInputs.cache
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\database\obj\Debug\net6.0\database.AssemblyInfo.cs
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\database\obj\Debug\net6.0\database.csproj.CoreCompileInputs.cache
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\database\obj\Debug\net6.0\database.csproj.CopyComplete
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\database\obj\Debug\net6.0\database.dll
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\database\obj\Debug\net6.0\refint\database.dll
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\database\obj\Debug\net6.0\database.pdb
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\database\obj\Debug\net6.0\ref\database.dll

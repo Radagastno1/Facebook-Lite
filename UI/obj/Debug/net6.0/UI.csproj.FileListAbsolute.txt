@@ -16,3 +16,9 @@ C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\ui\obj\Debu
 C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\ui\bin\Debug\net6.0\core.dll
 C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\ui\bin\Debug\net6.0\core.pdb
 C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\ui\obj\Debug\net6.0\UI.csproj.CopyComplete
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\ui\bin\Debug\net6.0\Dapper.dll
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\ui\bin\Debug\net6.0\MySqlConnector.dll
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\ui\bin\Debug\net6.0\database.dll
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\ui\bin\Debug\net6.0\logic.dll
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\ui\bin\Debug\net6.0\logic.pdb
+C:\Users\angel\Documents\SUVNET22\DATABAS\inlämningar\Facebook-Lite\ui\bin\Debug\net6.0\database.pdb

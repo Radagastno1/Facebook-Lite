@@ -2,6 +2,32 @@
   "version": 3,
   "targets": {
     "net6.0": {
+      "Dapper/2.0.123": {
+        "type": "package",
+        "compile": {
+          "lib/net5.0/Dapper.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net5.0/Dapper.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "MySqlConnector/2.2.1": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/MySqlConnector.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/MySqlConnector.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "core/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
@@ -11,19 +37,105 @@
         "runtime": {
           "bin/placeholder/core.dll": {}
         }
+      },
+      "database/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "core": "1.0.0",
+          "dapper": "2.0.123",
+          "logic": "1.0.0",
+          "mysqlconnector": "2.2.1"
+        },
+        "compile": {
+          "bin/placeholder/database.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/database.dll": {}
+        }
+      },
+      "logic/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "core": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/logic.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/logic.dll": {}
+        }
       }
     }
   },
   "libraries": {
+    "Dapper/2.0.123": {
+      "sha512": "RDFF4rBLLmbpi6pwkY7q/M6UXHRJEOerplDGE5jwEkP/JGJnBauAClYavNKJPW1yOTWRPIyfj4is3EaJxQXILQ==",
+      "type": "package",
+      "path": "dapper/2.0.123",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Dapper.png",
+        "dapper.2.0.123.nupkg.sha512",
+        "dapper.nuspec",
+        "lib/net461/Dapper.dll",
+        "lib/net461/Dapper.xml",
+        "lib/net5.0/Dapper.dll",
+        "lib/net5.0/Dapper.xml",
+        "lib/netstandard2.0/Dapper.dll",
+        "lib/netstandard2.0/Dapper.xml"
+      ]
+    },
+    "MySqlConnector/2.2.1": {
+      "sha512": "k5wwd56u2WoIVLxeKsUHl8WS27shGluK6yLwziAnJwERnMQ5TsAFHRpr6EKEfpLwGF+FwrbmJXUdCk9+EU7Wrw==",
+      "type": "package",
+      "path": "mysqlconnector/2.2.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net461/MySqlConnector.dll",
+        "lib/net461/MySqlConnector.xml",
+        "lib/net471/MySqlConnector.dll",
+        "lib/net471/MySqlConnector.xml",
+        "lib/net6.0/MySqlConnector.dll",
+        "lib/net6.0/MySqlConnector.xml",
+        "lib/net7.0/MySqlConnector.dll",
+        "lib/net7.0/MySqlConnector.xml",
+        "lib/netcoreapp3.1/MySqlConnector.dll",
+        "lib/netcoreapp3.1/MySqlConnector.xml",
+        "lib/netstandard2.0/MySqlConnector.dll",
+        "lib/netstandard2.0/MySqlConnector.xml",
+        "lib/netstandard2.1/MySqlConnector.dll",
+        "lib/netstandard2.1/MySqlConnector.xml",
+        "logo.png",
+        "mysqlconnector.2.2.1.nupkg.sha512",
+        "mysqlconnector.nuspec"
+      ]
+    },
     "core/1.0.0": {
       "type": "project",
       "path": "../core/core.csproj",
       "msbuildProject": "../core/core.csproj"
+    },
+    "database/1.0.0": {
+      "type": "project",
+      "path": "../database/database.csproj",
+      "msbuildProject": "../database/database.csproj"
+    },
+    "logic/1.0.0": {
+      "type": "project",
+      "path": "../logic/logic.csproj",
+      "msbuildProject": "../logic/logic.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
-      "core >= 1.0.0"
+      "core >= 1.0.0",
+      "database >= 1.0.0",
+      "logic >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -55,6 +167,12 @@
           "projectReferences": {
             "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\core\\core.csproj": {
               "projectPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\core\\core.csproj"
+            },
+            "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\database\\database.csproj": {
+              "projectPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\database\\database.csproj"
+            },
+            "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\logic\\logic.csproj": {
+              "projectPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\logic\\logic.csproj"
             }
           }
         }

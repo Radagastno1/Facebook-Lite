@@ -38,7 +38,8 @@ internal class Program
                 switch (menuOptions)
                 {
                     case 0:
-                        //LOG IN PAGE
+                    LogInService logInService = new();
+                    logInService.LogIn();
                         break;
                     case 1:
                     UserService userService = new();

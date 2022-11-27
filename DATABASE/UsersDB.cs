@@ -29,10 +29,11 @@ public class UsersDB : IData<User>
     public List<User> Get()
     {
         List<User> users = new();
-        string query = "SELECT id, first_name as 'FirstName', last_name as 'LastName', email " +
-        "pass_word as 'PassWord', birth_date as 'BirthDate', gender, about_me as 'AboutMe' " +
-        "FROM users;";
-        using (MySqlConnection con = new MySqlConnection("connectionstring"))
+        string query = "SELECT users.id, first_name as 'FirstName', last_name as 'LastName', email," +
+        "pass_word as 'PassWord', birth_date as 'BirthDate', gender, about_me as 'AboutMe', roles.name as 'Role' " +
+        "FROM users LEFT JOIN users_roles ON users_roles.users_id = users_id " +
+        "LEFT JOIN roles ON roles.id = users_roles.roles_id;";
+        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
             users = con.Query<User>(query).ToList();
         }

@@ -28,9 +28,22 @@
           }
         }
       },
+      "core/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/core.dll": {}
+        }
+      },
       "logic/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "core": "1.0.0"
+        },
         "compile": {
           "bin/placeholder/logic.dll": {}
         },
@@ -86,6 +99,11 @@
         "mysqlconnector.nuspec"
       ]
     },
+    "core/1.0.0": {
+      "type": "project",
+      "path": "../core/core.csproj",
+      "msbuildProject": "../core/core.csproj"
+    },
     "logic/1.0.0": {
       "type": "project",
       "path": "../logic/logic.csproj",
@@ -94,6 +112,7 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
+      "core >= 1.0.0",
       "dapper >= 2.0.123",
       "logic >= 1.0.0",
       "mysqlconnector >= 2.2.1"
@@ -105,9 +124,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\database\\DATABASE.csproj",
-      "projectName": "DATABASE",
-      "projectPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\database\\DATABASE.csproj",
+      "projectUniqueName": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\database\\database.csproj",
+      "projectName": "database",
+      "projectPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\database\\database.csproj",
       "packagesPath": "C:\\Users\\angel\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\database\\obj\\",
       "projectStyle": "PackageReference",
@@ -126,6 +145,9 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
+            "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\core\\core.csproj": {
+              "projectPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\core\\core.csproj"
+            },
             "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\logic\\logic.csproj": {
               "projectPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\logic\\logic.csproj"
             }
