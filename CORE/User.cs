@@ -34,6 +34,10 @@ public class User
             Role = (Roles)enumNumber;
         }
     }
+    public override string ToString()
+    {
+        return $"[{ID}]  {FirstName} {LastName}";
+    }
     public enum Genders
     {
         Undecided,

@@ -25,7 +25,7 @@ public class UserManager : IManager<User>, IManager<Post>
             List<User> allUsers = _userData.Get();
             foreach (User user in allUsers)
             {
-                if (user.FirstName.Contains(search) || user.LastName.Contains(search))
+                if (user.FirstName.ToLower().Contains(search.ToLower()) || user.LastName.ToLower().Contains(search.ToLower()))
                 {
                     searchedUsers.Add(user);
                 }
@@ -37,9 +37,18 @@ public class UserManager : IManager<User>, IManager<Post>
         }
         return searchedUsers;
     }
-    public User GetOne()
+    public User GetOne(int id)
     {
-        throw new NotImplementedException();
+        List<User> allUsers = _userData.Get();
+        User user = new();
+        foreach(User item in allUsers)
+        {
+            if(item.ID == id)
+            {
+                user = item;
+            }
+        }
+        return user;
     }
     public int? Remove(User user)
     {
@@ -65,7 +74,7 @@ public class UserManager : IManager<User>, IManager<Post>
         throw new NotImplementedException();
     }
 
-    Post IManager<Post>.GetOne()
+    Post IManager<Post>.GetOne(int id)
     {
         throw new NotImplementedException();
     }
