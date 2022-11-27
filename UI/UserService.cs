@@ -61,7 +61,7 @@ public class UserService
         string email = ConsoleInput.GetEmail("Email: ");
         string password = ConsoleInput.GetPassword("Password(at least 6 characters, one uppercase letter and at least one digit):");
         //validera date metod i consoleinput
-        string birthDate = ConsoleInput.GetString("Birthdate(YYYY-MM-DD): "); 
+        string birthDate = ConsoleInput.GetBirthDate("Birthdate(YYYY-MM-DD): "); 
         //visa genders alternativ
         User user = new(firstName, lastName, email, password, birthDate);
         _userManager.Create(user);

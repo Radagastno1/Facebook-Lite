@@ -23,6 +23,27 @@ public class ConsoleInput
         } while (string.IsNullOrEmpty(getString));
         return getString;
     }
+    public static string GetBirthDate(string output)
+    {
+        //dela upp till tre ints
+        bool success = false;
+        string dateString = string.Empty;
+        do
+        {
+            Console.WriteLine(output);
+            dateString = Console.ReadLine();
+            string[] array = dateString.Split('-');
+            if (array.Length == 3)
+            {
+                success = true;
+            }
+            else
+            {
+                success = false;
+            }
+        }while(!success);
+        return dateString;
+    }
     public static string GetEmail(string output)
     {
         string emailString = string.Empty;
@@ -41,10 +62,10 @@ public class ConsoleInput
             {
                 success = false;
             }
-        } while(!success);
+        } while (!success);
         return mailAdress.ToString();
     }
-     public static string GetPassword(string output)
+    public static string GetPassword(string output)
     {
         //måste innehålla minst 6 långt, en stor bokstav, minst en siffra
         string getString = string.Empty;
@@ -53,11 +74,11 @@ public class ConsoleInput
         {
             Console.WriteLine(output);
             getString = Console.ReadLine();
-            if(getString.Length>=6 && getString.Any(char.IsUpper) && getString.Any(char.IsDigit))
+            if (getString.Length >= 6 && getString.Any(char.IsUpper) && getString.Any(char.IsDigit))
             {
                 success = true;
             }
-        } while(!success);
+        } while (!success);
         return getString;
     }
 }
