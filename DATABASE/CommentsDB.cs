@@ -5,7 +5,7 @@ using MySqlConnector;
 namespace DATABASE;
 public class CommentsDB : IData<Comment>
 {
-    public int Create(Comment obj)
+    public int? Create(Comment obj)
     {
         int messageId = 0;
         string query = "INSERT INTO posts (content, users_id, posts_types_id, on_post_id) " +
@@ -16,7 +16,7 @@ public class CommentsDB : IData<Comment>
         }
         return messageId;
     }
-    public int Delete(Comment obj)
+    public int? Delete(Comment obj)
     {
         int messageId = 0;
         string query = "DELETE FROM posts WHERE id = @Id;";
@@ -43,7 +43,7 @@ public class CommentsDB : IData<Comment>
         throw new NotImplementedException();
     }
 
-    public int Update(Comment obj)
+    public int? Update(Comment obj)
     {
         int rowsEffected = 0;
         string query = "UPDATE posts SET content = @Content WHERE id = @Id;";

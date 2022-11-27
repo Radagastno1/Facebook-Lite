@@ -5,7 +5,7 @@ using MySqlConnector;
 namespace DATABASE;
 public class MessagesDB : IData<Message>
 {
-    public int Create(Message obj)
+    public int? Create(Message obj)
     { 
         int messageId = 0;
         string query = "START TRANSACTION " +
@@ -21,7 +21,7 @@ public class MessagesDB : IData<Message>
         }
         return messageId;
     }
-    public int Delete(Message obj)
+    public int? Delete(Message obj)
     {
         int rowsEffected = 0;
         string query = "DELETE FROM messages WHERE id = @Id;";
@@ -49,7 +49,7 @@ public class MessagesDB : IData<Message>
         }
         return messages;
     }
-    public int Update(Message obj)
+    public int? Update(Message obj)
     {
         int rowsEffected = 0;
         //fixa så att du bara kan ändra dina egna meddelanden

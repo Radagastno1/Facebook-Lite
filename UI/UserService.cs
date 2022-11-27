@@ -1,7 +1,13 @@
 using CORE;
+using LOGIC;
 namespace UI;
 public class UserService
 {
+    IManager<User> _userManager;
+    public UserService(IManager<User> userManager)
+    {
+        _userManager = userManager;
+    }
     public void ShowUserOverView()
     {
         string[] overviewOptions = new string[]
@@ -58,6 +64,7 @@ public class UserService
         string birthDate = ConsoleInput.GetString("Birthdate(YYYY-MM-DD): "); 
         //visa genders alternativ
         User user = new(firstName, lastName, email, password, birthDate);
+        _userManager.Create(user);
         return user;
     }
 }

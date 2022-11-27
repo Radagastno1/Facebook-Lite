@@ -5,7 +5,7 @@ using MySqlConnector;
 namespace DATABASE;
 public class PostsDB : IData<Post>
 {
-    public int Create(Post obj)
+    public int? Create(Post obj)
     {
         int rowsEffected = 0;
         string query = "INSERT INTO posts (content, users_id, posts_types_id) " +
@@ -16,7 +16,7 @@ public class PostsDB : IData<Post>
         }
         return rowsEffected;
     }
-    public int Delete(Post obj)
+    public int? Delete(Post obj)
     {
         int rowsEffected = 0;
         string query = "DELETE FROM posts WHERE id = @Id;";
@@ -37,7 +37,7 @@ public class PostsDB : IData<Post>
         }
         return posts;
     }
-    public int Update(Post obj)
+    public int? Update(Post obj)
     {
         int rowsEffected = 0;
         string query = "UPDATE posts SET content = @Content WHERE id = @Id;";

@@ -5,22 +5,33 @@ using MySqlConnector;
 namespace DATABASE;
 public class UsersDB : IData<User>
 {
-    public int Create(User obj)
+    public int? Create(User obj)
     {
         int userId = 0;
-        string query = "INSERT INTO users(first_name, last_name, email, pass_word, birth_date, gender, about_me) " +
-                       "VALUES(@FirstName, @LastName, @Email, @PassWord, @BirthDate, @Gender, @AboutMe);SELECT LAST_INSERT_ID();";
-        using (MySqlConnection con = new MySqlConnection("connectionstring"))
+        string query = "START TRANSACTION;" +
+        "INSERT INTO users(first_name, last_name, email, pass_word, birth_date, gender, about_me) " +
+        "VALUES(@FirstName, @LastName, @Email, @PassWord, @BirthDate, @Gender, @AboutMe); " +
+        "SET @users_id := LAST_INSERT_ID(); " +
+        "INSERT INTO users_roles (users_id, roles_id) VALUES(users_id, 5);" +
+        "COMMIT; SELECT @users_id;";
+        try
         {
-            userId = con.ExecuteScalar<int>(query, param: obj);
+            using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=true;"))
+            {
+                userId = con.ExecuteScalar<int>(query, param: obj);
+            }
+            return userId;
         }
-        return userId;
+        catch(InvalidOperationException)
+        {
+            return null;
+        }
     }
-    public int Delete(User obj)
+    public int? Delete(User obj)
     {
         int rowsEffected = 0;
         string query = "Delete from users WHERE id = @Id;";
-        using (MySqlConnection con = new MySqlConnection("connectionstring"))
+        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
             rowsEffected = con.ExecuteScalar<int>(query, param: obj);
         }
@@ -39,13 +50,13 @@ public class UsersDB : IData<User>
         }
         return users;
     }
-    public int Update(User obj)
+    public int? Update(User obj)
     {
         int rowsEffected = 0;
         string query = "Update users SET first_name = @FirstName, last_name = @LastName " +
         "email = @Email, pass_word = @PassWord, birth_date = @BirthDate, gender = @Gender " +
         "about_me = @AboutMe WHERE id = @Id;";
-        using (MySqlConnection con = new MySqlConnection("connectionstring"))
+        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
             rowsEffected = con.ExecuteScalar<int>(query, param: obj);
         }

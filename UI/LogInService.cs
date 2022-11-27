@@ -17,8 +17,6 @@ public class LogInService
         }
         catch(NullReferenceException)
         {
-            Console.WriteLine("Wrong email or password. Press any key to return.");
-            Console.ReadKey();
             return null;
         }
     }

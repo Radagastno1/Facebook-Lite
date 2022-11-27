@@ -1,8 +1,13 @@
-﻿namespace UI;
+﻿using CORE;
+using LOGIC;
+using DATABASE; //ska ui känna till databas?? pga usermanager
+namespace UI;
 internal class Program
 {
     private static void Main(string[] args)
     {
+        UserManager userManager = new(new UsersDB(),new PostsDB());
+        UserService userService = new(userManager);
         //MENYN INSPIRERAD AV PETRUS BLODBANKEN PROJEKT
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.BackgroundColor = ConsoleColor.White;
@@ -38,11 +43,17 @@ internal class Program
                 switch (menuOptions)
                 {
                     case 0:
+                    User user = new();
                     LogInService logInService = new();
-                    logInService.LogIn();
+                    user = logInService.LogIn();
+                    if(user != null)
+                    {
+                        userService.ShowUserOverView();
+                    }
+                    // om det ej var lyckat så är user null här, så i userpage får man kolla om user
+                    //är null eller ej
                         break;
                     case 1:
-                    UserService userService = new();
                     userService.UserSignUp();
                         //SIGN UP - MAKE NEW USER
                         break;

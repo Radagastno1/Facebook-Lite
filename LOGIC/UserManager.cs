@@ -13,9 +13,9 @@ public class UserManager : IManager<User>, IManager<Post>
     //hämta mina medd - messagemanager
     //radera post - usermanager
     //radera medd - usermanager
-    int IManager<User>.Create(User obj)
+    int? IManager<User>.Create(User user)
     {
-        throw new NotImplementedException();
+        return _userData.Create(user);
     }
     public List<User> GetBySearch(string search)
     {
@@ -41,7 +41,7 @@ public class UserManager : IManager<User>, IManager<Post>
     {
         throw new NotImplementedException();
     }
-    public int Remove(User user)
+    public int? Remove(User user)
     {
         return _userData.Delete(user);
     }
@@ -50,7 +50,7 @@ public class UserManager : IManager<User>, IManager<Post>
         throw new NotImplementedException();
     }
 
-    int IManager<Post>.Create(Post obj)
+    int? IManager<Post>.Create(Post obj)
     {
         throw new NotImplementedException();
     }
@@ -60,7 +60,7 @@ public class UserManager : IManager<User>, IManager<Post>
         throw new NotImplementedException();
     }
 
-    int IManager<Post>.Remove(Post obj)
+    int? IManager<Post>.Remove(Post obj)
     {
         throw new NotImplementedException();
     }

@@ -19,12 +19,13 @@ public class ConsoleInput
         do
         {
             Console.WriteLine(output);
-        } while (string.IsNullOrEmpty(Console.ReadLine()));
+            getString = Console.ReadLine();
+        } while (string.IsNullOrEmpty(getString));
         return getString;
     }
     public static string GetEmail(string output)
     {
-        string getString = string.Empty;
+        string emailString = string.Empty;
         bool success = true;
         MailAddress mailAdress = new MailAddress("test@hotmail.com");
         do
@@ -32,8 +33,8 @@ public class ConsoleInput
             try
             {
                 Console.WriteLine(output);
-                string email = Console.ReadLine();
-                mailAdress = new MailAddress(email);
+                emailString = Console.ReadLine();
+                mailAdress = new MailAddress(emailString);
                 success = true;
             }
             catch
@@ -51,8 +52,8 @@ public class ConsoleInput
         do
         {
             Console.WriteLine(output);
-            string input = Console.ReadLine();
-            if(input.Length>=6 && input.Any(char.IsUpper) && input.Any(char.IsDigit))
+            getString = Console.ReadLine();
+            if(getString.Length>=6 && getString.Any(char.IsUpper) && getString.Any(char.IsDigit))
             {
                 success = true;
             }

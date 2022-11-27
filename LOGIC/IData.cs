@@ -4,7 +4,7 @@ public interface IData<T>
 {
     List<T> Get();
     T GetById();
-    int Create(T obj);
-    int Update(T obj);
-    int Delete(T obj);
+    int? Create(T obj);
+    int? Update(T obj);
+    int? Delete(T obj);
 }
