@@ -109,7 +109,7 @@ public class UserService
         {
             foreach (string row in userData)
             {
-                Console.WriteLine("\t" + row);
+                Console.WriteLine(row);
             }
         }
     }

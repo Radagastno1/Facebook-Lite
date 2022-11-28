@@ -29,7 +29,7 @@ public class PostsDB : IData<Post>
     public List<Post> Get()
     {
         List<Post> posts = new();
-        string query = $"SELECT p.id as 'Id', p.content as 'Content', p.date_created as 'DateCreated', u.first_name as 'FirstName', u.last_name as 'LastName' " +
+        string query = $"SELECT p.id as 'Id', p.content as 'Content', p.date_created as 'DateCreated', u.first_name as 'FirstName', u.last_name as 'LastName', p.users_id as 'UserId' " +
          $"FROM posts p INNER JOIN users u ON p.users_id = u.id;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
