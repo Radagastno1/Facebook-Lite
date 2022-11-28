@@ -4,6 +4,7 @@ using DATABASE; //ska ui känna till databas?? pga usermanager
 namespace UI;
 internal class Program
 {
+    //MÅSTE FÅ POSTS ATT VISAS!!!!
     private static void Main(string[] args)
     {
         UserManager userManager = new(new UsersDB());
@@ -50,7 +51,7 @@ internal class Program
                         user = logInService.LogIn();
                         if (user != null)
                         {
-                            userService.ShowUserOverView();
+                            userService.ShowUserOverView(user);
                         }
                         // om det ej var lyckat så är user null här, så i userpage får man kolla om user
                         //är null eller ej

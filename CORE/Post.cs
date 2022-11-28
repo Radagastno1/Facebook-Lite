@@ -4,19 +4,21 @@ public class Post
 {
     public readonly int ID;
     public string Content{get;set;}
-    public DateOnly DateCreated{get;set;}
-    public int UserId{get;private set;} // detta istället för user
-    public User User{get;private set;}
+    public DateTime DateCreated{get;set;}
+    public int UserId{get;set;} // detta istället för user
+    // public User User{get;private set;} //behövs ej?
+    public string FirstName{get;set;}
+    public string LastName{get;set;}
     List<Comment>comments = new();
     public Post(){}
-    public Post(string aContent, DateOnly aDateCreated, User aUser)
+    public Post(string aContent, DateTime aDateCreated, int aUserId)
     {
         Content = aContent;
         DateCreated = aDateCreated;
-        User = aUser;
+        UserId = aUserId;
     }
     public override string ToString()
     {
-        return $"\t{User.FirstName} {User.LastName}\n\t{DateCreated.ToShortDateString()}\n\t{Content}";
+        return $"\t{FirstName} {LastName}\n\t{DateCreated}\n\t{Content}";
     }
 }

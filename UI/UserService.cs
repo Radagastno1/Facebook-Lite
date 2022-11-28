@@ -5,11 +5,13 @@ public class UserService
 {
     IManager<User> _userManager;
     IManager<Post> _postManager;
+    PostService postService;
     public UserService(IManager<User> userManager, IManager<Post> postManager)
     {
         _userManager = userManager;
+        _postManager = postManager;
     }
-    public void ShowUserOverView()
+    public void ShowUserOverView(User user)
     {
         string[] overviewOptions = new string[]
         { "[PUBLISH]","[SEARCH]","[CHAT]", "[MY PAGE]","[SETTINGS]" };
@@ -39,18 +41,24 @@ public class UserService
                         //MAKEWALLPOST
                         break;
                     case 1:
+                        postService = new(_postManager);
                         //SEARCHFORUSERS
                         string search = ConsoleInput.GetString("Search by name: ");
                         ShowSearches(search);
                         int id = ConsoleInput.GetInt("User to visit: ");
                         ShowProfile(id);
+                        postService.ShowPosts(id);
                         Console.ReadLine();
                         break;
                     case 2:
                         //CHATPAGE
                         break;
                     case 3:
+                        postService = new(_postManager);
                         //SHOWMYPAGE
+                        ShowProfile(user.ID);
+                        postService.ShowPosts(user.ID);
+                        Console.ReadLine();
                         break;
                     case 4:
                         //SETTINGSMENU
@@ -99,12 +107,10 @@ public class UserService
            };
         if (user != null)
         {
-            foreach(string row in userData)
+            foreach (string row in userData)
             {
                 Console.WriteLine("\t" + row);
             }
         }
-        //hämta senaste posts av usern
-        postService.ShowPosts(id);
     }
 }

@@ -55,10 +55,10 @@ public class PostsManager : IManager<Post>
 
     public List<Post> GetAll(int data)
     {
+        List<Post> chosenPosts = new();
         try
         {
             List<Post> allPosts = _postData.Get();
-            List<Post> chosenPosts = new();
             foreach (Post item in allPosts)
             {
                 if (item.UserId == data)
