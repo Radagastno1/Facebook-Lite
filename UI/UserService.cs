@@ -58,7 +58,6 @@ public class UserService
             }
         }
     }
-
     public User UserSignUp()
     {
         string firstName = ConsoleInput.GetString("First name: ");
@@ -86,13 +85,14 @@ public class UserService
     public void ShowProfile(int id)
     {
         User user = _userManager.GetOne(id);
+        Console.Title = $"{user.FirstName} {user.LastName}";
         string[] userData = new string[]
            {
-                $"{user.FirstName} {user.LastName}",
+                $"\t{Console.Title}                 ",
                 $"                                ",
-                $"I N F O R M A T I O N            ",
-                $"Gender: {user.Gender}            ",
-                $"About me: {user.AboutMe}          "
+                $"\tI N F O R M A T I O N            ",
+                $"\tGender: {user.Gender}            ",
+                $"\tAbout me: {user.AboutMe}          "
            };
         //hämta senaste posts av usern
         if (user != null)
