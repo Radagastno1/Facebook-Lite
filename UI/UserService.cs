@@ -4,7 +4,8 @@ namespace UI;
 public class UserService
 {
     IManager<User> _userManager;
-    public UserService(IManager<User> userManager)
+    IManager<Post> _postManager;
+    public UserService(IManager<User> userManager, IManager<Post> postManager)
     {
         _userManager = userManager;
     }
@@ -84,6 +85,7 @@ public class UserService
     }
     public void ShowProfile(int id)
     {
+        PostService postService = new(_postManager);
         User user = _userManager.GetOne(id);
         Console.Title = $"{user.FirstName} {user.LastName}";
         string[] userData = new string[]
@@ -92,9 +94,9 @@ public class UserService
                 $"                                ",
                 $"\tI N F O R M A T I O N            ",
                 $"\tGender: {user.Gender}            ",
-                $"\tAbout me: {user.AboutMe}          "
+                $"\tAbout me: {user.AboutMe}          ",
+                $"                                    "
            };
-        //hämta senaste posts av usern
         if (user != null)
         {
             foreach(string row in userData)
@@ -102,5 +104,7 @@ public class UserService
                 Console.WriteLine("\t" + row);
             }
         }
+        //hämta senaste posts av usern
+        postService.ShowPosts(id);
     }
 }

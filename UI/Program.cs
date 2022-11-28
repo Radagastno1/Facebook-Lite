@@ -6,8 +6,10 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        UserManager userManager = new(new UsersDB(),new PostsDB());
-        UserService userService = new(userManager);
+        UserManager userManager = new(new UsersDB());
+        PostsManager postsManager = new(new PostsDB());
+        UserService userService = new(userManager, postsManager);
+        PostService postService = new(postsManager);
         //MENYN INSPIRERAD AV PETRUS BLODBANKEN PROJEKT
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.BackgroundColor = ConsoleColor.White;
@@ -43,18 +45,18 @@ internal class Program
                 switch (menuOptions)
                 {
                     case 0:
-                    User user = new();
-                    LogInService logInService = new();
-                    user = logInService.LogIn();
-                    if(user != null)
-                    {
-                        userService.ShowUserOverView();
-                    }
-                    // om det ej var lyckat så är user null här, så i userpage får man kolla om user
-                    //är null eller ej
+                        User user = new();
+                        LogInService logInService = new();
+                        user = logInService.LogIn();
+                        if (user != null)
+                        {
+                            userService.ShowUserOverView();
+                        }
+                        // om det ej var lyckat så är user null här, så i userpage får man kolla om user
+                        //är null eller ej
                         break;
                     case 1:
-                    userService.UserSignUp();
+                        userService.UserSignUp();
                         //SIGN UP - MAKE NEW USER
                         break;
                     case 2:

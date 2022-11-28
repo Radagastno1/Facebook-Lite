@@ -5,6 +5,7 @@ public interface IManager<T>
     public List<T>GetBySearch(string search);
     public int? Remove(T obj);
     public T GetOne(int data);
+    public List<T> GetAll(int data);
     public T Update();
 
 }

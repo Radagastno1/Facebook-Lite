@@ -35,7 +35,14 @@ public class PostsDB : IData<Post>
         {
             posts = con.Query<Post>(query).ToList();
         }
-        return posts;
+        if(posts.Count > 0)
+        {
+            return posts;
+        }
+        else
+        {
+            return null;
+        }
     }
     public int? Update(Post obj)
     {
