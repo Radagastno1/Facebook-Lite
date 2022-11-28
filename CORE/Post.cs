@@ -19,6 +19,6 @@ public class Post
     }
     public override string ToString()
     {
-        return $"\t{FirstName} {LastName}\n\t{DateCreated}\n\t{Content}";
+        return $"\t[{ID}] {FirstName} {LastName}\n\t{DateCreated}\n\t{Content}";
     }
 }

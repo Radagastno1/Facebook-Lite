@@ -38,18 +38,33 @@ public class UserService
                 switch (menuOptions)
                 {
                     case 0:
-                        //MAKEWALLPOST
                         postService = new(_postManager);
                         postService.MakePost(user);
                         break;
                     case 1:
                         postService = new(_postManager);
-                        //SEARCHFORUSERS
                         string search = ConsoleInput.GetString("Search by name: ");
                         ShowSearches(search);
                         int id = ConsoleInput.GetInt("User to visit: ");
                         ShowProfile(id);
-                        postService.ShowPosts(id);
+                        int postId = postService.ShowPosts(id);
+                        if(postId != 0)
+                        {
+                            ConsoleKey key = postService.ChooseIfComment();
+                            if(key == ConsoleKey.C)
+                            {
+                                postService.CommentPost(user, postId);
+                            }
+                            else if(key == ConsoleKey.V)
+                            {
+                                // visa kommentarer på posten
+                            }
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                        //FIXA POST ID FRÅN POSTEN DEN Väljer
                         Console.ReadLine();
                         break;
                     case 2:
@@ -57,7 +72,6 @@ public class UserService
                         break;
                     case 3:
                         postService = new(_postManager);
-                        //SHOWMYPAGE
                         ShowProfile(user.ID);
                         postService.ShowPosts(user.ID);
                         Console.ReadLine();

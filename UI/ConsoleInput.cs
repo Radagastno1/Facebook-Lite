@@ -41,7 +41,7 @@ public class ConsoleInput
             {
                 success = false;
             }
-        }while(!success);
+        } while (!success);
         return dateString;
     }
     public static string GetEmail(string output)
@@ -80,6 +80,25 @@ public class ConsoleInput
             }
         } while (!success);
         return getString;
+    }
+
+    public static ConsoleKey GetPressedKey(string output, List<ConsoleKey> keys)
+    {
+        bool success = false;
+        ConsoleKey key;
+        do
+        {
+            Console.WriteLine(output);
+            key = Console.ReadKey().Key;
+            foreach (ConsoleKey item in keys)
+            {
+                if (item == key)
+                {
+                    success = true;
+                }
+            }
+        } while (!success);
+        return key;
     }
 
 }

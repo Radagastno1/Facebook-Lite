@@ -14,7 +14,7 @@ public class PostService
         Post post = new(content, DateTime.Now, user.ID);
         _postManager.Create(post);
     }
-    public void ShowPosts(int userId)
+    public int ShowPosts(int userId)
     {
         List<Post> allPosts = new();
         try
@@ -25,9 +25,25 @@ public class PostService
                 Console.WriteLine($"{item.ToString()}\n");
             }
         }
-        catch(NullReferenceException)
+        catch (NullReferenceException)
         {
             Console.WriteLine("\tNo posts yet..");
         }
+        int postId = ConsoleInput.GetInt("[0] Return   [ChoosePost] See Post");
+        return postId;
+    }
+
+    public ConsoleKey ChooseIfComment()
+    {
+        List<ConsoleKey> keys = new();
+        keys.Add(ConsoleKey.C); keys.Add(ConsoleKey.V);
+        ConsoleKey key = ConsoleInput.GetPressedKey("\t[C] Comment   [V] View Comments", keys);
+        return key;
+    }
+    public void CommentPost(User user, int postId)
+    {
+        string content = ConsoleInput.GetString("Leave a comment: ");
+        Post comment = new Comment(content, DateTime.Now, user.ID, postId);
+
     }
 }

@@ -7,4 +7,9 @@ public class Comment : Post
         OnPostId = aOnPostId;
     }
 
+    public override string ToString()
+    {
+        return $"\t{FirstName} {LastName}\n\t{Content}";
+    }
+
 }
