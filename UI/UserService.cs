@@ -39,6 +39,8 @@ public class UserService
                 {
                     case 0:
                         //MAKEWALLPOST
+                        postService = new(_postManager);
+                        postService.MakePost(user);
                         break;
                     case 1:
                         postService = new(_postManager);
@@ -98,7 +100,7 @@ public class UserService
         Console.Title = $"{user.FirstName} {user.LastName}";
         string[] userData = new string[]
            {
-                $"\t{Console.Title}                 ",
+                $"\n\t{Console.Title}                 ",
                 $"                                ",
                 $"\tI N F O R M A T I O N            ",
                 $"\tGender: {user.Gender}            ",

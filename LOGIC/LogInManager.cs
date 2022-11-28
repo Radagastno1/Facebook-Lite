@@ -11,10 +11,13 @@ public class LogInManager
 
     public User? UserLogIn(User user)
     {
-        List<User>allUsers = _userData.Get();
-        foreach(User item in allUsers)
+        List<User> allUsers = _userData.Get();
+        foreach (User item in allUsers)
         {
-            if(item.Email == user.Email && item.PassWord == user.PassWord) return user;
+            if (item.Email == user.Email && item.PassWord == user.PassWord)
+            {
+                return item;
+            }
         }
         return null;
     }

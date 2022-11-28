@@ -81,4 +81,5 @@ public class ConsoleInput
         } while (!success);
         return getString;
     }
+
 }
