@@ -60,6 +60,7 @@ public class UserService
                             else if(key == ConsoleKey.V)
                             {
                                 // visa kommentarer på posten
+                                postService.ShowCommentsOnPost(postId);
                             }
                         }
                         else

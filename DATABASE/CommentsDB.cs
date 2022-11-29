@@ -29,8 +29,10 @@ public class CommentsDB : IData<Comment>
     public List<Comment> Get()
     {
         List<Comment> comments = new();
-        string query = "SELECT id, content, date_created as 'DateCreated', users_id as 'UserId', " +
-        "on_post_id as 'OnPostId' FROM posts WHERE posts_types_id = 2;";
+        string query = "SELECT p.id, p.content, p.date_created as 'DateCreated', p.users_id as 'UserId', " +
+        "p.on_post_id as 'OnPostId', u.first_name as 'FirstName', u.last_name as 'LastName' FROM posts p " +
+        "INNER JOIN users u ON p.users_id = u.id " +
+        "WHERE posts_types_id = 2;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
             comments = con.Query<Comment>(query).ToList();

@@ -48,4 +48,19 @@ public class PostService
         Comment comment = new Comment(content, DateTime.Now, user.ID, postId);
         _commentManager.Create(comment);
     }
+    public void ShowCommentsOnPost(int postId)
+    {
+        try
+        {
+            List<Comment> comments = _commentManager.GetAll(postId);
+            foreach(Comment item in comments)
+            {
+                Console.WriteLine($"{item.ToString()}\n");
+            }
+        }
+        catch(NullReferenceException)
+        {
+            Console.WriteLine("No comments yet..");
+        }
+    }
 }
