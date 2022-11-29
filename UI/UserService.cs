@@ -5,11 +5,13 @@ public class UserService
 {
     IManager<User> _userManager;
     IManager<Post> _postManager;
+    IManager<Comment> _commentsManager;
     PostService postService;
-    public UserService(IManager<User> userManager, IManager<Post> postManager)
+    public UserService(IManager<User> userManager, IManager<Post> postManager, IManager<Comment> commentsManager)
     {
         _userManager = userManager;
         _postManager = postManager;
+        _commentsManager = commentsManager;
     }
     public void ShowUserOverView(User user)
     {
@@ -38,11 +40,11 @@ public class UserService
                 switch (menuOptions)
                 {
                     case 0:
-                        postService = new(_postManager);
+                        postService = new(_postManager,_commentsManager);
                         postService.MakePost(user);
                         break;
                     case 1:
-                        postService = new(_postManager);
+                        postService = new(_postManager, _commentsManager);
                         string search = ConsoleInput.GetString("Search by name: ");
                         ShowSearches(search);
                         int id = ConsoleInput.GetInt("User to visit: ");
@@ -71,7 +73,7 @@ public class UserService
                         //CHATPAGE
                         break;
                     case 3:
-                        postService = new(_postManager);
+                        postService = new(_postManager, _commentsManager);
                         ShowProfile(user.ID);
                         postService.ShowPosts(user.ID);
                         Console.ReadLine();
@@ -109,7 +111,7 @@ public class UserService
     }
     public void ShowProfile(int id)
     {
-        PostService postService = new(_postManager);
+        PostService postService = new(_postManager, _commentsManager);
         User user = _userManager.GetOne(id);
         Console.Title = $"{user.FirstName} {user.LastName}";
         string[] userData = new string[]

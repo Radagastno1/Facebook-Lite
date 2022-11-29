@@ -4,9 +4,11 @@ namespace UI;
 public class PostService
 {
     IManager<Post> _postManager;
-    public PostService(IManager<Post> postManager)
+    IManager<Comment> _commentManager;
+    public PostService(IManager<Post> postManager, IManager<Comment> commentManager)
     {
         _postManager = postManager;
+        _commentManager = commentManager;
     }
     public void MakePost(User user)
     {
@@ -43,7 +45,7 @@ public class PostService
     public void CommentPost(User user, int postId)
     {
         string content = ConsoleInput.GetString("Leave a comment: ");
-        Post comment = new Comment(content, DateTime.Now, user.ID, postId);
-
+        Comment comment = new Comment(content, DateTime.Now, user.ID, postId);
+        _commentManager.Create(comment);
     }
 }
