@@ -10,7 +10,8 @@ internal class Program
         UserManager userManager = new(new UsersDB());
         PostsManager postsManager = new(new PostsDB());
         CommentsManager commentsManager = new(new CommentsDB());
-        UserService userService = new(userManager, postsManager, commentsManager);
+        ConversationManager conversationManager = new(new ConversationDB());
+        UserService userService = new(userManager, postsManager, commentsManager, conversationManager);
         PostService postService = new(postsManager, commentsManager);
         //MENYN INSPIRERAD AV PETRUS BLODBANKEN PROJEKT
         Console.ForegroundColor = ConsoleColor.Blue;

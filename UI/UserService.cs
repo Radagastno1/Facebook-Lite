@@ -6,12 +6,14 @@ public class UserService
     IManager<User> _userManager;
     IManager<Post> _postManager;
     IManager<Comment> _commentsManager;
+    IManager<Conversation> _conversationManager;
     PostService postService;
-    public UserService(IManager<User> userManager, IManager<Post> postManager, IManager<Comment> commentsManager)
+    public UserService(IManager<User> userManager, IManager<Post> postManager, IManager<Comment> commentsManager, IManager<Conversation> conversationManager)
     {
         _userManager = userManager;
         _postManager = postManager;
         _commentsManager = commentsManager;
+        _conversationManager = conversationManager;
     }
     public void ShowUserOverView(User user)
     {
@@ -40,7 +42,7 @@ public class UserService
                 switch (menuOptions)
                 {
                     case 0:
-                        postService = new(_postManager,_commentsManager);
+                        postService = new(_postManager, _commentsManager);
                         postService.MakePost(user);
                         break;
                     case 1:
@@ -49,25 +51,36 @@ public class UserService
                         ShowSearches(search);
                         int id = ConsoleInput.GetInt("User to visit: ");
                         ShowProfile(id);
-                        int postId = postService.ShowPosts(id);
-                        if(postId != 0)
+                        List<ConsoleKey> keys = new();
+                        keys.Add(ConsoleKey.M); keys.Add(ConsoleKey.P);
+                        ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[M] Message  [P] Posts", keys);
+                        if (pressedKey == ConsoleKey.M)
                         {
-                            ConsoleKey key = postService.ChooseIfComment();
-                            if(key == ConsoleKey.C)
-                            {
-                                postService.CommentPost(user, postId);
-                            }
-                            else if(key == ConsoleKey.V)
-                            {
-                                // visa kommentarer på posten
-                                postService.ShowCommentsOnPost(postId);
-                            }
+                            Console.WriteLine("startar konversation här");
+                            ConversationService conversationService = new(_conversationManager);
+                            //hämtar personen som man besöker och skickar in i konversation
+                            User participant = _userManager.GetOne(id);
+                            List<User> participants = new();
+                            participants.Add(participant);
+                            conversationService.StartConversation(user, participants);
+                            //kolla om konversation finns, annars starta en ny med denna person!SEN gör detta
                         }
                         else
                         {
-                            continue;
+                            int postId = postService.ShowPosts(id);
+                            if (postId != 0)
+                            {
+                                ConsoleKey key = postService.ChooseIfComment();
+                                if (key == ConsoleKey.C)
+                                {
+                                    postService.CommentPost(user, postId);
+                                }
+                                else if (key == ConsoleKey.V)
+                                {
+                                    postService.ShowCommentsOnPost(postId);
+                                }
+                            }
                         }
-                        //FIXA POST ID FRÅN POSTEN DEN Väljer
                         Console.ReadLine();
                         break;
                     case 2:
@@ -138,24 +151,29 @@ public class UserService
     }
     public void EditInformation(User user)
     {
-        List<ConsoleKey>keys = new();
-        keys.Add(ConsoleKey.D1); keys.Add(ConsoleKey.D2);keys.Add(ConsoleKey.D3);
+        List<ConsoleKey> keys = new();
+        keys.Add(ConsoleKey.D1); keys.Add(ConsoleKey.D2); keys.Add(ConsoleKey.D3);
         keys.Add(ConsoleKey.D4); keys.Add(ConsoleKey.D5);
         ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[1] First name  [2] Last name  [3] Email  [4] Password  [5] About me", keys);
-        switch(pressedKey)
+        switch (pressedKey)
         {
-            case ConsoleKey.D1 : user.FirstName = ConsoleInput.GetString("New first name: ");
-            break;
-            case ConsoleKey.D2: user.LastName = ConsoleInput.GetString("New last name: ");
-            break;
-            case ConsoleKey.D3: user.Email = ConsoleInput.GetEmail("New Email: ");
-            break;
-            case ConsoleKey.D4: user.PassWord = ConsoleInput.GetPassword("New password: ");
-            break;
-            case ConsoleKey.D5: user.AboutMe = ConsoleInput.GetString("About me: ");
-            break;
+            case ConsoleKey.D1:
+                user.FirstName = ConsoleInput.GetString("New first name: ");
+                break;
+            case ConsoleKey.D2:
+                user.LastName = ConsoleInput.GetString("New last name: ");
+                break;
+            case ConsoleKey.D3:
+                user.Email = ConsoleInput.GetEmail("New Email: ");
+                break;
+            case ConsoleKey.D4:
+                user.PassWord = ConsoleInput.GetPassword("New password: ");
+                break;
+            case ConsoleKey.D5:
+                user.AboutMe = ConsoleInput.GetString("About me: ");
+                break;
         }
-        if(_userManager.Update(user) > 0)
+        if (_userManager.Update(user) > 0)
         {
             Console.WriteLine("Updated!");
         }
