@@ -22,7 +22,7 @@ public class UsersDB : IData<User>
             }
             return userId;
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             return null;
         }
@@ -50,15 +50,15 @@ public class UsersDB : IData<User>
         }
         return users;
     }
-    public int? Update(User obj)
+    public int? Update(User user)
     {
         int rowsEffected = 0;
-        string query = "Update users SET first_name = @FirstName, last_name = @LastName " +
-        "email = @Email, pass_word = @PassWord, birth_date = @BirthDate, gender = @Gender " +
-        "about_me = @AboutMe WHERE id = @Id;";
+        string query = "Update users SET first_name = @FirstName, last_name = @LastName, " +
+        "email = @Email, pass_word = @PassWord, birth_date = @BirthDate, gender = @Gender, " +
+        "about_me = @AboutMe WHERE id = @ID;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
-            rowsEffected = con.ExecuteScalar<int>(query, param: obj);
+            rowsEffected = con.ExecuteScalar<int>(query, param: user);
         }
         return rowsEffected;
     }

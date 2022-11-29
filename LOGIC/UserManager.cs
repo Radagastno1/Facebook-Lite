@@ -52,9 +52,17 @@ public class UserManager : IManager<User>
     {
         return _userData.Delete(user);
     }
-    public User Update()
+    public int? Update(User user)
     {
-        throw new NotImplementedException();
+       int? rows = _userData.Update(user);
+       if(rows > 0)
+       {
+        return rows;
+       }
+       else
+       {
+        return null;
+       }
     }
 
     public List<User> GetAll(int data)

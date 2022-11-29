@@ -101,4 +101,32 @@ public class ConsoleInput
         return key;
     }
 
+    public static string GetGender()
+    {
+        int index = 0;
+        int genderInt = 0;
+        bool success = false;
+        CORE.User.Genders genders = CORE.User.Genders.Undecided;
+        foreach (string Name in Enum.GetNames(typeof(CORE.User.Genders)))
+        {
+            Console.WriteLine($"[{index}] {Name}");
+            index++;
+        }
+        do
+        {
+            genderInt = ConsoleInput.GetInt("Choose gender: ");
+            foreach (int Number in Enum.GetValues(typeof(CORE.User.Genders)))
+            {
+                if (genderInt == Number)
+                {
+                    genders = (CORE.User.Genders)genderInt;
+                    success = true;
+                    break;
+                }
+            }
+        } while (!success);
+        string gender = ((CORE.User.Genders)genderInt).ToString();
+        return gender;
+    }
+
 }

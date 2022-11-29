@@ -48,7 +48,7 @@ public class PostsManager : IManager<Post>
     {
         return _postData.Delete(post);
     }
-    public Post Update()
+    public int? Update(Post post)
     {
         throw new NotImplementedException();
     }

@@ -6,6 +6,6 @@ public interface IManager<T>
     public int? Remove(T obj);
     public T GetOne(int data);
     public List<T> GetAll(int data);
-    public T Update();
+    public int? Update(T obj);
 
 }

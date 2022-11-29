@@ -2,30 +2,24 @@ using System.ComponentModel;
 namespace CORE;
 public class User
 {
-    public readonly int ID;
+    public int ID{get; private set;}
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }
     public string PassWord { get; set; }
     public string BirthDate { get; set; }
-    public Genders Gender { get; private set; }
+    public string Gender { get; private set; }
     public Roles Role { get; private set; }
-    public string AboutMe { get; private set; }
+    public string AboutMe { get; set; }
     public User() { }
-    public User(string aFirstName, string aLastName, string aEmail, string aPassWord, string aBirthDate)
+    public User(string aFirstName, string aLastName, string aEmail, string aPassWord, string aBirthDate, string aGender)
     {
         FirstName = aFirstName;
         LastName = aLastName;
         Email = aEmail;
         PassWord = aPassWord;
         BirthDate = aBirthDate;
-    }
-    public void SetGender(int enumNumber)
-    {
-        if (Enum.IsDefined(typeof(Genders), enumNumber))
-        {
-            Gender = (Genders)enumNumber;
-        }
+        Gender = aGender;
     }
     public void SetRole(int enumNumber)
     {

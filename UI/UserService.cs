@@ -81,6 +81,9 @@ public class UserService
                         break;
                     case 4:
                         //SETTINGSMENU
+                        EditInformation(user);
+                        //hämta alla uppdaterade uppgifter till usern
+                        user = _userManager.GetOne(user.ID);
                         break;
                 }
             }
@@ -95,7 +98,8 @@ public class UserService
         //validera date metod i consoleinput
         string birthDate = ConsoleInput.GetBirthDate("Birthdate(YYYY-MM-DD): ");
         //visa genders alternativ
-        User user = new(firstName, lastName, email, password, birthDate);
+        string gender = ConsoleInput.GetGender();
+        User user = new(firstName, lastName, email, password, birthDate, gender);
         _userManager.Create(user);
         return user;
     }
@@ -130,6 +134,34 @@ public class UserService
             {
                 Console.WriteLine(row);
             }
+        }
+    }
+    public void EditInformation(User user)
+    {
+        List<ConsoleKey>keys = new();
+        keys.Add(ConsoleKey.D1); keys.Add(ConsoleKey.D2);keys.Add(ConsoleKey.D3);
+        keys.Add(ConsoleKey.D4); keys.Add(ConsoleKey.D5);
+        ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[1] First name  [2] Last name  [3] Email  [4] Password  [5] About me", keys);
+        switch(pressedKey)
+        {
+            case ConsoleKey.D1 : user.FirstName = ConsoleInput.GetString("New first name: ");
+            break;
+            case ConsoleKey.D2: user.LastName = ConsoleInput.GetString("New last name: ");
+            break;
+            case ConsoleKey.D3: user.Email = ConsoleInput.GetEmail("New Email: ");
+            break;
+            case ConsoleKey.D4: user.PassWord = ConsoleInput.GetPassword("New password: ");
+            break;
+            case ConsoleKey.D5: user.AboutMe = ConsoleInput.GetString("About me: ");
+            break;
+        }
+        if(_userManager.Update(user) > 0)
+        {
+            Console.WriteLine("Updated!");
+        }
+        else
+        {
+            Console.WriteLine("Something went wrong.");
         }
     }
 }

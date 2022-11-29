@@ -44,7 +44,7 @@ public class CommentsManager : IManager<Comment>
     {
         throw new NotImplementedException();
     }
-    public Comment Update()
+    public int? Update(Comment comment)
     {
         throw new NotImplementedException();
     }
