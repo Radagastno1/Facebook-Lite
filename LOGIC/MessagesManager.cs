@@ -3,9 +3,14 @@ namespace LOGIC;
 
 public class MessgageManager : IManager<Message>
 {
-    public int? Create(Message obj)
+    IData<Message> _messageManager;
+    public MessgageManager(IData<Message> messageManager)
     {
-        throw new NotImplementedException();
+        _messageManager = messageManager;
+    }
+    public int? Create(Message message)
+    {
+        return _messageManager.Create(message);
     }
 
     public List<Message> GetAll(int data)

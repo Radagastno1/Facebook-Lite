@@ -9,7 +9,7 @@ public class ConversationService
     {
         _conversationManager = conversationManager;
     }
-    public void StartConversation(User user, List<User> participants)
+    public int? StartConversation(User user, List<User> participants)
     {
         Conversation conversation = new();
         conversation.CreatorId = user.ID;
@@ -27,5 +27,11 @@ public class ConversationService
         //sedan insert into users_conversations user.id, conversation.id
         //foreach user in participants: 
         //sedan insert into users_conversations particpant.id, conversation.id
+        return conversationId;
+    }
+
+    public void ShowConversation()
+    {
+
     }
 }

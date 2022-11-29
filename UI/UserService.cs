@@ -7,13 +7,16 @@ public class UserService
     IManager<Post> _postManager;
     IManager<Comment> _commentsManager;
     IManager<Conversation> _conversationManager;
+    IManager<Message> _messageManager;
     PostService postService;
-    public UserService(IManager<User> userManager, IManager<Post> postManager, IManager<Comment> commentsManager, IManager<Conversation> conversationManager)
+    MessageService messageService;
+    public UserService(IManager<User> userManager, IManager<Post> postManager, IManager<Comment> commentsManager, IManager<Conversation> conversationManager, IManager<Message> messageManager)
     {
         _userManager = userManager;
         _postManager = postManager;
         _commentsManager = commentsManager;
         _conversationManager = conversationManager;
+        _messageManager = messageManager;
     }
     public void ShowUserOverView(User user)
     {
@@ -60,10 +63,14 @@ public class UserService
                             ConversationService conversationService = new(_conversationManager);
                             //hämtar personen som man besöker och skickar in i konversation
                             User participant = _userManager.GetOne(id);
+                            //kolla om konversation finns, annars starta en ny med denna person!SEN gör detta
                             List<User> participants = new();
                             participants.Add(participant);
-                            conversationService.StartConversation(user, participants);
-                            //kolla om konversation finns, annars starta en ny med denna person!SEN gör detta
+                            int conversationId = conversationService.StartConversation(user, participants).GetValueOrDefault();
+                            //kolla om konversation finns, annars starta en ny med denna person!SEN gör detta över
+                            //VISA KONVERSATIONEN SEDAN HÄR
+                            messageService = new(_messageManager);
+                            messageService.MakeMessage(user, conversationId);
                         }
                         else
                         {

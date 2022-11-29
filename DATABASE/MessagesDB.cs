@@ -7,26 +7,21 @@ public class MessagesDB : IData<Message>
 {
     public int? Create(Message obj)
     { 
-        int messageId = 0;
-        string query = "START TRANSACTION " +
-        "INSERT INTO conversations(creator_id) VALUES(@Id);" +
-        "SET @conversations_id := LAST_INSERT_ID();" +
-        "INSERT INTO users_conversations(users_id, conversations_id) VALUES (@participant, @conversations_id);" +
-        "INSERT INTO messages (content, sender_id, conversations_id) " +
-        "VALUES(@Content, @SenderId, @conversations_id); "+
-        "COMMIT; SELECT LAST_INSERT_ID();";
-        using (MySqlConnection con = new MySqlConnection("connectionstring"))
+        int rowsEffected = 0;
+        string query = "INSERT INTO messages (content, sender_id, conversations_id) " +
+        "VALUES(@Content, @SenderId, @ConversationId);";
+        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
-            messageId = con.ExecuteScalar<int>(query, param: obj);
+            rowsEffected = con.ExecuteScalar<int>(query, param: obj);
         }
-        return messageId;
+        return rowsEffected;
     }
     public int? Delete(Message obj)
     {
         int rowsEffected = 0;
         string query = "DELETE FROM messages WHERE id = @Id;";
         // du ska kunna deleta dina medd. samt dig själv från konversationen
-        using (MySqlConnection con = new MySqlConnection("connectionstring"))
+        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
             rowsEffected = con.ExecuteScalar<int>(query, param: obj);
         }
@@ -43,7 +38,7 @@ public class MessagesDB : IData<Message>
         "ON c.id = uc.conversations_id " +
         "INNER JOIN users u2 ON uc.users_id = u2.id " +
         "WHERE u2.id = 2 ORDER BY m.date_created ASC;";
-        using (MySqlConnection con = new MySqlConnection("connectionstring"))
+        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
             messages = con.Query<Message>(query).ToList();
         }
@@ -54,7 +49,7 @@ public class MessagesDB : IData<Message>
         int rowsEffected = 0;
         //fixa så att du bara kan ändra dina egna meddelanden
         string query = "UPDATE messages SET content = @Content WHERE id = @Id;";
-        using (MySqlConnection con = new MySqlConnection("connectionstring"))
+        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
             rowsEffected = con.ExecuteScalar<int>(query, param: obj);
         }
