@@ -10,5 +10,11 @@ public class Message
     public int ConversationId{get;set;}
     public List<User>participants = new();
     public Message(){}
+    public Message(string aContent, int aSenderId, int aConversationId)
+    {
+        Content = aContent;
+        SenderId = aSenderId;
+        ConversationId = aConversationId;
+    }
 
 }

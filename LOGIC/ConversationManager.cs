@@ -1,34 +1,34 @@
 using CORE;
 namespace LOGIC;
 
-public class MessgageManager : IManager<Message>
+public class ConversationManager : IManager<Conversation>
 {
-    public int? Create(Message obj)
+    public int? Create(Conversation obj)
     {
         throw new NotImplementedException();
     }
 
-    public List<Message> GetAll(int data)
+    public List<Conversation> GetAll(int data)
     {
         throw new NotImplementedException();
     }
 
-    public List<Message> GetBySearch(string search)
+    public List<Conversation> GetBySearch(string search)
     {
         throw new NotImplementedException();
     }
 
-    public Message GetOne(int data)
+    public Conversation GetOne(int data)
     {
         throw new NotImplementedException();
     }
 
-    public int? Remove(Message obj)
+    public int? Remove(Conversation obj)
     {
         throw new NotImplementedException();
     }
 
-    public int? Update(Message obj)
+    public int? Update(Conversation obj)
     {
         throw new NotImplementedException();
     }
