@@ -12,11 +12,27 @@ public class MessageService
     }
     public void MakeMessage(User user, int conversationId)
     {
+        //man väljer en persons id
+        //startar en konversation direkt som är tom först OM inte det redan finns en konversation
+        //därefter kan man göra ett meddelande och skriva
         string content = ConsoleInput.GetString("Message: ");
         Message message = new(content, user.ID, conversationId);
         _messageManager.Create(message);
     }
-    //man väljer en persons id
-    //startar en konversation direkt som är tom först OM inte det redan finns en konversation
-    //därefter kan man göra ett meddelande och skriva
+    public void ShowMessages(int conversationId)
+    {
+        List<Message> messages = _messageManager.GetAll(conversationId);
+        if (messages != null)
+        {
+            foreach (Message item in messages)
+            {
+                Console.WriteLine(item.ToString());
+            }
+        }
+        else
+        {
+            Console.WriteLine("No messages here yet..");
+        }
+    }
+
 }

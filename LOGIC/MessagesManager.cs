@@ -15,10 +15,23 @@ public class MessgageManager : IManager<Message>
 
     public List<Message> GetAll(int data)
     {
-        List<Message> allMessages = new();
-        List<Message> selectedMessages = _messageManager.Get();
-        // if....
-        return selectedMessages;
+        List<Message> selectedMessages = new();
+        try
+        {
+            List<Message> allMessages = _messageManager.Get();
+            foreach (Message item in allMessages)
+            {
+                if (item.ConversationId == data)
+                {
+                    selectedMessages.Add(item);
+                }
+            }
+            return selectedMessages;
+        }
+        catch(NullReferenceException)
+        {
+            return null;
+        }
     }
 
     public List<Message> GetBySearch(string search)

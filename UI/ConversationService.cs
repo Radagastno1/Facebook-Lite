@@ -4,10 +4,12 @@ namespace UI;
 public class ConversationService
 {
     IManager<Conversation> _conversationManager;
+    IManager<Message> _messageManager;
 
-    public ConversationService(IManager<Conversation> conversationManager)
+    public ConversationService(IManager<Conversation> conversationManager, IManager<Message> messageManager)
     {
         _conversationManager = conversationManager;
+        _messageManager = messageManager;
     }
     public int? StartConversation(User user, List<User> participants)
     {
@@ -29,13 +31,19 @@ public class ConversationService
         //sedan insert into users_conversations particpant.id, conversation.id
         return conversationId;
     }
-
-    public void GetOneConversation(User user,int participantId)
+    public void GetOneConversation(User user, int participantId)
     {
+        MessageService messageService = new(_messageManager);
         // hämta konversationen med mitt id och en till id
-        Conversation conversation = _conversationManager.GetOne(user.ID, participantId);
-        // via konversationens id, hämta alla messages som har den conversation_id
-    
-
+        try
+        {
+            Conversation conversation = _conversationManager.GetOne(user.ID, participantId);
+            // via konversationens id, hämta alla messages som har den conversation_id
+            messageService.ShowMessages(conversation.ID);
+        }
+        catch(Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
     }
 }
