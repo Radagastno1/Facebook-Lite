@@ -54,7 +54,7 @@ public class PostsDB : IData<Post>
         }
         return rowsEffected; 
     }
-    public Post GetById()
+    public Post GetById(int data1, int data2)
     {
         throw new NotImplementedException();
     }

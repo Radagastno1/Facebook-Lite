@@ -40,7 +40,7 @@ public class CommentsDB : IData<Comment>
         return comments;
     }
 
-    public Comment GetById()
+    public Comment GetById(int data1, int data2)
     {
         throw new NotImplementedException();
     }

@@ -31,7 +31,7 @@ public class PostsManager : IManager<Post>
         }
         return searchedPosts;
     }
-    public Post GetOne(int id)
+    public Post GetOne(int id, int data2)
     {
         List<Post> allPosts = _postData.Get();
         Post post = new();

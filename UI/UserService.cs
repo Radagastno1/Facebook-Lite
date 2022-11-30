@@ -62,7 +62,7 @@ public class UserService
                             Console.WriteLine("startar konversation här");
                             ConversationService conversationService = new(_conversationManager);
                             //hämtar personen som man besöker och skickar in i konversation
-                            User participant = _userManager.GetOne(id);
+                            User participant = _userManager.GetOne(id, 0);
                             //kolla om konversation finns, annars starta en ny med denna person!SEN gör detta
                             List<User> participants = new();
                             participants.Add(participant);
@@ -103,7 +103,7 @@ public class UserService
                         //SETTINGSMENU
                         EditInformation(user);
                         //hämta alla uppdaterade uppgifter till usern
-                        user = _userManager.GetOne(user.ID);
+                        user = _userManager.GetOne(user.ID, 0);
                         break;
                 }
             }
@@ -137,7 +137,7 @@ public class UserService
     public void ShowProfile(int id)
     {
         PostService postService = new(_postManager, _commentsManager);
-        User user = _userManager.GetOne(id);
+        User user = _userManager.GetOne(id, 0);
         Console.Title = $"{user.FirstName} {user.LastName}";
         string[] userData = new string[]
            {

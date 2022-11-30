@@ -35,7 +35,7 @@ public class UserManager : IManager<User>
         }
         return searchedUsers;
     }
-    public User GetOne(int id)
+    public User GetOne(int id, int data2)
     {
         List<User> allUsers = _userData.Get();
         User user = new();

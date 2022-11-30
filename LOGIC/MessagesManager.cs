@@ -15,7 +15,10 @@ public class MessgageManager : IManager<Message>
 
     public List<Message> GetAll(int data)
     {
-        throw new NotImplementedException();
+        List<Message> allMessages = new();
+        List<Message> selectedMessages = _messageManager.Get();
+        // if....
+        return selectedMessages;
     }
 
     public List<Message> GetBySearch(string search)
@@ -23,7 +26,7 @@ public class MessgageManager : IManager<Message>
         throw new NotImplementedException();
     }
 
-    public Message GetOne(int data)
+    public Message GetOne(int data1, int data2)
     {
         throw new NotImplementedException();
     }

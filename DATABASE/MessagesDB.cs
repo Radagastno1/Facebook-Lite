@@ -30,7 +30,7 @@ public class MessagesDB : IData<Message>
     public List<Message> Get()
     {
         List<Message> messages = new();
-         string query = "SELECT m.content, concat(u1.first_name, ' ', u1.last_name) as 'Sender' " +
+         string query = "SELECT m.content as 'Content', concat(u1.first_name, ' ', u1.last_name) as 'Sender', c.users_id as 'ParticipantId' " +
         "FROM messages m " + 
         "INNER JOIN users u1 ON m.sender_id = u1.id " +
         "INNER JOIN conversations c ON m.conversations_id = c.id " + 
@@ -55,7 +55,7 @@ public class MessagesDB : IData<Message>
         }
         return rowsEffected;
     }
-    public Message GetById()
+    public Message GetById(int data1, int data2)
     {
         throw new NotImplementedException();
     }

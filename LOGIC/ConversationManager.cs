@@ -4,21 +4,23 @@ namespace LOGIC;
 public class ConversationManager : IManager<Conversation>
 {
     IData<Conversation> _conversationData;
+    IData<Message> _messageData;
 
-    public ConversationManager(IData<Conversation> conversationData)
+    public ConversationManager(IData<Conversation> conversationData, IData<Message> messageData)
     {
         _conversationData = conversationData;
+        _messageData = messageData;
     }
     public int? Create(Conversation conversation)
     {
         int? conversationId = _conversationData.Create(conversation);
-        if(conversationId != null)
+        if (conversationId != null)
         {             //använder jag för mycket nullable ints?
             conversation.ID = conversationId.GetValueOrDefault();
         }
         return conversationId;
     }
-     public int? Update(Conversation conversation)
+    public int? Update(Conversation conversation)
     {
         int? usersConversationId = _conversationData.Update(conversation);
         return usersConversationId;
@@ -34,9 +36,17 @@ public class ConversationManager : IManager<Conversation>
         throw new NotImplementedException();
     }
 
-    public Conversation GetOne(int data)
+    public Conversation GetOne(int data1, int data2)
     {
-        throw new NotImplementedException();
+        try
+        {
+            Conversation conversation = _conversationData.GetById(data1, data2);
+            return conversation;
+        }
+        catch(NullReferenceException)
+        {
+            return null;
+        }
     }
 
     public int? Remove(Conversation obj)

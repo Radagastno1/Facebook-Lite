@@ -36,7 +36,7 @@ public class CommentsManager : IManager<Comment>
     {
         throw new NotImplementedException();
     }
-    public Comment GetOne(int data)
+    public Comment GetOne(int data1, int data2)
     {
         throw new NotImplementedException();
     }

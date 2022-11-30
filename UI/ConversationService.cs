@@ -30,8 +30,12 @@ public class ConversationService
         return conversationId;
     }
 
-    public void ShowConversation()
+    public void GetOneConversation(User user,int participantId)
     {
+        // hämta konversationen med mitt id och en till id
+        Conversation conversation = _conversationManager.GetOne(user.ID, participantId);
+        // via konversationens id, hämta alla messages som har den conversation_id
+    
 
     }
 }

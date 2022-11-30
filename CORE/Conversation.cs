@@ -5,9 +5,9 @@ public class Conversation
     public DateTime DateCreated{get;set;}
     public User Creator{get;set;}
     List<User> Participants{get;set;}
-    List<Message> messages = new();
     public int ParticipantId{get;set;}
     public int CreatorId{get;set;}
+    public List<Message> Messages {get;set;} = new();
     public Conversation(){}
     public Conversation(User aCreator, List<User> aParticipants)
     {

@@ -18,7 +18,7 @@ public class ConversationDB : IData<Conversation>
     }
     public int? Update(Conversation conversation)
     {
-         int usersConversationId = 0;
+        int usersConversationId = 0;
         string query = "INSERT INTO users_conversations(users_id, conversations_id) VALUES (@participantId, @Id);" +
         "SELECT LAST_INSERT_ID();";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
@@ -33,10 +33,19 @@ public class ConversationDB : IData<Conversation>
     }
     public List<Conversation> Get()
     {
+        //här hämtar vi alla konversationer som man har i sin messenger
         throw new NotImplementedException();
     }
-    public Conversation GetById()
+    public Conversation GetById(int myId, int participantId)
     {
-        throw new NotImplementedException();
+        Conversation conversation = new();
+        string query = "SELECT uc.conversations_id, u1.id, u2.id FROM users_conversations uc " +
+        "INNER JOIN users u1 ON u1.id = uc.users_id INNER JOIN users u2 ON u1.id = uc.users_id " + 
+        "WHERE u1.id = @myId AND u2.id = @participantId;";
+        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
+        {
+            conversation = con.QuerySingle<Conversation>(query, new{@myId = myId, @participantId = participantId});
+        }
+        return conversation;
     }
 }

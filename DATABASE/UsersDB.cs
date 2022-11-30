@@ -62,7 +62,7 @@ public class UsersDB : IData<User>
         }
         return rowsEffected;
     }
-    public User GetById()
+    public User GetById(int data1, int data2)
     {
         throw new NotImplementedException();
     }
