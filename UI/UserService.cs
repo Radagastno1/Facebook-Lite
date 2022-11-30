@@ -57,18 +57,20 @@ public class UserService
                         ShowSearches(search);
                         int id = ConsoleInput.GetInt("User to visit: ");
                         ShowProfile(id);
+
                         List<ConsoleKey> keys = new();
                         keys.Add(ConsoleKey.M); keys.Add(ConsoleKey.P);
                         ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[M] Message  [P] Posts", keys);
                         if (pressedKey == ConsoleKey.M)
                         {
+                            int conversationId = 0;
                             //kolla om konversation finns och isåfall välj showconversation
                             try
                             {
-                                conversationService.GetOneConversation(user, id);
+                                conversationId = conversationService.GetOneConversation(user, id);
                                 //FEL HÄR SEQUENCE CONTAINS MORE THAN ONE ELEMENT
                             }
-                            catch(InvalidOperationException)
+                            catch (InvalidOperationException)
                             {
                                 Console.WriteLine("startar konversation här");
                                 //hämtar personen som man besöker och skickar in i konversation
@@ -76,12 +78,12 @@ public class UserService
                                 //kolla om konversation finns, annars starta en ny med denna person!SEN gör detta
                                 List<User> participants = new();
                                 participants.Add(participant);
-                                int conversationId = conversationService.StartConversation(user, participants).GetValueOrDefault();
+                                conversationId = conversationService.StartConversation(user, participants).GetValueOrDefault();
                                 //kolla om konversation finns, annars starta en ny med denna person!SEN gör detta över
                                 //VISA KONVERSATIONEN SEDAN HÄR
-                                messageService = new(_messageManager);
-                                messageService.MakeMessage(user, conversationId);
                             }
+                            messageService = new(_messageManager);
+                            messageService.MakeMessage(user, conversationId);
                         }
                         else
                         {

@@ -26,9 +26,13 @@ public class MessgageManager : IManager<Message>
                     selectedMessages.Add(item);
                 }
             }
+            if (selectedMessages.Count() < 1)
+            {
+                throw new InvalidOperationException();
+            }
             return selectedMessages;
         }
-        catch(NullReferenceException)
+        catch (InvalidOperationException)
         {
             return null;
         }

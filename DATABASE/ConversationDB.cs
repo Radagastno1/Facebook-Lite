@@ -39,7 +39,7 @@ public class ConversationDB : IData<Conversation>
     public Conversation GetById(int myId, int participantId)
     {
         Conversation conversation = new();
-        string query = "SELECT uc.conversations_id, u1.id, u2.id FROM users_conversations uc " +
+        string query = "SELECT uc.conversations_id as 'Id' FROM users_conversations uc " +
         "INNER JOIN users u1 ON u1.id = uc.users_id INNER JOIN users u2 ON u1.id = uc.users_id " + 
         "WHERE u1.id = @myId AND u2.id = @participantId;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
