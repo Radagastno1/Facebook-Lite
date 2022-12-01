@@ -5,10 +5,12 @@ public class ConversationService
 {
     IManager<Conversation> _conversationManager;
     IManager<Message> _messageManager;
-    public ConversationService(IManager<Conversation> conversationManager, IManager<Message> messageManager)
+    IIdManager _idManager;
+    public ConversationService(IManager<Conversation> conversationManager, IManager<Message> messageManager, IIdManager idManager)
     {
         _conversationManager = conversationManager;
         _messageManager = messageManager;
+        _idManager = idManager;
     }
     public int? StartConversation(User user, List<User> participants)
     {
@@ -30,11 +32,19 @@ public class ConversationService
         //sedan insert into users_conversations particpant.id, conversation.id
         return conversationId;
     }
-    public int GetOneConversation(User user, int participantId)
+    public int GetOneConversation(User user, List<int>ids)
     {
-        Conversation? conversation = _conversationManager.GetOne(user.ID, participantId);
+        List<int> participantIds = new();
+        participantIds.Add(user.ID);
+        foreach(int id in ids)
+        {
+            participantIds.Add(id);
+        }
+        //Conversation? conversation = _conversationManager.GetOne(user.ID, participantId);
+        Conversation? conversation = new();
+        conversation.ID = _idManager.GetId(participantIds);
         // hämta konversationen med mitt id och en till id
-        if (conversation == null)
+        if (conversation.ID == 0)
         {
             Console.WriteLine("Kastar invalid exception");
             //gör ny konversation

@@ -4,38 +4,48 @@ namespace LOGIC;
 public class MessgageManager : IManager<Message>
 {
     IData<Message> _messageManager;
-    public MessgageManager(IData<Message> messageManager)
+    IExtraData<Message> _extraData;
+    public MessgageManager(IData<Message> messageManager, IExtraData<Message> extraData)
     {
         _messageManager = messageManager;
+        _extraData = extraData;
     }
     public int? Create(Message message)
     {
         return _messageManager.Create(message);
     }
 
-    public List<Message> GetAll(int data)
+    public List<Message> GetAll(int conversationId)
     {
-        List<Message> selectedMessages = new();
-        try
-        {
-            List<Message> allMessages = _messageManager.Get();
-            foreach (Message item in allMessages)
-            {
-                if (item.ConversationId == data)
-                {
-                    selectedMessages.Add(item);
-                }
-            }
-            if (selectedMessages.Count() < 1)
-            {
-                throw new InvalidOperationException();
-            }
-            return selectedMessages;
-        }
-        catch (InvalidOperationException)
+        List<Message> selectedMessages = _extraData.GetManyByData(conversationId);
+        if(selectedMessages == null && selectedMessages.Count() < 1)
         {
             return null;
         }
+        else
+        {
+            return selectedMessages;
+        }
+        // try
+        // {
+        //     List<Message> allMessages = _messageManager.Get();
+        //     foreach (Message item in allMessages)
+        //     {
+        //         if (item.ConversationId == data)
+        //         {
+        //             selectedMessages.Add(item);
+        //         }
+        //     }
+        //     if (selectedMessages.Count() < 1)
+        //     {
+        //         throw new InvalidOperationException();
+        //     }
+        //     return selectedMessages;
+        // }
+        // catch (InvalidOperationException)
+        // {
+        //     return null;
+        // }
     }
 
     public List<Message> GetBySearch(string search)

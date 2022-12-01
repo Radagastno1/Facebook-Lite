@@ -1,7 +1,7 @@
 using CORE;
 namespace LOGIC;
 
-public class ConversationManager : IManager<Conversation>
+public class ConversationManager : IManager<Conversation>, IIdManager
 {
     IData<Conversation> _conversationData;
     IData<Message> _messageData;
@@ -43,14 +43,29 @@ public class ConversationManager : IManager<Conversation>
             Conversation conversation = _conversationData.GetById(data1, data2);
             return conversation;
         }
-        catch(NullReferenceException)
+        catch (NullReferenceException)
         {
             return null;
         }
     }
-
     public int? Remove(Conversation obj)
     {
         throw new NotImplementedException();
+    }
+    public int GetId(List<int> participantIds)
+    {
+        List<Conversation> conversations = _conversationData.Get();
+        int conversationId = 0;
+        foreach (int id in participantIds)
+        {
+            foreach (Conversation item in conversations)
+            {
+               if(id == item.ParticipantId)
+               {
+                conversationId = item.ID;
+               }
+            }
+        }
+        return conversationId;
     }
 }

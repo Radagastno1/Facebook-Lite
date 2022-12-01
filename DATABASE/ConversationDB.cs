@@ -34,14 +34,25 @@ public class ConversationDB : IData<Conversation>
     public List<Conversation> Get()
     {
         //här hämtar vi alla konversationer som man har i sin messenger
-        throw new NotImplementedException();
+        List<Conversation> allConversations = new();
+        string query = "SELECT uc.conversations_id as 'Id', c.date_created as 'DateCreated', c.creator_id as 'CreatorId', u.id as 'ParticipantId'" +
+                       "FROM conversations c " +
+                       "LEFT JOIN users_conversations uc " +
+                       "ON c.id = uc.conversations_id " +
+                       "LEFT JOIN users u " +
+                        "ON u.id = uc.users_id;";
+        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
+        {
+            allConversations = con.Query<Conversation>(query).ToList();
+        }
+        return allConversations;
     }
     public Conversation GetById(int myId, int participantId)
     {
         Conversation conversation = new();
         string query = "SELECT uc.conversations_id as 'Id' FROM users_conversations uc " +
         "INNER JOIN users u1 ON u1.id = uc.users_id INNER JOIN users u2 ON u1.id = uc.users_id " + 
-        "WHERE u1.id = @myId AND u2.id = @participantId;";
+        "WHERE uc.users_id = @myId AND uc.users_id = @participantId;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
             conversation = con.QuerySingle<Conversation>(query, new{@myId = myId, @participantId = participantId});

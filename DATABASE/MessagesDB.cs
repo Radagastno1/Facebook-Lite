@@ -3,10 +3,10 @@ using CORE;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class MessagesDB : IData<Message>
+public class MessagesDB : IData<Message>, IExtraData<Message>
 {
     public int? Create(Message obj)
-    { 
+    {
         int rowsEffected = 0;
         string query = "INSERT INTO messages (content, sender_id, conversations_id) " +
         "VALUES(@Content, @SenderId, @ConversationId);";
@@ -29,20 +29,7 @@ public class MessagesDB : IData<Message>
     }
     public List<Message> Get()
     {
-        List<Message> messages = new();
-         string query = "SELECT m.content as 'Content', concat(u1.first_name, ' ', u1.last_name) as 'Sender', uc.users_id as 'ParticipantId' " +
-        "FROM messages m " + 
-        "INNER JOIN users u1 ON m.sender_id = u1.id " +
-        "INNER JOIN conversations c ON m.conversations_id = c.id " + 
-        "INNER JOIN users_conversations uc " +
-        "ON c.id = uc.conversations_id " +
-        "INNER JOIN users u2 ON uc.users_id = u2.id " +
-        "WHERE u2.id = 2 ORDER BY m.date_created ASC;";
-        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
-        {
-            messages = con.Query<Message>(query).ToList();
-        }
-        return messages;
+        throw new NotImplementedException();
     }
     public int? Update(Message obj)
     {
@@ -58,5 +45,22 @@ public class MessagesDB : IData<Message>
     public Message GetById(int data1, int data2)
     {
         throw new NotImplementedException();
+    }
+
+    public List<Message> GetManyByData(int conversationId)
+    {
+        //MEDDE KOMMER INTE
+        List<Message> messages = new();
+        string query = "SELECT m.content as 'Content', concat(u.first_name, ' ', u.last_name) as 'Sender' " +
+       "FROM messages m INNER JOIN conversations c ON m.conversations_id = c.id  " +
+       "INNER JOIN users_conversations uc ON c.id = uc.conversations_id " +
+       "INNER JOIN users u ON u.id = m.sender_id " +
+       "WHERE c.id = @conversationId GROUP BY m.id " +
+       "ORDER BY m.date_created ASC;";
+        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
+        {
+            messages = con.Query<Message>(query, new{@conversationId = conversationId}).ToList();
+        }
+        return messages;
     }
 }

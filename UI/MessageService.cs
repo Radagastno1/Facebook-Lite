@@ -22,16 +22,16 @@ public class MessageService
     public void ShowMessages(int conversationId)
     {
         List<Message> messages = _messageManager.GetAll(conversationId);
-        if (messages != null)
+        if (messages == null || messages.Count() < 1)
+        {
+            Console.WriteLine("No messages here yet..");
+        }
+        else if (messages.Count() > 0)
         {
             foreach (Message item in messages)
             {
                 Console.WriteLine(item.ToString());
             }
-        }
-        else
-        {
-            Console.WriteLine("No messages here yet..");
         }
     }
 

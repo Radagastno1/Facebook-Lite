@@ -8,16 +8,18 @@ public class UserService
     IManager<Comment> _commentsManager;
     IManager<Conversation> _conversationManager;
     IManager<Message> _messageManager;
+    IIdManager _idManager;
     PostService postService;
     MessageService messageService;
     ConversationService conversationService;
-    public UserService(IManager<User> userManager, IManager<Post> postManager, IManager<Comment> commentsManager, IManager<Conversation> conversationManager, IManager<Message> messageManager)
+    public UserService(IManager<User> userManager, IManager<Post> postManager, IManager<Comment> commentsManager, IManager<Conversation> conversationManager, IManager<Message> messageManager, IIdManager idManager)
     {
         _userManager = userManager;
         _postManager = postManager;
         _commentsManager = commentsManager;
         _conversationManager = conversationManager;
         _messageManager = messageManager;
+        _idManager = idManager;
     }
     public void ShowUserOverView(User user)
     {
@@ -51,7 +53,7 @@ public class UserService
                         break;
                     case 1:
                         postService = new(_postManager, _commentsManager);
-                        conversationService = new(_conversationManager, _messageManager);
+                        conversationService = new(_conversationManager, _messageManager, _idManager);
 
                         string search = ConsoleInput.GetString("Search by name: ");
                         ShowSearches(search);
@@ -67,7 +69,9 @@ public class UserService
                             //kolla om konversation finns och isåfall välj showconversation
                             try
                             {
-                                conversationId = conversationService.GetOneConversation(user, id);
+                                List<int>ids = new();
+                                ids.Add(id);
+                                conversationId = conversationService.GetOneConversation(user, ids);
                                 //FEL HÄR SEQUENCE CONTAINS MORE THAN ONE ELEMENT
                             }
                             catch (InvalidOperationException)
@@ -101,7 +105,7 @@ public class UserService
                                 }
                             }
                         }
-                        Console.ReadLine();
+                        Console.ReadKey();
                         break;
                     case 2:
                         //CHATPAGE
