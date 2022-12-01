@@ -4,7 +4,7 @@ public class ConsoleInput
 {
     public static int GetInt(string output)
     {
-        int getInt = 0;
+        int getInt;
         bool success = false;
         do
         {
@@ -26,7 +26,7 @@ public class ConsoleInput
     public static string GetBirthDate(string output)
     {
         //dela upp till tre ints
-        bool success = false;
+        bool success;
         string dateString = string.Empty;
         do
         {

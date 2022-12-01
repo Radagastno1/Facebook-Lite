@@ -54,18 +54,25 @@ public class ConversationManager : IManager<Conversation>, IIdManager
     }
     public int GetId(List<int> participantIds)
     {
+        //en konversation har en lista med participantids
+
+        //id 6 och id 8 i listan  letar efter en konversationsid som har båda dessa i sig
         List<Conversation> conversations = _conversationData.Get();
         int conversationId = 0;
-        foreach (int id in participantIds)
+        List<Conversation> selectedConversations = new();
+
+        foreach (Conversation item in conversations)
         {
-            foreach (Conversation item in conversations)
+            foreach (int id in participantIds)
             {
-               if(id == item.ParticipantId)
-               {
-                conversationId = item.ID;
-               }
+                if (id == item.ParticipantId)
+                {
+                    // tex konv id 25 och 26
+                    selectedConversations.Add(item);
+                }
             }
         }
+
         return conversationId;
     }
 }
