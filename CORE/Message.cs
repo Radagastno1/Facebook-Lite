@@ -7,7 +7,7 @@ public class Message
     public string Reciever{get;set;}
     public string Sender{get;set;}
     public int SenderId{get;set;}
-    // public bool IsDeleted{get;set;}
+    //public bool IsDeleted{get;set;}
     public int ConversationId{get;set;}
     public List<User>participants = new();
     public Message(){}
