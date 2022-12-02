@@ -8,11 +8,11 @@ public class UserService
     IManager<Comment> _commentsManager;
     IManager<Conversation> _conversationManager;
     IManager<Message> _messageManager;
-    IIdManager _idManager;
+    IIdManager<Conversation> _idManager;
     PostService postService;
     MessageService messageService;
     ConversationService conversationService;
-    public UserService(IManager<User> userManager, IManager<Post> postManager, IManager<Comment> commentsManager, IManager<Conversation> conversationManager, IManager<Message> messageManager, IIdManager idManager)
+    public UserService(IManager<User> userManager, IManager<Post> postManager, IManager<Comment> commentsManager, IManager<Conversation> conversationManager, IManager<Message> messageManager, IIdManager<Conversation> idManager)
     {
         _userManager = userManager;
         _postManager = postManager;

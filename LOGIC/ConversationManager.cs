@@ -1,11 +1,10 @@
 using CORE;
 namespace LOGIC;
 
-public class ConversationManager : IManager<Conversation>, IIdManager
+public class ConversationManager : IManager<Conversation>, IIdManager<Conversation>
 {
     IData<Conversation> _conversationData;
     IData<Message> _messageData;
-
     public ConversationManager(IData<Conversation> conversationData, IData<Message> messageData)
     {
         _conversationData = conversationData;
@@ -25,17 +24,14 @@ public class ConversationManager : IManager<Conversation>, IIdManager
         int? usersConversationId = _conversationData.Update(conversation);
         return usersConversationId;
     }
-
     public List<Conversation> GetAll(int data)
     {
         throw new NotImplementedException();
     }
-
     public List<Conversation> GetBySearch(string search)
     {
         throw new NotImplementedException();
     }
-
     public Conversation GetOne(int data1, int data2)
     {
         try
@@ -52,27 +48,15 @@ public class ConversationManager : IManager<Conversation>, IIdManager
     {
         throw new NotImplementedException();
     }
-    public int GetId(List<int> participantIds)
+    public List<Conversation> GetIds(List<int> participantIds)
     {
-        //en konversation har en lista med participantids
-
-        //id 6 och id 8 i listan  letar efter en konversationsid som har båda dessa i sig
-        List<Conversation> conversations = _conversationData.Get();
-        int conversationId = 0;
-        List<Conversation> selectedConversations = new();
-
-        foreach (Conversation item in conversations)
+        List<Conversation> conversationHolder = new();
+        string sql = "";
+        foreach(int id in participantIds)
         {
-            foreach (int id in participantIds)
-            {
-                if (id == item.ParticipantId)
-                {
-                    // tex konv id 25 och 26
-                    selectedConversations.Add(item);
-                }
-            }
+            sql += $" AND id = {id} ";
         }
 
-        return conversationId;
+        return conversationHolder;
     }
 }

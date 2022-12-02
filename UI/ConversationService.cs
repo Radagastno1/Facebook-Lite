@@ -5,8 +5,8 @@ public class ConversationService
 {
     IManager<Conversation> _conversationManager;
     IManager<Message> _messageManager;
-    IIdManager _idManager;
-    public ConversationService(IManager<Conversation> conversationManager, IManager<Message> messageManager, IIdManager idManager)
+    IIdManager<Conversation> _idManager;
+    public ConversationService(IManager<Conversation> conversationManager, IManager<Message> messageManager, IIdManager<Conversation> idManager)
     {
         _conversationManager = conversationManager;
         _messageManager = messageManager;
@@ -41,22 +41,19 @@ public class ConversationService
             participantIds.Add(id);
         }
         //Conversation? conversation = _conversationManager.GetOne(user.ID, participantId);
-        Conversation? conversation = new();
-        conversation.ID = _idManager.GetId(participantIds);
-        // hämta konversationen med mitt id och en till id
-        if (conversation.ID == 0)
+        List<Conversation>foundConversations = new();
+        foundConversations = _idManager.GetIds(participantIds);
+        // hämta konversationen med mitt id och fler
+        foreach(Conversation item in foundConversations)
         {
-            Console.WriteLine("Kastar invalid exception");
-            //gör ny konversation
-            throw new InvalidOperationException();
+            Console.WriteLine($"Conversation [{item.ID}]");
         }
-        else
-        {
+        int conversationId = ConsoleInput.GetInt("Choose: ");
             Console.WriteLine("Visar meddelanden i konversation som fanns");
             // via konversationens id, hämta alla messages som har den conversation_id
             MessageService messageService = new(_messageManager);
-            messageService.ShowMessages(conversation.ID);
-        }
-        return conversation.ID;
+            messageService.ShowMessages(conversationId);
+        
+        return conversationId;
     }
 }

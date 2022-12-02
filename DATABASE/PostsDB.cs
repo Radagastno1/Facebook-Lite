@@ -3,7 +3,7 @@ using CORE;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class PostsDB : IData<Post>
+public class PostsDB : IData<Post>, IExtraData<Post>
 {
     public int? Create(Post obj)
     {
@@ -55,6 +55,11 @@ public class PostsDB : IData<Post>
         return rowsEffected; 
     }
     public Post GetById(int data1, int data2)
+    {
+        throw new NotImplementedException();
+    }
+
+    public List<Post> GetManyByData(int data, string text)
     {
         throw new NotImplementedException();
     }

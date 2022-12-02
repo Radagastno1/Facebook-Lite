@@ -47,7 +47,7 @@ public class MessagesDB : IData<Message>, IExtraData<Message>
         throw new NotImplementedException();
     }
 
-    public List<Message> GetManyByData(int conversationId)
+    public List<Message> GetManyByData(int conversationId, string text)
     {
         //MEDDE KOMMER INTE
         List<Message> messages = new();

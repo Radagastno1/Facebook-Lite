@@ -47,17 +47,25 @@ public class ConversationDB : IData<Conversation>
         }
         return allConversations;
     }
-    public Conversation GetById(int myId, int participantId)
+    public List<Conversation> GetManyByData(int amountOfUsers, string sql)
     {
         //stop denna hämtar konversation endast mellan 2 st
-        Conversation conversation = new();
-        string query = "SELECT uc.conversations_id as 'Id' FROM users_conversations uc " +
-        "INNER JOIN users u1 ON u1.id = uc.users_id INNER JOIN users u2 ON u1.id = uc.users_id " + 
-        "WHERE uc.users_id = @myId AND uc.users_id = @participantId;";
+        List<Conversation>conversations = new();
+        string query = "SELECT conversations_id ," +
+         "GROUP_CONCAT(uc.users_id) AS User_List " +
+        "FROM users_conversations uc " +
+        "WHERE  uc.users_id IN (14,16) -- find user_id 1 or 3 " + //I PARANTESEN SKA IN IDS
+        "GROUP BY uc.conversations_id " +
+        "HAVING COUNT(DISTINCT uc.users_id) = 2;"; //2 is how many usersids HÄR SKA IN LÄNGD PÅ LISTAN
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
-            conversation = con.QuerySingle<Conversation>(query, new{@myId = myId, @participantId = participantId});
+            conversations = con.Query<Conversation>(query).ToList();
         }
-        return conversation;
+        return conversations;
+    }
+
+    Conversation IData<Conversation>.GetById(int data1, int data2)
+    {
+        throw new NotImplementedException();
     }
 }

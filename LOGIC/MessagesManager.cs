@@ -17,7 +17,9 @@ public class MessgageManager : IManager<Message>
 
     public List<Message> GetAll(int conversationId)
     {
-        List<Message> selectedMessages = _extraData.GetManyByData(conversationId);
+        string text = "";
+        //fixa bättre interfaces
+        List<Message> selectedMessages = _extraData.GetManyByData(conversationId, text);
         if(selectedMessages == null && selectedMessages.Count() < 1)
         {
             return null;

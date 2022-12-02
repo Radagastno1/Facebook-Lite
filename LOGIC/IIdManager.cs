@@ -1,5 +1,5 @@
 namespace LOGIC;
-public interface IIdManager
+public interface IIdManager<T>
 {
-    public int GetId(List<int>integers);
+    public List<T> GetIds(List<int>integers);
 }
