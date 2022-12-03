@@ -51,15 +51,15 @@ public class ConversationDB : IData<Conversation>, IExtraData<Conversation>
     {
         //stop denna hämtar konversation endast mellan 2 st
         List<Conversation>conversations = new();
-        string query = "SELECT conversations_id ," +
+        string query = $"SELECT uc.conversations_id AS 'ID', " +
          "GROUP_CONCAT(uc.users_id) AS User_List " +
         "FROM users_conversations uc " +
-        "WHERE  uc.users_id IN "/*(14,16)*/ + sql + //I SQL SKA IN IDS I EN PARANTES
+        $"WHERE  uc.users_id IN ({sql})" + //I SQL SKA IN IDS I EN PARANTES
         "GROUP BY uc.conversations_id " +
         "HAVING COUNT(DISTINCT uc.users_id) = @amountOfUsers;"; //2 is how many usersids HÄR SKA IN LÄNGD PÅ LISTAN
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
-            conversations = con.Query<Conversation>(query).ToList();
+            conversations = con.Query<Conversation>(query, new{@amountOfUsers = amountOfUsers}).ToList();
         }
         return conversations;
     }

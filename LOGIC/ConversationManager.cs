@@ -52,14 +52,21 @@ public class ConversationManager : IManager<Conversation>, IIdManager<Conversati
     }
     public List<Conversation> GetIds(List<int> participantIds)
     {
-        int amountOfParticipants = participantIds.Count();
         List<Conversation> conversationHolder = new();
+        int amountOfParticipants = participantIds.Count();
         string sql = "";
-        foreach(int id in participantIds)
+        foreach (int id in participantIds)
         {
-            sql += $" AND id = {id} ";
-            conversationHolder.Add(_extraData.GetOneByData(id, sql));
+            if (id != participantIds.Last())
+            {
+                sql += $"{id}, ";
+            }
+            else
+            {
+                sql += $"{id}";
+            }
         }
+        conversationHolder = _extraData.GetManyByData(amountOfParticipants, sql);
         return conversationHolder;
     }
 }
