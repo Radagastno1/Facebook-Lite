@@ -32,7 +32,7 @@ public class ConversationService
         //sedan insert into users_conversations particpant.id, conversation.id
         return conversationId;
     }
-    public int GetOneConversation(User user, List<int>ids)
+    public int ShowConversation(User user, List<int>ids)
     {//denna ska heta showconversations 
         List<int> participantIds = new();
         participantIds.Add(user.ID);
