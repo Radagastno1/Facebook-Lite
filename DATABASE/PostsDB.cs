@@ -63,4 +63,9 @@ public class PostsDB : IData<Post>, IExtraData<Post>
     {
         throw new NotImplementedException();
     }
+
+    Post IExtraData<Post>.GetOneByData(int data, string text)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -63,4 +63,9 @@ public class MessagesDB : IData<Message>, IExtraData<Message>
         }
         return messages;
     }
+
+    Message IExtraData<Message>.GetOneByData(int data, string text)
+    {
+        throw new NotImplementedException();
+    }
 }

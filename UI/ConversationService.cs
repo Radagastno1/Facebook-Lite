@@ -33,7 +33,7 @@ public class ConversationService
         return conversationId;
     }
     public int GetOneConversation(User user, List<int>ids)
-    {
+    {//denna ska heta showconversations 
         List<int> participantIds = new();
         participantIds.Add(user.ID);
         foreach(int id in ids)

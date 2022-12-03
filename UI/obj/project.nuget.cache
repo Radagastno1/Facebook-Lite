@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "yZ/5wORsJUkrcSGs1tPXXM3X/1O4KMdJ0eY7ETqUuPVmH0MlX6fKPUCtxyTFtKF5gayx8PjydTS/U/Xx1zfyxg==",
+  "dgSpecHash": "E5F94havV2FIWhFrqVjQgDmniOkSNyAWLK5O74uULJn99VBIrB70QFl123CV4Udh2ox63kRFzGfb1VVJ74Chig==",
   "success": true,
-  "projectFilePath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\ui\\UI.csproj",
+  "projectFilePath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\UI\\UI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\angel\\.nuget\\packages\\dapper\\2.0.123\\dapper.2.0.123.nupkg.sha512",
     "C:\\Users\\angel\\.nuget\\packages\\mysqlconnector\\2.2.1\\mysqlconnector.2.2.1.nupkg.sha512"

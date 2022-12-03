@@ -10,7 +10,7 @@ internal class Program
         UserManager userManager = new(new UsersDB());
         PostsManager postsManager = new(new PostsDB());
         CommentsManager commentsManager = new(new CommentsDB());
-        ConversationManager conversationManager = new(new ConversationDB(), new MessagesDB());
+        ConversationManager conversationManager = new(new ConversationDB(), new MessagesDB(), new ConversationDB());
         MessgageManager messageManager = new(new MessagesDB(), new MessagesDB());
         UserService userService = new(userManager, postsManager, commentsManager, conversationManager, messageManager, conversationManager);
         PostService postService = new(postsManager, commentsManager);

@@ -3,7 +3,7 @@ using LOGIC;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class ConversationDB : IData<Conversation>
+public class ConversationDB : IData<Conversation>, IExtraData<Conversation>
 {
     public int? Create(Conversation conversation)
     {
@@ -54,9 +54,9 @@ public class ConversationDB : IData<Conversation>
         string query = "SELECT conversations_id ," +
          "GROUP_CONCAT(uc.users_id) AS User_List " +
         "FROM users_conversations uc " +
-        "WHERE  uc.users_id IN (14,16) -- find user_id 1 or 3 " + //I PARANTESEN SKA IN IDS
+        "WHERE  uc.users_id IN "/*(14,16)*/ + sql + //I SQL SKA IN IDS I EN PARANTES
         "GROUP BY uc.conversations_id " +
-        "HAVING COUNT(DISTINCT uc.users_id) = 2;"; //2 is how many usersids HÄR SKA IN LÄNGD PÅ LISTAN
+        "HAVING COUNT(DISTINCT uc.users_id) = @amountOfUsers;"; //2 is how many usersids HÄR SKA IN LÄNGD PÅ LISTAN
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
             conversations = con.Query<Conversation>(query).ToList();
@@ -65,6 +65,11 @@ public class ConversationDB : IData<Conversation>
     }
 
     Conversation IData<Conversation>.GetById(int data1, int data2)
+    {
+        throw new NotImplementedException();
+    }
+
+    Conversation IExtraData<Conversation>.GetOneByData(int data, string text)
     {
         throw new NotImplementedException();
     }

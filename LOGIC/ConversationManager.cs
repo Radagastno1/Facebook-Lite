@@ -5,10 +5,12 @@ public class ConversationManager : IManager<Conversation>, IIdManager<Conversati
 {
     IData<Conversation> _conversationData;
     IData<Message> _messageData;
-    public ConversationManager(IData<Conversation> conversationData, IData<Message> messageData)
+    IExtraData<Conversation> _extraData;
+    public ConversationManager(IData<Conversation> conversationData, IData<Message> messageData, IExtraData<Conversation> extraData)
     {
         _conversationData = conversationData;
         _messageData = messageData;
+        _extraData = extraData;
     }
     public int? Create(Conversation conversation)
     {
@@ -50,13 +52,14 @@ public class ConversationManager : IManager<Conversation>, IIdManager<Conversati
     }
     public List<Conversation> GetIds(List<int> participantIds)
     {
+        int amountOfParticipants = participantIds.Count();
         List<Conversation> conversationHolder = new();
         string sql = "";
         foreach(int id in participantIds)
         {
             sql += $" AND id = {id} ";
+            conversationHolder.Add(_extraData.GetOneByData(id, sql));
         }
-
         return conversationHolder;
     }
 }
