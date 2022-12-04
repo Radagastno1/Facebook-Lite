@@ -11,7 +11,7 @@ public class UserManager : IManager<User>
     //hämta mina medd - messagemanager
     //radera post - usermanager
     //radera medd - usermanager
-    int? IManager<User>.Create(User user)
+    public int? Create(User user)
     {
         return _userData.Create(user);
     }

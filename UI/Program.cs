@@ -1,10 +1,10 @@
 ﻿using CORE;
 using LOGIC;
-using DATABASE; //ska ui känna till databas?? pga usermanager
+using DATABASE; 
 namespace UI;
 internal class Program
 {
-    //MÅSTE FÅ POSTS ATT VISAS!!!!
+    //MÅSTE FÅ POSTS ATT VISAS!
     private static void Main(string[] args)
     {
         UserManager userManager = new(new UsersDB());
@@ -12,8 +12,8 @@ internal class Program
         CommentsManager commentsManager = new(new CommentsDB());
         ConversationManager conversationManager = new(new ConversationDB(), new MessagesDB(), new ConversationDB());
         MessgageManager messageManager = new(new MessagesDB(), new MessagesDB());
-        UserService userService = new(userManager, postsManager, commentsManager, conversationManager, messageManager, conversationManager);
-        PostService postService = new(postsManager, commentsManager);
+        SignUpGUI signUpGui = new(userManager);
+        UserGUI userGUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, conversationManager, commentsManager);
         //MENYN INSPIRERAD AV PETRUS BLODBANKEN PROJEKT
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.BackgroundColor = ConsoleColor.White;
@@ -49,27 +49,24 @@ internal class Program
                 switch (menuOptions)
                 {
                     case 0:
-                        User user = new();
+                        User? user = new();
                         LogInService logInService = new();
                         user = logInService.LogIn();
                         if (user != null)
                         {
-                            userService.ShowUserOverView(user);
+                            userGUI.ShowFacebookOverview(user);
                         }
-                        // om det ej var lyckat så är user null här, så i userpage får man kolla om user
-                        //är null eller ej
                         break;
                     case 1:
-                        userService.UserSignUp();
-                        //SIGN UP - MAKE NEW USER
+                        signUpGui.UserSignUp();
+                        //returnerar user för nu, vill att mail ska skickas ut till 
+                        //userns mail sedan eventuellt för att validera
                         break;
                     case 2:
-                        //FORGOT PASSWORD - EMAIL-SERVICE
+                        //FORGOT PASSWORD - EMAIL-SERVICE för utveckling
                         break;
                 }
             }
         }
-
-
     }
 }

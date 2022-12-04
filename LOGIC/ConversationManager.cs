@@ -1,7 +1,7 @@
 using CORE;
 namespace LOGIC;
 
-public class ConversationManager : IManager<Conversation>, IIdManager<Conversation>
+public class ConversationManager : IManager<Conversation>, IIdManager<Conversation>, IConnecting<User>
 {
     IData<Conversation> _conversationData;
     IData<Message> _messageData;
@@ -50,8 +50,9 @@ public class ConversationManager : IManager<Conversation>, IIdManager<Conversati
     {
         throw new NotImplementedException();
     }
-    public List<Conversation> GetIds(List<int> participantIds)
+    public ConversationResult GetIds(List<int> participantIds)
     {
+        ConversationResult result = new();
         List<Conversation> conversationHolder = new();
         int amountOfParticipants = participantIds.Count();
         string sql = "";
@@ -67,6 +68,35 @@ public class ConversationManager : IManager<Conversation>, IIdManager<Conversati
             }
         }
         conversationHolder = _extraData.GetManyByData(amountOfParticipants, sql);
-        return conversationHolder;
+        if (conversationHolder.Count > 0)
+        {
+            result.conversations = conversationHolder;
+            result.ConversationExists = true;
+        }
+        else
+        {
+            result.ConversationExists = false;
+        }
+        return result;
     }
+    public int? MakeNew(List<User> participants, User user)
+    {
+        //DENNA I LOGIK!
+        Conversation conversation = new();
+        conversation.CreatorId = user.ID;
+        int? conversationId = Create(conversation);
+        //den som startar konversationen är en del av participants med:
+        participants.Add(user);
+        foreach (User item in participants)
+        {
+            conversation.ParticipantId = item.ID;
+            Update(conversation);
+        }
+        // insert into conversations(user.id)
+        //sedan insert into users_conversations user.id, conversation.id
+        //foreach user in participants: 
+        //sedan insert into users_conversations particpant.id, conversation.id
+        return conversationId;
+    }
+
 }

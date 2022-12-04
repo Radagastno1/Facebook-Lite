@@ -1,5 +1,5 @@
 using CORE;
-namespace UI;
+namespace LOGIC;
 public class ConversationResult
 {
     public List<Conversation> conversations{get;set;} = new();
