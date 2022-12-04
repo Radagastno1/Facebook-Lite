@@ -68,11 +68,12 @@ public class UserService
                         {
                             List<int> ids = new();
                             ids.Add(id);
-                            //kolla om konversation finns och isåfall välj showconversation
                             bool conversationExists = conversationService.ConversationsExists(ids, user).ConversationExists;
                             if (conversationExists == true)
                             {
-                                conversationId = conversationService.ChooseConversation(conversationService.ConversationsExists(ids, user).conversations);
+                                conversationService.ShowConversations(conversationService.ConversationsExists(ids, user).conversations);
+                                conversationId = ConsoleInput.GetInt("Choose: ");
+                                messageService.ShowMessages(conversationId);
                             }
                             else
                             {
@@ -81,7 +82,14 @@ public class UserService
                                 pressedKey = ConsoleInput.GetPressedKey("[S]Start conversation  [R] Return", keys);
                                 if (pressedKey == ConsoleKey.S)
                                 {
-                                    conversationId = StartingConversation(id, user);
+                                    ids = new();
+                                    ids.Add(id);
+                                    List<User> participants = GetUsersById(ids);
+                                    conversationId = StartNewConversation(participants, user);
+                                }
+                                else
+                                {
+                                    break;
                                 }
                             }
                             messageService = new(_messageManager);
@@ -117,7 +125,6 @@ public class UserService
                     case 4:
                         //SETTINGSMENU
                         EditInformation(user);
-                        //hämta alla uppdaterade uppgifter till usern
                         user = _userManager.GetOne(user.ID, 0);
                         break;
                 }
@@ -171,17 +178,21 @@ public class UserService
             }
         }
     }
-    public int StartingConversation(int id, User user)
+    public int StartNewConversation(List<User> participants, User user)
     {
-        Console.WriteLine("startar konversation här");
-        //hämtar personen som man besöker och skickar in i konversation
-        User participant = _userManager.GetOne(id, 0);
-        //kolla om konversation finns, annars starta en ny med denna person!SEN gör detta
-        List<User> participants = new();
-        participants.Add(participant);
         int conversationId = conversationService.StartConversation(user, participants).GetValueOrDefault();
         //VISA KONVERSATIONEN SEDAN HÄR
         return conversationId;
+    }
+    public List<User> GetUsersById(List<int> ids)
+    {
+        List<User> participants = new();
+        foreach (int id in ids)
+        {
+            User participant = _userManager.GetOne(id, 0);
+            participants.Add(participant);
+        }
+        return participants;
     }
     public void EditInformation(User user)
     {
