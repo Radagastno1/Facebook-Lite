@@ -18,21 +18,22 @@ public class UserManager : IManager<User>
     public List<User> GetBySearch(string search)
     {
          List<User> searchedUsers = new();
-        try
-        {
-            List<User> allUsers = _userData.Get();
-            foreach (User user in allUsers)
-            {
-                if (user.FirstName.ToLower().Contains(search.ToLower()) || user.LastName.ToLower().Contains(search.ToLower()))
-                {
-                    searchedUsers.Add(user);
-                }
-            }
-        }
-        catch(InvalidOperationException e)
-        {
-            Console.WriteLine(e);
-        }
+        
+        // try
+        // {
+        //     List<User> allUsers = _userData.Get();
+        //     foreach (User user in allUsers)
+        //     {
+        //         if (user.FirstName.ToLower().Contains(search.ToLower()) || user.LastName.ToLower().Contains(search.ToLower()))
+        //         {
+        //             searchedUsers.Add(user);
+        //         }
+        //     }
+        // }
+        // catch(InvalidOperationException e)
+        // {
+        //     Console.WriteLine(e);
+        // }
         return searchedUsers;
     }
     public User GetOne(int id, int data2)

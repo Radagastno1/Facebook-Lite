@@ -114,10 +114,23 @@ public class UserUI
                     case 2:
                         //CHATPAGE
                         ShowConversationParticipants(user.ID);
-                        conversationId = ConsoleInput.GetInt("Choose: ");
-                        ShowMessages(conversationId);
-                        MakeMessage(user, conversationId);
-                        // 
+                        pressedKey = ConsoleInput.GetPressedKey($"[C] Choose conversation  [N] New Conversation", NewKeyList(ConsoleKey.C, ConsoleKey.N));
+                        if (pressedKey == ConsoleKey.C)
+                        {
+                            conversationId = ConsoleInput.GetInt("Choose: ");
+                            ShowMessages(conversationId);
+                            MakeMessage(user, conversationId);
+                        }
+                        else
+                        {
+                             //söka efter personer att lägga till
+                            string userName = ConsoleInput.GetString($"Search for user by name: ");
+                            //visa lista med deras idn och för och efternamn
+
+                            //välja deras idn
+                            //när jag sökt klart så ska man kunna skapa konv. mellan oss
+                            //och därifrån skriva meddelanden inom konversationen
+                        }
                         Console.ReadKey();
                         break;
                     case 3:
@@ -134,13 +147,10 @@ public class UserUI
             }
         }
     }
-
-
     public void ShowMyPage()
     {
 
     }
-
     public void ShowOverlook()
     {
 

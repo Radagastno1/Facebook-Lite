@@ -3,7 +3,7 @@ using CORE;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class UsersDB : IData<User>
+public class UsersDB : IData<User>, IDataSearcher<User>
 {
     public int? Create(User obj)
     {
@@ -66,4 +66,20 @@ public class UsersDB : IData<User>
     {
         throw new NotImplementedException();
     }
+
+    public ConversationResult GetIds(int data)
+    {
+        throw new NotImplementedException();
+    }
+    public List<User> GetSearches(string name)
+    {
+        List<User>foundUsers = new();
+        string query = "SELECT u.id, u.first_name as 'FirstName', u.last_name as 'LastName', u.email, " +
+        "u.pass_word as 'PassWord', u.birth_date as 'BirthDate', u.gender, u.about_me as 'AboutMe', r.name as 'Role' " +
+        "FROM users u LEFT JOIN users_roles ur ON ur.users_id = u.id " +
+        "LEFT JOIN roles r ON r.id = ur.roles_id " +
+        "WHERE u.first_name LIKE '%ang%';";
+        return foundUsers;
+    }
+
 }
