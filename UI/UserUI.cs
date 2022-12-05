@@ -123,13 +123,8 @@ public class UserUI
                         }
                         else
                         {
-                             //söka efter personer att lägga till
-                            string userName = ConsoleInput.GetString($"Search for user by name: ");
-                            ShowSearches(userName);
-                            //visa lista med deras idn och för och efternamn
-
-                            //välja deras idn
-                            //när jag sökt klart så ska man kunna skapa konv. mellan oss
+                            AddPeopleToNewConversation(user);
+                            
                             //och därifrån skriva meddelanden inom konversationen
                         }
                         Console.ReadKey();
@@ -184,6 +179,27 @@ public class UserUI
                 Console.WriteLine(item.ToString());
             }
         }
+    }
+    public int AddPeopleToNewConversation(User user)
+    {
+        List<int> userIds = new();
+        ConsoleKey pressedKey = new();
+        int conversationId = 0;
+        do
+        {
+            pressedKey = ConsoleInput.GetPressedKey("[A] Add user  [R] Return", NewKeyList(ConsoleKey.A, ConsoleKey.R));
+            if (pressedKey == ConsoleKey.A)
+            {
+                string userName = ConsoleInput.GetString($"Search for user by name: ");
+                ShowSearches(userName);
+                int id = ConsoleInput.GetInt("Choose by ID");
+                userIds.Add(id);
+            }
+
+        } while (pressedKey != ConsoleKey.R);
+        List<User> participants = GetUsersById(userIds);
+        conversationId = _connectionManager.MakeNew(participants, user).GetValueOrDefault();
+        return conversationId;
     }
     public void ShowProfile(int id)
     {

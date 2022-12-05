@@ -66,7 +66,6 @@ public class UsersDB : IData<User>, IDataSearcher<User>
     {
         throw new NotImplementedException();
     }
-
     public ConversationResult GetIds(int data)
     {
         throw new NotImplementedException();
