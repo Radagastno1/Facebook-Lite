@@ -4,7 +4,7 @@ using DATABASE;
 namespace UI;
 internal class Program
 {
-    //MÅSTE FÅ POSTS ATT VISAS!
+    //KOMMENTARER VISAS SOM POSTS PÅ SIN MYPAGE!
     private static void Main(string[] args)
     {
         UserManager userManager = new(new UsersDB());

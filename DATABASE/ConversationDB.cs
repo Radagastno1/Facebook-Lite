@@ -3,7 +3,7 @@ using LOGIC;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IIdData
+public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IIdData<Conversation>
 {
     public int? Create(Conversation conversation)
     {
@@ -89,15 +89,14 @@ public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IId
             }
         return result;
     }
-
-    public ConversationResult GetById(int data1)
+    public List<Conversation> GetById(int data1)
     {
-        ConversationResult result = new();
-        string query = $";"; //2 is how many usersids HÄR SKA IN LÄNGD PÅ LISTAN
+        List<Conversation>conversations = new();
+        string query = $"SELECT uc.conversation_id as 'ID' FROM users_conversations uc WHERE uc.users_id = $data;"; 
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
-            result.Conversations = con.Query<Conversation>(query).ToList();
+            conversations = con.Query<Conversation>(query).ToList();
         }
-        return result;
+        return conversations;
     }
 }

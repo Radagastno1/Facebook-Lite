@@ -113,7 +113,9 @@ public class UserUI
                         break;
                     case 2:
                         //CHATPAGE
-                        ShowChat(user.ID);
+                        ShowConversationParticipants(user.ID);
+                        // ShowChat(user.ID);
+                        Console.ReadKey();
                         break;
                     case 3:
                         ShowProfile(user.ID);
@@ -200,14 +202,23 @@ public class UserUI
         }
         return null;
     }
-    public void ShowConversationParticipants(List<Conversation> conversations)
+    public void ShowConversationParticipants(int id)
     {
+        //KOLLA DENNA CONVER.BLR NULL SISTA
         List<int> ids = new();
+        ids.Add(id);
+        List<Conversation>conversations = _idManager.GetIds(ids).Conversations;
+        List<int>conversationsIds = new();
         foreach (Conversation c in conversations)
         {
-            ids.Add(c.ID);
+            conversationsIds.Add(c.ID);
         }
-        conversations = _idManager.GetById(ids);
+
+        List<Conversation>foundConversations = _idManager.GetById(conversationsIds);
+        foreach(Conversation c in foundConversations)
+        {
+            Console.WriteLine(c.ToString());
+        }
     }
     public void ShowConversations(List<Conversation> conversations)
     {

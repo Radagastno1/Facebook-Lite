@@ -6,8 +6,8 @@ public class ConversationManager : IManager<Conversation>, IConnecting<User>, II
     IData<Conversation> _conversationData;
     IData<Message> _messageData;
     IExtraData<Conversation> _extraData;
-    IIdData _getIdData;
-    public ConversationManager(IData<Conversation> conversationData, IData<Message> messageData, IExtraData<Conversation> extraData, IIdData getIdData)
+    IIdData<Conversation> _getIdData;
+    public ConversationManager(IData<Conversation> conversationData, IData<Message> messageData, IExtraData<Conversation> extraData, IIdData<Conversation> getIdData)
     {
         _conversationData = conversationData;
         _messageData = messageData;
@@ -30,7 +30,8 @@ public class ConversationManager : IManager<Conversation>, IConnecting<User>, II
     }
     public List<Conversation> GetAll(int data)
     {
-        throw new NotImplementedException();
+        List<Conversation>conversations = _getIdData.GetById(data);
+        return conversations;
     }
     public List<Conversation> GetBySearch(string search)
     {
@@ -105,14 +106,17 @@ public class ConversationManager : IManager<Conversation>, IConnecting<User>, II
     public List<Conversation> GetById(List<int> ids)
     {
         ConversationResult result = new();
+        List<Conversation>conversations = new();
+        bool success;
         foreach (int id in ids)
         {
             result.Conversation = _getIdData.GetIds(id).Conversation;
-            if (result.ConversationExists == true)
+            success =_getIdData.GetIds(id).ConversationExists;
+            if (success == true)
             {
-                result.Conversations.Add(result.Conversation);
+                conversations.Add(result.Conversation);
             }
         }
-        return result.Conversations;
+        return conversations;
     }
 }
