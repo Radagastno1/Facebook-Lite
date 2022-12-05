@@ -114,7 +114,10 @@ public class UserUI
                     case 2:
                         //CHATPAGE
                         ShowConversationParticipants(user.ID);
-                        // ShowChat(user.ID);
+                        conversationId = ConsoleInput.GetInt("Choose: ");
+                        ShowMessages(conversationId);
+                        MakeMessage(user, conversationId);
+                        // 
                         Console.ReadKey();
                         break;
                     case 3:
@@ -207,15 +210,15 @@ public class UserUI
         //KOLLA DENNA CONVER.BLR NULL SISTA
         List<int> ids = new();
         ids.Add(id);
-        List<Conversation>conversations = _idManager.GetIds(ids).Conversations;
-        List<int>conversationsIds = new();
+        List<Conversation> conversations = _idManager.GetIds(ids).Conversations;
+        List<int> conversationsIds = new();
         foreach (Conversation c in conversations)
         {
             conversationsIds.Add(c.ID);
         }
 
-        List<Conversation>foundConversations = _idManager.GetById(conversationsIds);
-        foreach(Conversation c in foundConversations)
+        List<Conversation> foundConversations = _idManager.GetById(conversationsIds);
+        foreach (Conversation c in foundConversations)
         {
             Console.WriteLine(c.ToString());
         }

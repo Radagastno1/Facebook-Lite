@@ -39,15 +39,6 @@ public class ConversationManager : IManager<Conversation>, IConnecting<User>, II
     }
     public Conversation GetOne(int data1, int data2)
     {
-        //     try
-        //     {
-        //         Conversation conversation = _getIdData.GetById(data1);
-        //         return conversation;
-        //     }
-        //     catch (NullReferenceException)
-        //     {
-        //         return null;
-        //     }
         return new Conversation();
     }
     public int? Remove(Conversation obj)
@@ -96,13 +87,8 @@ public class ConversationManager : IManager<Conversation>, IConnecting<User>, II
             conversation.ParticipantId = item.ID;
             Update(conversation);
         }
-        // insert into conversations(user.id)
-        //sedan insert into users_conversations user.id, conversation.id
-        //foreach user in participants: 
-        //sedan insert into users_conversations particpant.id, conversation.id
         return conversationId;
     }
-
     public List<Conversation> GetById(List<int> ids)
     {
         ConversationResult result = new();
