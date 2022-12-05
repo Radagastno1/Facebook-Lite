@@ -1,16 +1,18 @@
 using CORE;
 namespace LOGIC;
 
-public class ConversationManager : IManager<Conversation>, IIdManager<Conversation>, IConnecting<User>
+public class ConversationManager : IManager<Conversation>, IConnecting<User>, IIdManager<Conversation>
 {
     IData<Conversation> _conversationData;
     IData<Message> _messageData;
     IExtraData<Conversation> _extraData;
-    public ConversationManager(IData<Conversation> conversationData, IData<Message> messageData, IExtraData<Conversation> extraData)
+    IIdData _getIdData;
+    public ConversationManager(IData<Conversation> conversationData, IData<Message> messageData, IExtraData<Conversation> extraData, IIdData getIdData)
     {
         _conversationData = conversationData;
         _messageData = messageData;
         _extraData = extraData;
+        _getIdData = getIdData;
     }
     public int? Create(Conversation conversation)
     {
@@ -36,15 +38,16 @@ public class ConversationManager : IManager<Conversation>, IIdManager<Conversati
     }
     public Conversation GetOne(int data1, int data2)
     {
-        try
-        {
-            Conversation conversation = _conversationData.GetById(data1, data2);
-            return conversation;
-        }
-        catch (NullReferenceException)
-        {
-            return null;
-        }
+        //     try
+        //     {
+        //         Conversation conversation = _getIdData.GetById(data1);
+        //         return conversation;
+        //     }
+        //     catch (NullReferenceException)
+        //     {
+        //         return null;
+        //     }
+        return new Conversation();
     }
     public int? Remove(Conversation obj)
     {
@@ -70,7 +73,7 @@ public class ConversationManager : IManager<Conversation>, IIdManager<Conversati
         conversationHolder = _extraData.GetManyByData(amountOfParticipants, sql);
         if (conversationHolder.Count > 0)
         {
-            result.conversations = conversationHolder;
+            result.Conversations = conversationHolder;
             result.ConversationExists = true;
         }
         else
@@ -99,4 +102,17 @@ public class ConversationManager : IManager<Conversation>, IIdManager<Conversati
         return conversationId;
     }
 
+    public List<Conversation> GetById(List<int> ids)
+    {
+        ConversationResult result = new();
+        foreach (int id in ids)
+        {
+            result.Conversation = _getIdData.GetIds(id).Conversation;
+            if (result.ConversationExists == true)
+            {
+                result.Conversations.Add(result.Conversation);
+            }
+        }
+        return result.Conversations;
+    }
 }

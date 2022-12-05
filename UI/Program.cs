@@ -10,10 +10,10 @@ internal class Program
         UserManager userManager = new(new UsersDB());
         PostsManager postsManager = new(new PostsDB());
         CommentsManager commentsManager = new(new CommentsDB());
-        ConversationManager conversationManager = new(new ConversationDB(), new MessagesDB(), new ConversationDB());
+        ConversationManager conversationManager = new(new ConversationDB(), new MessagesDB(), new ConversationDB(), new ConversationDB());
         MessgageManager messageManager = new(new MessagesDB(), new MessagesDB());
-        SignUpGUI signUpGui = new(userManager);
-        UserGUI userGUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, conversationManager, commentsManager);
+        SignUpUI signUpUI = new(userManager);
+        UserUI userUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, conversationManager, commentsManager);
         //MENYN INSPIRERAD AV PETRUS BLODBANKEN PROJEKT
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.BackgroundColor = ConsoleColor.White;
@@ -54,11 +54,11 @@ internal class Program
                         user = logInService.LogIn();
                         if (user != null)
                         {
-                            userGUI.ShowFacebookOverview(user);
+                            userUI.ShowFacebookOverview(user);
                         }
                         break;
                     case 1:
-                        signUpGui.UserSignUp();
+                        signUpUI.UserSignUp();
                         //returnerar user för nu, vill att mail ska skickas ut till 
                         //userns mail sedan eventuellt för att validera
                         break;

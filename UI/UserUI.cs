@@ -1,7 +1,7 @@
 using LOGIC;
 using CORE;
 namespace UI;
-public class UserGUI
+public class UserUI
 {
     IManager<User> _userManager;
     IManager<Post> _postManager;
@@ -11,8 +11,7 @@ public class UserGUI
     IConnecting<User> _connectionManager;
     IManager<Comment> _commentManager;
     List<ConsoleKey> keys = new();
-
-    public UserGUI(IManager<User> userManager, IManager<Post> postManager, IManager<Conversation> conversationManager, IIdManager<Conversation> idManager, IManager<Message> messageManager, IConnecting<User> connectingManager, IManager<Comment> commentManager)
+    public UserUI(IManager<User> userManager, IManager<Post> postManager, IManager<Conversation> conversationManager, IIdManager<Conversation> idManager, IManager<Message> messageManager, IConnecting<User> connectingManager, IManager<Comment> commentManager)
     {
         _userManager = userManager;
         _postManager = postManager;
@@ -69,7 +68,8 @@ public class UserGUI
                         {
                             List<int> ids = new();
                             ids.Add(id);
-                            List<Conversation>? conversations = GetConversations(ids, user);
+                            ids.Add(user.ID);
+                            List<Conversation>? conversations = GetConversations(ids);
                             if (conversations != null)
                             {
                                 ShowConversations(conversations);
@@ -113,6 +113,7 @@ public class UserGUI
                         break;
                     case 2:
                         //CHATPAGE
+                        ShowChat(user.ID);
                         break;
                     case 3:
                         ShowProfile(user.ID);
@@ -139,9 +140,17 @@ public class UserGUI
     {
 
     }
-    public void ShowChat()
+    public void ShowChat(int id)
     {
-
+        List<int> ids = new();
+        ids.Add(id);
+        List<Conversation>? conversations = GetConversations(ids);
+        Console.WriteLine($"Chats");
+        foreach (Conversation item in conversations)
+        {
+            Console.WriteLine(item.ToString());
+        }
+        //id på konversationen, alla konversationer i asc ordning
     }
     public void MakePost(User user)
     {
@@ -181,27 +190,30 @@ public class UserGUI
             }
         }
     }
-    public List<Conversation>? GetConversations(List<int> ids, User user)
+    public List<Conversation>? GetConversations(List<int> ids)
     {
         //denna i logik?
-        List<int> participantIds = new();
-        participantIds.Add(user.ID);
-        foreach (int id in ids)
-        {
-            participantIds.Add(id);
-        }
 
-        if (_idManager.GetIds(participantIds).ConversationExists == true)
+        if (_idManager.GetIds(ids).ConversationExists == true)
         {
-            return _idManager.GetIds(participantIds).conversations;
+            return _idManager.GetIds(ids).Conversations;
         }
         return null;
+    }
+    public void ShowConversationParticipants(List<Conversation> conversations)
+    {
+        List<int> ids = new();
+        foreach (Conversation c in conversations)
+        {
+            ids.Add(c.ID);
+        }
+        conversations = _idManager.GetById(ids);
     }
     public void ShowConversations(List<Conversation> conversations)
     {
         foreach (Conversation item in conversations)
         {
-            Console.WriteLine($"Conversation [{item.ID}]");
+            Console.WriteLine(item.ToString());
         }
     }
     public void EditInformation(User user)

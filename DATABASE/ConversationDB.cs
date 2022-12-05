@@ -3,7 +3,7 @@ using LOGIC;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class ConversationDB : IData<Conversation>, IExtraData<Conversation>
+public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IIdData
 {
     public int? Create(Conversation conversation)
     {
@@ -49,8 +49,7 @@ public class ConversationDB : IData<Conversation>, IExtraData<Conversation>
     }
     public List<Conversation> GetManyByData(int amountOfUsers, string sql)
     {
-        //stop denna hämtar konversation endast mellan 2 st
-        List<Conversation>conversations = new();
+        List<Conversation> conversations = new();
         string query = $"SELECT uc.conversations_id AS 'ID', " +
          "GROUP_CONCAT(uc.users_id) AS User_List " +
         "FROM users_conversations uc " +
@@ -59,18 +58,46 @@ public class ConversationDB : IData<Conversation>, IExtraData<Conversation>
         "HAVING COUNT(DISTINCT uc.users_id) = @amountOfUsers;"; //2 is how many usersids HÄR SKA IN LÄNGD PÅ LISTAN
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
-            conversations = con.Query<Conversation>(query, new{@amountOfUsers = amountOfUsers}).ToList();
+            conversations = con.Query<Conversation>(query, new { @amountOfUsers = amountOfUsers }).ToList();
         }
         return conversations;
-    }
-
-    Conversation IData<Conversation>.GetById(int data1, int data2)
-    {
-        throw new NotImplementedException();
     }
 
     Conversation IExtraData<Conversation>.GetOneByData(int data, string text)
     {
         throw new NotImplementedException();
+    }
+
+    public ConversationResult GetIds(int conversationId)
+    {
+        List<User>users = new();
+        ConversationResult result = new();
+            string query = $" SELECT c.id as 'ID', GROUP_CONCAT(u.first_name) AS ParticipantsNames " +
+                           "FROM conversations c " +
+                           "INNER JOIN users_conversations uc " +
+                           "ON uc.conversations_id = c.id " +
+                           "INNER JOIN users u " +
+                           "ON u.id = uc.users_id " +
+                           "WHERE c.id = @id;";
+            using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
+            {
+                result.Conversation = con.QuerySingle<Conversation>(query, new { @id = conversationId });
+            }
+            if(result.Conversation != null)
+            {
+                result.ConversationExists = true;
+            }
+        return result;
+    }
+
+    public ConversationResult GetById(int data1)
+    {
+        ConversationResult result = new();
+        string query = $";"; //2 is how many usersids HÄR SKA IN LÄNGD PÅ LISTAN
+        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
+        {
+            result.Conversations = con.Query<Conversation>(query).ToList();
+        }
+        return result;
     }
 }

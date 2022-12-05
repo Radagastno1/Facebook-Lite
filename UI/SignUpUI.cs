@@ -1,10 +1,10 @@
 using LOGIC;
 using CORE;
 namespace UI;
-public class SignUpGUI
+public class SignUpUI
 {
     IManager<User> _userManager;
-    public SignUpGUI(IManager<User> userManager)
+    public SignUpUI(IManager<User> userManager)
     {
         _userManager = userManager;
     }
