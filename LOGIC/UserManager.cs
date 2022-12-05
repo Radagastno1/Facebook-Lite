@@ -3,9 +3,11 @@ namespace LOGIC;
 public class UserManager : IManager<User>
 {
     IData<User> _userData;
-    public UserManager(IData<User> userData)
+    IDataSearcher<User> _dataSearcher;
+    public UserManager(IData<User> userData, IDataSearcher<User> dataSearcher)
     {
         _userData = userData;
+        _dataSearcher = dataSearcher;
     }
     //hämta mina posts - usermanager
     //hämta mina medd - messagemanager
@@ -15,34 +17,19 @@ public class UserManager : IManager<User>
     {
         return _userData.Create(user);
     }
-    public List<User> GetBySearch(string search)
+    public List<User> GetBySearch(string name)
     {
-         List<User> searchedUsers = new();
-        
-        // try
-        // {
-        //     List<User> allUsers = _userData.Get();
-        //     foreach (User user in allUsers)
-        //     {
-        //         if (user.FirstName.ToLower().Contains(search.ToLower()) || user.LastName.ToLower().Contains(search.ToLower()))
-        //         {
-        //             searchedUsers.Add(user);
-        //         }
-        //     }
-        // }
-        // catch(InvalidOperationException e)
-        // {
-        //     Console.WriteLine(e);
-        // }
+        List<User> searchedUsers = new();
+        searchedUsers = _dataSearcher.GetSearches(name);
         return searchedUsers;
     }
     public User GetOne(int id, int data2)
     {
         List<User> allUsers = _userData.Get();
         User user = new();
-        foreach(User item in allUsers)
+        foreach (User item in allUsers)
         {
-            if(item.ID == id)
+            if (item.ID == id)
             {
                 user = item;
             }
@@ -55,15 +42,15 @@ public class UserManager : IManager<User>
     }
     public int? Update(User user)
     {
-       int? rows = _userData.Update(user);
-       if(rows > 0)
-       {
-        return rows;
-       }
-       else
-       {
-        return null;
-       }
+        int? rows = _userData.Update(user);
+        if (rows > 0)
+        {
+            return rows;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public List<User> GetAll(int data)

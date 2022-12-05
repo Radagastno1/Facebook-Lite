@@ -125,6 +125,7 @@ public class UserUI
                         {
                              //söka efter personer att lägga till
                             string userName = ConsoleInput.GetString($"Search for user by name: ");
+                            ShowSearches(userName);
                             //visa lista med deras idn och för och efternamn
 
                             //välja deras idn
@@ -173,9 +174,9 @@ public class UserUI
         Post post = new(content, DateTime.Now, user.ID);
         _postManager.Create(post);
     }
-    public void ShowSearches(string search)
+    public void ShowSearches(string name)
     {
-        List<User> users = _userManager.GetBySearch(search);
+        List<User> users = _userManager.GetBySearch(name);
         if (users != null)
         {
             foreach (User item in users)

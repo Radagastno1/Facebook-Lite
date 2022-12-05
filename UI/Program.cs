@@ -7,7 +7,7 @@ internal class Program
     //KOMMENTARER VISAS SOM POSTS PÅ SIN MYPAGE!
     private static void Main(string[] args)
     {
-        UserManager userManager = new(new UsersDB());
+        UserManager userManager = new(new UsersDB(), new UsersDB());
         PostsManager postsManager = new(new PostsDB());
         CommentsManager commentsManager = new(new CommentsDB());
         ConversationManager conversationManager = new(new ConversationDB(), new MessagesDB(), new ConversationDB(), new ConversationDB());
