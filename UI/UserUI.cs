@@ -245,19 +245,16 @@ public class UserUI
             {
                 conversationsIds.Add(c.ID);
             }
-
             List<Conversation> foundConversations = _idManager.GetById(conversationsIds);
             foreach (Conversation c in foundConversations)
             {
                 Console.WriteLine(c.ToString());
             }
         }
-        catch(NullReferenceException)
+        catch (NullReferenceException)
         {
             Console.WriteLine("No conversations yet..");
         }
-
-
     }
     public void ShowConversations(List<Conversation> conversations)
     {
