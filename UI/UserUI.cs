@@ -123,9 +123,9 @@ public class UserUI
                         }
                         else
                         {
-                            AddPeopleToNewConversation(user);
-                            
-                            //och därifrån skriva meddelanden inom konversationen
+                            int newConversationId = AddPeopleToNewConversation(user);
+                            ShowMessages(newConversationId);
+                            MakeMessage(user, newConversationId);
                         }
                         Console.ReadKey();
                         break;
@@ -237,18 +237,27 @@ public class UserUI
         //KOLLA DENNA CONVER.BLR NULL SISTA
         List<int> ids = new();
         ids.Add(id);
-        List<Conversation> conversations = _idManager.GetIds(ids).Conversations;
-        List<int> conversationsIds = new();
-        foreach (Conversation c in conversations)
+        try
         {
-            conversationsIds.Add(c.ID);
+            List<Conversation> conversations = _idManager.GetIds(ids).Conversations;
+            List<int> conversationsIds = new();
+            foreach (Conversation c in conversations)
+            {
+                conversationsIds.Add(c.ID);
+            }
+
+            List<Conversation> foundConversations = _idManager.GetById(conversationsIds);
+            foreach (Conversation c in foundConversations)
+            {
+                Console.WriteLine(c.ToString());
+            }
+        }
+        catch(NullReferenceException)
+        {
+            Console.WriteLine("No conversations yet..");
         }
 
-        List<Conversation> foundConversations = _idManager.GetById(conversationsIds);
-        foreach (Conversation c in foundConversations)
-        {
-            Console.WriteLine(c.ToString());
-        }
+
     }
     public void ShowConversations(List<Conversation> conversations)
     {

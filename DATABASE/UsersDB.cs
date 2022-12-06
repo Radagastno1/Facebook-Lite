@@ -82,5 +82,6 @@ public class UsersDB : IData<User>, IDataSearcher<User>
         foundUsers = con.Query<User>(query, new{@name = name}).ToList();
         return foundUsers;
     }
+    
 
 }
