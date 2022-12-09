@@ -23,6 +23,7 @@ public class UserUI
     }
     public List<ConsoleKey> NewKeyList(ConsoleKey key1, ConsoleKey key2)
     {
+        //i tools
         keys = new();
         keys.Add(key1);
         keys.Add(key2);
@@ -69,7 +70,7 @@ public class UserUI
                             List<int> ids = new();
                             ids.Add(id);
                             ids.Add(user.ID);
-                            List<Conversation>? conversations = GetConversations(ids);
+                            List<Conversation>? conversations = _idManager.GetIds(ids).Conversations;
                             if (conversations != null)
                             {
                                 ShowConversations(conversations);
@@ -136,8 +137,16 @@ public class UserUI
                         break;
                     case 4:
                         //SETTINGSMENU
-                        EditInformation(user);
-                        user = _userManager.GetOne(user.ID, 0);
+                        pressedKey = ConsoleInput.GetPressedKey("[E] Edit profile [D] Delete account",NewKeyList(ConsoleKey.E, ConsoleKey.D));
+                        if (pressedKey == ConsoleKey.E)
+                        {
+                            EditInformation(user);
+                            user = _userManager.GetOne(user.ID, 0);
+                        }
+                        else
+                        {
+                            DeletingAccount(user);
+                        }
                         break;
                 }
             }
@@ -155,8 +164,9 @@ public class UserUI
     {
         List<int> ids = new();
         ids.Add(id);
-        List<Conversation>? conversations = GetConversations(ids);
+        List<Conversation>? conversations = _idManager.GetIds(ids).Conversations;
         Console.WriteLine($"Chats");
+        if (conversations == null) Console.WriteLine("No conversation yet");
         foreach (Conversation item in conversations)
         {
             Console.WriteLine(item.ToString());
@@ -222,16 +232,16 @@ public class UserUI
             }
         }
     }
-    public List<Conversation>? GetConversations(List<int> ids)
-    {
-        //denna i logik?
+    // public List<Conversation>? GetConversations(List<int> ids)
+    // {
+    //     //denna i logik?
 
-        if (_idManager.GetIds(ids).ConversationExists == true)
-        {
-            return _idManager.GetIds(ids).Conversations;
-        }
-        return null;
-    }
+    //     if (_idManager.GetIds(ids).ConversationExists == true)
+    //     {
+    //         return _idManager.GetIds(ids).Conversations;
+    //     }
+    //     return null;
+    // }
     public void ShowConversationParticipants(int id)
     {
         //KOLLA DENNA CONVER.BLR NULL SISTA
@@ -295,6 +305,16 @@ public class UserUI
         {
             Console.WriteLine("Something went wrong.");
         }
+    }
+    public void DeletingAccount(User user)
+    {
+        string password = ConsoleInput.GetString("Type your password to delete  your account.");
+        if(user.PassWord == password)
+        {
+            _userManager.Remove(user);
+            Console.WriteLine("Your account is now inactive. If you log in to your account you will be active again.");
+        }
+
     }
     public void ShowMessages(int conversationId)
     {

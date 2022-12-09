@@ -5,6 +5,12 @@ using MySqlConnector;
 namespace DATABASE;
 public class UsersDB : IData<User>, IDataSearcher<User>
 {
+    //1.fixa hur det ska se ut överallt om man är inaktiv
+    //namn ska synas som deleted user? ingen publik information osv 
+    //2.om man loggar in på sitt konto igen inom 30 dagar så ska det aktiveras, så är det ej nu
+    //ang nr 2 : en sql query som kollar regelbundet om det gått 30 dagar, isåfall flyttar den inaktiva personen
+    //till ett annat table, deleted_users och syns inte som vanlig user längre 
+
     public int? Create(User obj)
     {
         int userId = 0;
@@ -17,10 +23,10 @@ public class UsersDB : IData<User>, IDataSearcher<User>
         try
         {
             using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=true;"))
-            {
-                userId = con.ExecuteScalar<int>(query, param: obj);
-            }
-            return userId;
+            
+            userId = con.ExecuteScalar<int>(query, param: obj);
+             
+            return userId; 
         }
         catch (InvalidOperationException)
         {
@@ -29,8 +35,9 @@ public class UsersDB : IData<User>, IDataSearcher<User>
     }
     public int? Delete(User obj)
     {
+        //is_active är true by default 
         int rowsEffected = 0;
-        string query = "Delete from users WHERE id = @Id;";
+        string query = "UPDATE users SET is_active = false WHERE id = @id;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
             rowsEffected = con.ExecuteScalar<int>(query, param: obj);
@@ -40,10 +47,12 @@ public class UsersDB : IData<User>, IDataSearcher<User>
     public List<User> Get()
     {
         List<User> users = new();
-        string query = "SELECT u.id, u.first_name as 'FirstName', u.last_name as 'LastName', u.email," +
+        string query = 
+        "SELECT u.id, u.first_name as 'FirstName', u.last_name as 'LastName', u.email," +
         "u.pass_word as 'PassWord', u.birth_date as 'BirthDate', u.gender, u.about_me as 'AboutMe', r.name as 'Role' " +
         "FROM users u LEFT JOIN users_roles ur ON ur.users_id = u.id " +
-        "LEFT JOIN roles r ON r.id = ur.roles_id WHERE r.id = 5;";
+        "LEFT JOIN roles r ON r.id = ur.roles_id WHERE u.is_active = true;";
+        //NU kan man ej logga in på sitt konto om man är inaktiv för att testa detta
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
             users = con.Query<User>(query).ToList();
@@ -77,7 +86,7 @@ public class UsersDB : IData<User>, IDataSearcher<User>
         "u.birth_date as 'BirthDate', u.gender, u.about_me as 'AboutMe' " +
         "FROM users u LEFT JOIN users_roles ur ON ur.users_id = u.id " +
         "LEFT JOIN roles r ON r.id = ur.roles_id " +
-        $"WHERE u.first_name LIKE '%{name}%' AND r.id = 5;";
+        $"WHERE u.first_name LIKE '%{name}%' AND r.id = 5 AND u.is_active = true;";
         using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
         foundUsers = con.Query<User>(query, new{@name = name}).ToList();
         return foundUsers;

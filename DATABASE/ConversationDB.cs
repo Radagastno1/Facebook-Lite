@@ -51,7 +51,7 @@ public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IId
     {
         List<Conversation> conversations = new();
         string query = $"SELECT uc.conversations_id AS 'ID', " +
-         "GROUP_CONCAT(uc.users_id) AS User_List " +
+        "GROUP_CONCAT(uc.users_id) AS User_List " +
         "FROM users_conversations uc " +
         $"WHERE  uc.users_id IN ({sql})" + //I SQL SKA IN IDS I EN PARANTES
         "GROUP BY uc.conversations_id " +

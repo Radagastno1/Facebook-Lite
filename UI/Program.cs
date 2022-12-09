@@ -4,6 +4,8 @@ using DATABASE;
 namespace UI;
 internal class Program
 {
+    //ATT FIXA
+    //1. RENSA OCH ORDNA UPP BRA INTERFACES, FINNS METODER SOM TVINGAS IMPLEMENTERAS SOM EJ BEHÖVS/ANVÄNDS!!
     //KOMMENTARER VISAS SOM POSTS PÅ SIN MYPAGE!
     private static void Main(string[] args)
     {
