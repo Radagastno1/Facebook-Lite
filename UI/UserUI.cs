@@ -3,6 +3,7 @@ using CORE;
 namespace UI;
 public class UserUI
 {
+    static int? deleted = 0;
     IManager<User> _userManager;
     IManager<Post> _postManager;
     IManager<Conversation> _conversationManager;
@@ -10,8 +11,9 @@ public class UserUI
     IIdManager<Conversation> _idManager;
     IConnecting<User> _connectionManager;
     IManager<Comment> _commentManager;
+    IManager<User> _usersDeletions;
     List<ConsoleKey> keys = new();
-    public UserUI(IManager<User> userManager, IManager<Post> postManager, IManager<Conversation> conversationManager, IIdManager<Conversation> idManager, IManager<Message> messageManager, IConnecting<User> connectingManager, IManager<Comment> commentManager)
+    public UserUI(IManager<User> userManager, IManager<Post> postManager, IManager<Conversation> conversationManager, IIdManager<Conversation> idManager, IManager<Message> messageManager, IConnecting<User> connectingManager, IManager<Comment> commentManager, IManager<User> usersDeletions)
     {
         _userManager = userManager;
         _postManager = postManager;
@@ -20,6 +22,14 @@ public class UserUI
         _messageManager = messageManager;
         _connectionManager = connectingManager;
         _commentManager = commentManager;
+        _usersDeletions = usersDeletions;
+        deleted = _usersDeletions.Create(new User()); //behöver ändra fixa till interfaces
+        ShowAccountDeleted();
+    }
+    public void ShowAccountDeleted()
+    {
+        Console.WriteLine(deleted + " accounts deleted.");
+        Console.ReadKey();
     }
     public List<ConsoleKey> NewKeyList(ConsoleKey key1, ConsoleKey key2)
     {

@@ -14,8 +14,9 @@ internal class Program
         CommentsManager commentsManager = new(new CommentsDB());
         ConversationManager conversationManager = new(new ConversationDB(), new MessagesDB(), new ConversationDB(), new ConversationDB());
         MessgageManager messageManager = new(new MessagesDB(), new MessagesDB());
+        DeletionManager deletionManager = new(new DeletionDB());
         SignUpUI signUpUI = new(userManager);
-        UserUI userUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, conversationManager, commentsManager);
+        UserUI userUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, conversationManager, commentsManager, deletionManager);
         //MENYN INSPIRERAD AV PETRUS BLODBANKEN PROJEKT
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.BackgroundColor = ConsoleColor.White;
