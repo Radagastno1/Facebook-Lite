@@ -56,6 +56,7 @@ public class MessagesDB : IData<Message>, IExtraData<Message>
        "INNER JOIN users_conversations uc ON c.id = uc.conversations_id " +
        "INNER JOIN users u ON u.id = m.sender_id " +
        "WHERE c.id = @conversationId GROUP BY m.id " +
+       "AND m.is_visible = true " +
        "ORDER BY m.date_created ASC;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {

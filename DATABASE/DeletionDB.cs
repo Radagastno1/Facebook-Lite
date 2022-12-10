@@ -60,7 +60,10 @@ public class DeletionDB : IData<User>
     public int? Update(User obj)
     {
         //uppdatera något? vet ej
-         string query = "UPDATE users SET is_deleted = true WHERE id = @Id;";
+         string query = "START TRANSACTION; " +
+         "UPDATE users SET is_deleted = true WHERE id = @Id; " +
+         "UPDATE messages SET is_visible = false WHERE sender_id = @Id;" +
+         "COMMIT;";
          int rows = 0;
         try
         {

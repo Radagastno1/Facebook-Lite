@@ -7,10 +7,7 @@ public class UsersDB : IData<User>, IDataSearcher<User>
 {
     //1.fixa hur det ska se ut överallt om man är inaktiv
     //namn ska synas som deleted user? ingen publik information osv 
-    //2.om man loggar in på sitt konto igen inom 30 dagar så ska det aktiveras, så är det ej nu
-    //ang nr 2 : en sql query som kollar regelbundet om det gått 30 dagar, isåfall flyttar den inaktiva personen
-    //till ett annat table, deleted_users och syns inte som vanlig user längre 
-
+  
     public int? Create(User obj)
     {
         int userId = 0;
@@ -51,7 +48,7 @@ public class UsersDB : IData<User>, IDataSearcher<User>
         "SELECT u.id, u.first_name as 'FirstName', u.last_name as 'LastName', u.email," +
         "u.pass_word as 'PassWord', DATE_FORMAT(u.birth_date, '%Y-%m-%d') as 'BirthDate', u.gender, u.about_me as 'AboutMe', r.name as 'Role' " +
         "FROM users u LEFT JOIN users_roles ur ON ur.users_id = u.id " +
-        "LEFT JOIN roles r ON r.id = ur.roles_id WHERE u.is_active = true;";
+        "LEFT JOIN roles r ON r.id = ur.roles_id WHERE u.is_deleted = false;";
         //NU kan man ej logga in på sitt konto om man är inaktiv för att testa detta
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
