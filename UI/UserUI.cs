@@ -23,6 +23,7 @@ public class UserUI
         _connectionManager = connectingManager;
         _commentManager = commentManager;
         _usersDeletions = usersDeletions;
+        //FIXA DATUMET 
         deleted = _usersDeletions.Create(new User()); //behöver ändra fixa till interfaces
         ShowAccountDeleted();
     }

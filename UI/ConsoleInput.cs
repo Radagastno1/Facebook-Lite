@@ -27,11 +27,14 @@ public class ConsoleInput
     {
         //dela upp till tre ints
         bool success;
+        string date = string.Empty;
+        // DateOnly date;
         string dateString = string.Empty;
         do
         {
-            Console.WriteLine(output);
-            dateString = Console.ReadLine();
+            // Console.WriteLine(output);
+            // dateString = Console.ReadLine();
+            // success = DateOnly.TryParse(dateString, out date);
             string[] array = dateString.Split('-');
             if (array.Length == 3)
             {
@@ -42,7 +45,7 @@ public class ConsoleInput
                 success = false;
             }
         } while (!success);
-        return dateString;
+        return date;
     }
     public static string GetEmail(string output)
     {

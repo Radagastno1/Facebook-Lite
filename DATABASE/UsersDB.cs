@@ -49,7 +49,7 @@ public class UsersDB : IData<User>, IDataSearcher<User>
         List<User> users = new();
         string query = 
         "SELECT u.id, u.first_name as 'FirstName', u.last_name as 'LastName', u.email," +
-        "u.pass_word as 'PassWord', u.birth_date as 'BirthDate', u.gender, u.about_me as 'AboutMe', r.name as 'Role' " +
+        "u.pass_word as 'PassWord', DATE_FORMAT(u.birth_date, '%Y-%m-%d') as 'BirthDate', u.gender, u.about_me as 'AboutMe', r.name as 'Role' " +
         "FROM users u LEFT JOIN users_roles ur ON ur.users_id = u.id " +
         "LEFT JOIN roles r ON r.id = ur.roles_id WHERE u.is_active = true;";
         //NU kan man ej logga in på sitt konto om man är inaktiv för att testa detta

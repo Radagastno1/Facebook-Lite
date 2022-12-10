@@ -15,7 +15,7 @@ public class DeletionManager : IManager<User>
         {
             foreach(User item in usersToDelete)
             {
-                _userData.Create(item);
+                _userData.Update(item);
                 usersToDeletedTable++;
             }
         }

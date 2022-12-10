@@ -12,10 +12,24 @@ public class DeletionDB : IData<User>
     // SELECT u.id, u.first_name, u.last_name, u.email, u.pass_word,
     // u.birth_date, u.gender, u.about_me, (u.date_inactive + 30) as date_check
     // FROM users u WHERE @date_check < CURRENT_DATE();
-    public int? Create(User obj)
+    public int? Create(User user)
     {
         //lägg till på deleted_user table
-        throw new NotImplementedException();
+        int insertAndDeleted = 0;
+        string query = "INSERT INTO deleted_users (id, first_name, last_name, email, pass_word, birth_date, gender, about_me) " +
+        "VALUES(@Id, @FirstName, @LastName, @Email, @PassWord, @BirthDate, @Gender, @AboutMe);";
+        try
+        {
+            using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=true;"))
+
+                insertAndDeleted = con.ExecuteScalar<int>(query, param : user);
+
+            return insertAndDeleted;
+        }
+        catch (InvalidOperationException)
+        {
+            return null;
+        }
     }
 
     public int? Delete(User obj)
@@ -25,11 +39,11 @@ public class DeletionDB : IData<User>
     }
 
     public List<User> Get()
-    { //hämta users som ska läggas in i deleted table
-        List<User>users = new();
-        string query = "SELECT u.id, u.first_name, u.last_name, u.email, u.pass_word, " +
-         "u.birth_date, u.gender, u.about_me, (u.date_inactive + 30) as date_check " +
-         "FROM users u WHERE @date_check < CURRENT_DATE();";
+    { //hämta users som ska läggas in i deleted table, som har varit inaktiva i mer än 30 dagar
+        List<User> users = new();
+        string query = "SELECT u.id as 'Id', DATE_ADD(u.date_inactive, interval 30 day) " +
+        "as deletingdate FROM users u  WHERE DATE_ADD(u.date_inactive, interval 30 day) < CURRENT_DATE() " +
+        "AND is_deleted = false;";
         try
         {
             using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=true;"))
@@ -46,6 +60,19 @@ public class DeletionDB : IData<User>
     public int? Update(User obj)
     {
         //uppdatera något? vet ej
-        throw new NotImplementedException();
+         string query = "UPDATE users SET is_deleted = true WHERE id = @Id;";
+         int rows = 0;
+        try
+        {
+            using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=true;"))
+
+                rows = con.ExecuteScalar<int>(query, param : obj);
+
+            return rows;
+        }
+        catch (InvalidOperationException)
+        {
+            return null;
+        }throw new NotImplementedException();
     }
 }

@@ -1,6 +1,8 @@
 ﻿using CORE;
 using LOGIC;
 using DATABASE; 
+using Dapper;
+using MySqlConnector;
 namespace UI;
 internal class Program
 {
@@ -9,6 +11,13 @@ internal class Program
     //KOMMENTARER VISAS SOM POSTS PÅ SIN MYPAGE!
     private static void Main(string[] args)
     {
+        string query = "SELECT birth_date FROM users WHERE id = 15;";
+        string showDate = "";
+         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=true;"))
+            
+            showDate = con.QuerySingle<string>(query);
+            Console.WriteLine(showDate);
+             
         UserManager userManager = new(new UsersDB(), new UsersDB());
         PostsManager postsManager = new(new PostsDB());
         CommentsManager commentsManager = new(new CommentsDB());
