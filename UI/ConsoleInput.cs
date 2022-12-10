@@ -2,6 +2,32 @@ using System.Net.Mail;
 namespace UI;
 public class ConsoleInput
 {
+    public static int GetMenuOptions(string[] options)
+    {
+        int menuOptions = 0;
+        while (true)
+        {
+            Console.Clear();
+            for (int i = 0; i < options.Length; i++)
+            {
+                Console.WriteLine((i == menuOptions ? "\t>>" : "\t") + options[i]);
+            }
+            ConsoleKeyInfo keyPressed = Console.ReadKey();
+
+            if (keyPressed.Key == ConsoleKey.DownArrow && menuOptions != options.Length - 1)
+            {
+                menuOptions++;
+            }
+            else if (keyPressed.Key == ConsoleKey.UpArrow && menuOptions >= 1)
+            {
+                menuOptions--;
+            }
+            else if (keyPressed.Key == ConsoleKey.Enter)
+            {
+                return menuOptions;
+            }
+        }
+    }
     public static int GetInt(string output)
     {
         int getInt;
@@ -25,16 +51,12 @@ public class ConsoleInput
     }
     public static string GetBirthDate(string output)
     {
-        //dela upp till tre ints
         bool success;
-        string date = string.Empty;
-        // DateOnly date;
         string dateString = string.Empty;
         do
         {
-            // Console.WriteLine(output);
-            // dateString = Console.ReadLine();
-            // success = DateOnly.TryParse(dateString, out date);
+            Console.WriteLine(output);
+            dateString = Console.ReadLine();
             string[] array = dateString.Split('-');
             if (array.Length == 3)
             {
@@ -45,7 +67,7 @@ public class ConsoleInput
                 success = false;
             }
         } while (!success);
-        return date;
+        return dateString;
     }
     public static string GetEmail(string output)
     {

@@ -14,9 +14,7 @@ public class SignUpUI
         string lastName = ConsoleInput.GetString("Last name: ");
         string email = ConsoleInput.GetEmail("Email: ");
         string password = ConsoleInput.GetPassword("Password(at least 6 characters, one uppercase letter and at least one digit):");
-        //validera date metod i consoleinput
         string birthDate = ConsoleInput.GetBirthDate("Birthdate(YYYY-MM-DD): ");
-        //visa genders alternativ
         string gender = ConsoleInput.GetGender();
         User user = new(firstName, lastName, email, password, birthDate, gender);
         _userManager.Create(user);

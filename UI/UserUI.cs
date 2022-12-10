@@ -23,7 +23,6 @@ public class UserUI
         _connectionManager = connectingManager;
         _commentManager = commentManager;
         _usersDeletions = usersDeletions;
-        //FIXA DATUMET 
         deleted = _usersDeletions.Create(new User()); //behöver ändra fixa till interfaces
         ShowAccountDeleted();
     }
@@ -32,144 +31,113 @@ public class UserUI
         Console.WriteLine(deleted + " accounts deleted.");
         Console.ReadKey();
     }
-    public List<ConsoleKey> NewKeyList(ConsoleKey key1, ConsoleKey key2)
-    {
-        //i tools
-        keys = new();
-        keys.Add(key1);
-        keys.Add(key2);
-        return keys;
-    }
     public void ShowFacebookOverview(User user)
     {
         string[] overviewOptions = new string[]
-        { "[PUBLISH]","[SEARCH]","[CHAT]", "[MY PAGE]","[SETTINGS]" };
+        { "[PUBLISH]","[SEARCH]","[CHAT]", "[MY PAGE]","[SETTINGS]", "[LOG OUT]" };
         int menuOptions = 0;
         while (true)
         {
-            Console.Clear();
-            for (int i = 0; i < overviewOptions.Length; i++)
+            menuOptions = ConsoleInput.GetMenuOptions(overviewOptions);
+            switch (menuOptions)
             {
-                Console.WriteLine((i == menuOptions ? "\t>>" : "\t") + overviewOptions[i]);
-            }
-            ConsoleKeyInfo keyPressed = Console.ReadKey();
-
-            if (keyPressed.Key == ConsoleKey.DownArrow && menuOptions != overviewOptions.Length - 1)
-            {
-                menuOptions++;
-            }
-            else if (keyPressed.Key == ConsoleKey.UpArrow && menuOptions >= 1)
-            {
-                menuOptions--;
-            }
-            else if (keyPressed.Key == ConsoleKey.Enter)
-            {
-                switch (menuOptions)
-                {
-                    case 0:
-                        MakePost(user);
-                        break;
-                    case 1:
-                        int conversationId = 0;
-                        string search = ConsoleInput.GetString("Search by name: ");
-                        ShowSearches(search);
-                        int id = ConsoleInput.GetInt("User to visit: ");
-                        ShowProfile(id);
-                        ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[M] Message  [P] Posts", NewKeyList(ConsoleKey.M, ConsoleKey.P));
-                        if (pressedKey == ConsoleKey.M)
+                case 0:
+                    MakePost(user);
+                    break;
+                case 1:
+                    int conversationId = 0;
+                    string search = ConsoleInput.GetString("Search by name: ");
+                    ShowSearches(search);
+                    int id = ConsoleInput.GetInt("User to visit: ");
+                    ShowProfile(id);
+                    ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[M] Message  [P] Posts", LogicTool.NewKeyList(ConsoleKey.M, ConsoleKey.P));
+                    if (pressedKey == ConsoleKey.M)
+                    {
+                        List<int> ids = new();
+                        ids.Add(id);
+                        ids.Add(user.ID);
+                        List<Conversation>? conversations = _idManager.GetIds(ids).Conversations;
+                        if (conversations != null)
                         {
-                            List<int> ids = new();
-                            ids.Add(id);
-                            ids.Add(user.ID);
-                            List<Conversation>? conversations = _idManager.GetIds(ids).Conversations;
-                            if (conversations != null)
+                            ShowConversations(conversations);
+                            conversationId = ConsoleInput.GetInt("Choose: ");
+                            ShowMessages(conversationId);
+                        }
+                        else
+                        {
+                            pressedKey = ConsoleInput.GetPressedKey("[S]Start conversation  [R] Return", LogicTool.NewKeyList(ConsoleKey.S, ConsoleKey.R));
+                            if (pressedKey == ConsoleKey.S)
                             {
-                                ShowConversations(conversations);
-                                conversationId = ConsoleInput.GetInt("Choose: ");
-                                ShowMessages(conversationId);
+                                ids = new();
+                                ids.Add(id);
+                                List<User> participants = GetUsersById(ids);
+                                conversationId = _connectionManager.MakeNew(participants, user).GetValueOrDefault();
                             }
                             else
                             {
-                                pressedKey = ConsoleInput.GetPressedKey("[S]Start conversation  [R] Return", NewKeyList(ConsoleKey.S, ConsoleKey.R));
-                                if (pressedKey == ConsoleKey.S)
-                                {
-                                    ids = new();
-                                    ids.Add(id);
-                                    List<User> participants = GetUsersById(ids);
-                                    conversationId = _connectionManager.MakeNew(participants, user).GetValueOrDefault();
-                                }
-                                else
-                                {
-                                    break;
-                                }
+                                break;
                             }
-                            MakeMessage(user, conversationId);
                         }
-                        else
+                        MakeMessage(user, conversationId);
+                    }
+                    else
+                    {
+                        int postId = ShowPosts(id);
+                        if (postId != 0)
                         {
-                            int postId = ShowPosts(id);
-                            if (postId != 0)
+                            ConsoleKey key = ConsoleInput.GetPressedKey("\t[C] Comment   [V] View Comments", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.V));
+                            if (key == ConsoleKey.C)
                             {
-                                ConsoleKey key = ConsoleInput.GetPressedKey("\t[C] Comment   [V] View Comments", NewKeyList(ConsoleKey.C, ConsoleKey.V));
-                                if (key == ConsoleKey.C)
-                                {
-                                    CommentPost(user, postId);
-                                }
-                                else if (key == ConsoleKey.V)
-                                {
-                                    ShowCommentsOnPost(postId);
-                                }
+                                CommentPost(user, postId);
+                            }
+                            else if (key == ConsoleKey.V)
+                            {
+                                ShowCommentsOnPost(postId);
                             }
                         }
-                        Console.ReadKey();
-                        break;
-                    case 2:
-                        //CHATPAGE
-                        ShowConversationParticipants(user.ID);
-                        pressedKey = ConsoleInput.GetPressedKey($"[C] Choose conversation  [N] New Conversation", NewKeyList(ConsoleKey.C, ConsoleKey.N));
-                        if (pressedKey == ConsoleKey.C)
-                        {
-                            conversationId = ConsoleInput.GetInt("Choose: ");
-                            ShowMessages(conversationId);
-                            MakeMessage(user, conversationId);
-                        }
-                        else
-                        {
-                            int newConversationId = AddPeopleToNewConversation(user);
-                            ShowMessages(newConversationId);
-                            MakeMessage(user, newConversationId);
-                        }
-                        Console.ReadKey();
-                        break;
-                    case 3:
-                        ShowProfile(user.ID);
-                        ShowPosts(user.ID);
-                        Console.ReadKey();
-                        break;
-                    case 4:
-                        //SETTINGSMENU
-                        pressedKey = ConsoleInput.GetPressedKey("[E] Edit profile [D] Delete account",NewKeyList(ConsoleKey.E, ConsoleKey.D));
-                        if (pressedKey == ConsoleKey.E)
-                        {
-                            EditInformation(user);
-                            user = _userManager.GetOne(user.ID, 0);
-                        }
-                        else
-                        {
-                            DeletingAccount(user);
-                        }
-                        break;
-                }
+                    }
+                    Console.ReadKey();
+                    break;
+                case 2:
+                    //CHATPAGE
+                    ShowConversationParticipants(user.ID);
+                    pressedKey = ConsoleInput.GetPressedKey($"[C] Choose conversation  [N] New Conversation", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.N));
+                    if (pressedKey == ConsoleKey.C)
+                    {
+                        conversationId = ConsoleInput.GetInt("Choose: ");
+                        ShowMessages(conversationId);
+                        MakeMessage(user, conversationId);
+                    }
+                    else
+                    {
+                        int newConversationId = AddPeopleToNewConversation(user);
+                        ShowMessages(newConversationId);
+                        MakeMessage(user, newConversationId);
+                    }
+                    Console.ReadKey();
+                    break;
+                case 3:
+                    ShowProfile(user.ID);
+                    ShowPosts(user.ID);
+                    Console.ReadKey();
+                    break;
+                case 4:
+                    //SETTINGSMENU
+                    pressedKey = ConsoleInput.GetPressedKey("[E] Edit profile [D] Delete account", LogicTool.NewKeyList(ConsoleKey.E, ConsoleKey.D));
+                    if (pressedKey == ConsoleKey.E)
+                    {
+                        EditInformation(user);
+                        user = _userManager.GetOne(user.ID, 0);
+                    }
+                    else
+                    {
+                        DeletingAccount(user);
+                    }
+                    break;
+                case 5:
+                    return;
             }
         }
-    }
-    public void ShowMyPage()
-    {
-
-    }
-    public void ShowOverlook()
-    {
-
     }
     public void ShowChat(int id)
     {
@@ -182,7 +150,6 @@ public class UserUI
         {
             Console.WriteLine(item.ToString());
         }
-        //id på konversationen, alla konversationer i asc ordning
     }
     public void MakePost(User user)
     {
@@ -208,7 +175,7 @@ public class UserUI
         int conversationId = 0;
         do
         {
-            pressedKey = ConsoleInput.GetPressedKey("[A] Add user  [R] Return", NewKeyList(ConsoleKey.A, ConsoleKey.R));
+            pressedKey = ConsoleInput.GetPressedKey("[A] Add user  [R] Return", LogicTool.NewKeyList(ConsoleKey.A, ConsoleKey.R));
             if (pressedKey == ConsoleKey.A)
             {
                 string userName = ConsoleInput.GetString($"Search for user by name: ");
@@ -255,7 +222,6 @@ public class UserUI
     // }
     public void ShowConversationParticipants(int id)
     {
-        //KOLLA DENNA CONVER.BLR NULL SISTA
         List<int> ids = new();
         ids.Add(id);
         try
@@ -320,12 +286,11 @@ public class UserUI
     public void DeletingAccount(User user)
     {
         string password = ConsoleInput.GetString("Type your password to delete  your account.");
-        if(user.PassWord == password)
+        if (user.PassWord == password)
         {
             _userManager.Remove(user);
             Console.WriteLine("Your account is now inactive. If you log in to your account you will be active again.");
         }
-
     }
     public void ShowMessages(int conversationId)
     {

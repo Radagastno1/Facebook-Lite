@@ -14,30 +14,13 @@ public class DeletionDB : IData<User>
     // FROM users u WHERE @date_check < CURRENT_DATE();
     public int? Create(User user)
     {
-        //lägg till på deleted_user table
-        int insertAndDeleted = 0;
-        string query = "INSERT INTO deleted_users (id, first_name, last_name, email, pass_word, birth_date, gender, about_me) " +
-        "VALUES(@Id, @FirstName, @LastName, @Email, @PassWord, @BirthDate, @Gender, @AboutMe);";
-        try
-        {
-            using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=true;"))
-
-                insertAndDeleted = con.ExecuteScalar<int>(query, param : user);
-
-            return insertAndDeleted;
-        }
-        catch (InvalidOperationException)
-        {
-            return null;
-        }
+       throw new NotImplementedException();
     }
-
     public int? Delete(User obj)
     {
-        //om man nu behöver deleta därifrån?
+        //vad används denna till hmmm
         throw new NotImplementedException();
     }
-
     public List<User> Get()
     { //hämta users som ska läggas in i deleted table, som har varit inaktiva i mer än 30 dagar
         List<User> users = new();

@@ -9,14 +9,9 @@ internal class Program
     //ATT FIXA
     //1. RENSA OCH ORDNA UPP BRA INTERFACES, FINNS METODER SOM TVINGAS IMPLEMENTERAS SOM EJ BEHÖVS/ANVÄNDS!!
     //KOMMENTARER VISAS SOM POSTS PÅ SIN MYPAGE!
+    //BEHÖVS CASCADING DELETE VID FK I POST, OM MAN TAR BORT EN POST SKA KOMMENTARERNA FÖRSVINNA OCKSÅ
     private static void Main(string[] args)
     {
-        string query = "SELECT birth_date FROM users WHERE id = 15;";
-        string showDate = "";
-         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=true;"))
-            
-            showDate = con.QuerySingle<string>(query);
-            Console.WriteLine(showDate);
              
         UserManager userManager = new(new UsersDB(), new UsersDB());
         PostsManager postsManager = new(new PostsDB());
