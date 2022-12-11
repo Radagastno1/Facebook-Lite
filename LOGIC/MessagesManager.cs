@@ -46,22 +46,22 @@ public class MessgageManager : IManager<Message>
         // }
     }
 
-    public List<Message> GetBySearch(string search)
+    public List<Message> GetBySearch(string search)   //söka i meddelandet efter datum eller ord?
     {
         throw new NotImplementedException();
     }
 
-    public Message GetOne(int data1, int data2)
+    public Message GetOne(int data1)    //hämta specifikt medd? vet ej
     {
         throw new NotImplementedException();
     }
 
-    public int? Remove(Message obj)
+    public int? Remove(Message obj)   //man ska kunna ta bort sitt medd = is_visible = true
     {
         throw new NotImplementedException();
     }
 
-    public int? Update(Message obj)
+    public int? Update(Message obj)  //man kan redigera sitt meddel inom en viss tid, lägg en bool is_edited ?
     {
         throw new NotImplementedException();
     }

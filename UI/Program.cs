@@ -7,20 +7,22 @@ namespace UI;
 internal class Program
 {
     //ATT FIXA
-    //1. RENSA OCH ORDNA UPP BRA INTERFACES, FINNS METODER SOM TVINGAS IMPLEMENTERAS SOM EJ BEHÖVS/ANVÄNDS!!
-    //KOMMENTARER VISAS SOM POSTS PÅ SIN MYPAGE!
-    //BEHÖVS CASCADING DELETE VID FK I POST, OM MAN TAR BORT EN POST SKA KOMMENTARERNA FÖRSVINNA OCKSÅ
+    //1. lägga till is_visible till messages, posts
+    //2. querys samt logik, kunna "radera" alltså sätta till is_visible = false PÅ SINA EGNA
+    //3. lägga till is_edited på messages och posts
+    //4. querys samt logik kunna redigera messages och posts (samt comments) som man själv har gjort
+    //5. i post och message, hämta ut med mer specifika idn, inte bara hämta ut alla och solla via logik!!
     private static void Main(string[] args)
     {
-             
-        UserManager userManager = new(new UsersDB(), new UsersDB());
+        UserManager userManager = new(new UsersDB(), new UsersDB(), new UsersDB());
         PostsManager postsManager = new(new PostsDB());
         CommentsManager commentsManager = new(new CommentsDB());
         ConversationManager conversationManager = new(new ConversationDB(), new MessagesDB(), new ConversationDB(), new ConversationDB());
         MessgageManager messageManager = new(new MessagesDB());
-        DeletionManager deletionManager = new(new DeletionDB());
         SignUpUI signUpUI = new(userManager);
-        UserUI userUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, conversationManager, commentsManager, deletionManager);
+        LogInManager logInManager = new(new UsersDB());
+        LogInService logInService = new(logInManager);
+        UserUI userUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, conversationManager, commentsManager, userManager);
         //MENYN INSPIRERAD AV PETRUS BLODBANKEN PROJEKT
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.BackgroundColor = ConsoleColor.White;
@@ -57,7 +59,6 @@ internal class Program
                 {
                     case 0:
                         User? user = new();
-                        LogInService logInService = new();
                         user = logInService.LogIn();
                         if (user != null)
                         {

@@ -4,6 +4,11 @@ using DATABASE; //UI måste känna till database pga loginmanager? egentligen in
 namespace UI;
 public class LogInService
 {
+    ILogInManager<User> _logInManager;
+    public LogInService(ILogInManager<User> logInManager)
+    {
+        _logInManager = logInManager;
+    }
     public User? LogIn()
     {
         User user = new();
@@ -12,7 +17,7 @@ public class LogInService
         LogInManager logInManager = new(new UsersDB()); //DENNA SKA HA EN INTERFACE, NU HÅRDKOPPLAD
         try
         {
-            user = logInManager.UserLogIn(user);
+            user = _logInManager.LogIn(user);
             return user;
         }
         catch(NullReferenceException)

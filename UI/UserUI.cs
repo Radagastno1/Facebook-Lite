@@ -10,11 +10,11 @@ public class UserUI
     IManager<Conversation> _conversationManager;
     IManager<Message> _messageManager;
     IIdManager<Conversation> _idManager;
-    IConnecting<User> _connectionManager;
+    IConnectingMultiple<User> _connectionManager;
     IManager<Comment> _commentManager;
-    IManager<User> _usersDeletions;
+    IDeletionManager<User> _deletionManager;
     List<ConsoleKey> keys = new();
-    public UserUI(IManager<User> userManager, IManager<Post> postManager, IManager<Conversation> conversationManager, IIdManager<Conversation> idManager, IManager<Message> messageManager, IConnecting<User> connectingManager, IManager<Comment> commentManager, IManager<User> usersDeletions)
+    public UserUI(IManager<User> userManager, IManager<Post> postManager, IManager<Conversation> conversationManager, IIdManager<Conversation> idManager, IManager<Message> messageManager, IConnectingMultiple<User> connectingManager, IManager<Comment> commentManager, IDeletionManager<User> deletionManager)
     {
         _userManager = userManager;
         _postManager = postManager;
@@ -23,8 +23,8 @@ public class UserUI
         _messageManager = messageManager;
         _connectionManager = connectingManager;
         _commentManager = commentManager;
-        _usersDeletions = usersDeletions;
-        deleted = _usersDeletions.Create(new User()); //behöver ändra fixa till interfaces
+        _deletionManager = deletionManager;
+        deleted = _deletionManager.SetAsDeleted();
         ShowAccountDeleted();
     }
     public void ShowAccountDeleted()
@@ -128,7 +128,7 @@ public class UserUI
                     if (pressedKey == ConsoleKey.E)
                     {
                         EditInformation(user);
-                        user = _userManager.GetOne(user.ID, 0);
+                        user = _userManager.GetOne(user.ID);
                     }
                     else
                     {
@@ -192,7 +192,7 @@ public class UserUI
     }
     public void ShowProfile(int id)
     {
-        User user = _userManager.GetOne(id, 0);
+        User user = _userManager.GetOne(id);
         Console.Title = $"{user.FirstName} {user.LastName}";
         string[] userData = new string[]
            {
@@ -313,7 +313,7 @@ public class UserUI
         List<User> participants = new();
         foreach (int id in ids)
         {
-            User participant = _userManager.GetOne(id, 0);
+            User participant = _userManager.GetOne(id);
             participants.Add(participant);
         }
         return participants;

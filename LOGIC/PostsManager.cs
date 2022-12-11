@@ -31,7 +31,7 @@ public class PostsManager : IManager<Post>
         }
         return searchedPosts;
     }
-    public Post GetOne(int id, int data2)
+    public Post GetOne(int id)
     {
         List<Post> allPosts = _postData.GetAll();
         Post post = new();
@@ -44,11 +44,11 @@ public class PostsManager : IManager<Post>
         }
         return post;
     }
-    public int? Remove(Post post)
+    public int? Remove(Post post)   //man ska kunna radera sin post, alltså sätta till ej synlig
     {
         return _postData.Delete(post);
     }
-    public int? Update(Post post)
+    public int? Update(Post post)   //redigera sin post och lägg till is_edited i table
     {
         throw new NotImplementedException();
     }

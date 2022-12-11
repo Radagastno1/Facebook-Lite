@@ -3,11 +3,10 @@ using CORE;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class UsersDB : IData<User>, IDataSearcher<User>
+public class UsersDB : IData<User>, IDataSearcher<User>, IDeletionData<User>
 {
     //1.fixa hur det ska se ut överallt om man är inaktiv
     //namn ska synas som deleted user? ingen publik information osv 
-  
     public int? Create(User obj)  //IDATA
     {
         int userId = 0;
@@ -20,10 +19,10 @@ public class UsersDB : IData<User>, IDataSearcher<User>
         try
         {
             using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=true;"))
-            
-            userId = con.ExecuteScalar<int>(query, param: obj);
-             
-            return userId; 
+
+                userId = con.ExecuteScalar<int>(query, param: obj);
+
+            return userId;
         }
         catch (InvalidOperationException)
         {
@@ -43,7 +42,7 @@ public class UsersDB : IData<User>, IDataSearcher<User>
     public List<User> GetAll()  //IDATA
     {
         List<User> users = new();
-        string query = 
+        string query =
         "SELECT u.id, u.first_name as 'FirstName', u.last_name as 'LastName', u.email," +
         "u.pass_word as 'PassWord', DATE_FORMAT(u.birth_date, '%Y-%m-%d') as 'BirthDate', u.gender, u.about_me as 'AboutMe', r.name as 'Role' " +
         "FROM users u LEFT JOIN users_roles ur ON ur.users_id = u.id " +
@@ -67,14 +66,6 @@ public class UsersDB : IData<User>, IDataSearcher<User>
         }
         return rowsEffected;
     }
-    public User GetById(int data1, int data2)
-    {
-        throw new NotImplementedException();
-    }
-    public ConversationResult GetIds(int data)
-    {
-        throw new NotImplementedException();
-    }
     public List<User> GetSearches(string name)
     {
         List<User> foundUsers = new();
@@ -84,14 +75,53 @@ public class UsersDB : IData<User>, IDataSearcher<User>
         "LEFT JOIN roles r ON r.id = ur.roles_id " +
         $"WHERE u.first_name LIKE '%{name}%' AND r.id = 5 AND u.is_active = true;";
         using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
-        foundUsers = con.Query<User>(query, new{@name = name}).ToList();
+        foundUsers = con.Query<User>(query, new { @name = name }).ToList();
         return foundUsers;
-    }   
-
+    }
     public List<User> GetById(int id)
     {
         throw new NotImplementedException();
     }
-    
 
+    public List<User> GetInactive()
+    {
+        List<User> users = new();
+        string query = "SELECT u.id as 'Id', DATE_ADD(u.date_inactive, interval 30 day) " +
+        "as deletingdate FROM users u  WHERE DATE_ADD(u.date_inactive, interval 30 day) < CURRENT_DATE() " +
+        "AND is_deleted = false;";
+        try
+        {
+            using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=true;"))
+
+                users = con.Query<User>(query).ToList();
+
+            return users;
+        }
+        catch (InvalidOperationException)
+        {
+            return null;
+        }
+    }
+
+    public int? UpdateToDeleted(User user)
+    {
+        //uppdatera något? vet ej
+        string query = "START TRANSACTION; " +
+        "UPDATE users SET is_deleted = true WHERE id = @Id; " +
+        "UPDATE messages SET is_visible = false WHERE sender_id = @Id;" +
+        "COMMIT;";
+        int rows = 0;
+        try
+        {
+            using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=true;"))
+
+                rows = con.ExecuteScalar<int>(query, param: user);
+
+            return rows;
+        }
+        catch (InvalidOperationException)
+        {
+            return null;
+        }
+    }
 }

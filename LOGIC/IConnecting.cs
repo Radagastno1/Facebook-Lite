@@ -1,5 +1,5 @@
 namespace LOGIC;
-public interface IConnecting<T>
+public interface IConnectingMultiple<T>
 {
     public int? MakeNew(List<T> objects, T obj);
 }

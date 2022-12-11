@@ -32,20 +32,20 @@ public class CommentsManager : IManager<Comment>
             return null;
         }
     }
-    public List<Comment> GetBySearch(string search)
+    public List<Comment> GetBySearch(string name)
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException();  //sök efter kommentarer i en post via namn?
     }
-    public Comment GetOne(int data1, int data2)
+    public Comment GetOne(int data)
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException();  //hämta specifik kommentar
     }
     public int? Remove(Comment obj)
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException();  //måste kunna radera sin egen kommentar ELLER om den är på sitt inlägg
     }
     public int? Update(Comment comment)
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException();  //redigera sin egna kommentar
     }
 }

@@ -1,7 +1,7 @@
 using CORE;
 namespace LOGIC;
 
-public class ConversationManager : IManager<Conversation>, IConnecting<User>, IIdManager<Conversation>
+public class ConversationManager : IManager<Conversation>, IConnectingMultiple<User>, IIdManager<Conversation>
 {
     IData<Conversation> _conversationData;
     IData<Message> _messageData;
@@ -33,11 +33,11 @@ public class ConversationManager : IManager<Conversation>, IConnecting<User>, II
         List<Conversation>conversations = _conversationData.GetById(data);
         return conversations;
     }
-    public List<Conversation> GetBySearch(string search)
+    public List<Conversation> GetBySearch(string name)
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException();    //ska kunna söka efter konversationer via namn i sin chatt
     }
-    public Conversation GetOne(int data1, int data2)
+    public Conversation GetOne(int data)
     {
         return new Conversation();
     }

@@ -1,13 +1,15 @@
 using CORE;
 namespace LOGIC;
-public class UserManager : IManager<User>
+public class UserManager : IManager<User>, IDeletionManager<User>
 {
     IData<User> _userData;
     IDataSearcher<User> _dataSearcher;
-    public UserManager(IData<User> userData, IDataSearcher<User> dataSearcher)
+    IDeletionData<User> _deletionData;
+    public UserManager(IData<User> userData, IDataSearcher<User> dataSearcher, IDeletionData<User> deletionData)
     {
         _userData = userData;
         _dataSearcher = dataSearcher;
+        _deletionData = deletionData;
     }
     public int? Create(User user)
     {
@@ -19,7 +21,7 @@ public class UserManager : IManager<User>
         searchedUsers = _dataSearcher.GetSearches(name);
         return searchedUsers;
     }
-    public User GetOne(int id, int data2)
+    public User GetOne(int id)
     {
         List<User> allUsers = _userData.GetAll();
         User user = new();
@@ -52,5 +54,20 @@ public class UserManager : IManager<User>
     public List<User> GetAll(int data)
     {
         throw new NotImplementedException();
+    }
+
+    public int? SetAsDeleted()
+    {
+        List<User> usersToDelete = _deletionData.GetInactive();
+        int usersToDeletedTable = 0;
+        if (usersToDelete != null)
+        {
+            foreach (User item in usersToDelete)
+            {
+                _deletionData.UpdateToDeleted(item);
+                usersToDeletedTable++;
+            }
+        }
+        return usersToDeletedTable;
     }
 }

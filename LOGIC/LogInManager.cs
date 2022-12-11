@@ -1,6 +1,6 @@
 using CORE;
 namespace LOGIC;
-public class LogInManager
+public class LogInManager : ILogInManager<User>  
 {
     IData<User> _userData;
 
@@ -8,8 +8,7 @@ public class LogInManager
     {
         _userData = userData;
     }
-
-    public User? UserLogIn(User user)
+    public User? LogIn(User user)
     {
         List<User> allUsers = _userData.GetAll();
         foreach (User item in allUsers)
