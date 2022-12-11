@@ -19,7 +19,10 @@ public class PostsDB : IData<Post>, IExtraData<Post>
     public int? Delete(Post obj)
     {
         int rowsEffected = 0;
-        string query = "DELETE FROM posts WHERE id = @Id;";
+        string query = "START TRANSACTION; " +
+        "DELETE FROM posts WHERE id = @id;" +
+        "DELETE FROM posts WHERE on_post_id = @id;" + 
+        "COMMIT;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
             rowsEffected = con.ExecuteScalar<int>(query, param: obj);

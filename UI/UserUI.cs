@@ -3,6 +3,7 @@ using CORE;
 namespace UI;
 public class UserUI
 {
+    //RENSA INTERFACES STRUKTURERA db och logik, vad används?
     static int? deleted = 0;
     IManager<User> _userManager;
     IManager<Post> _postManager;
