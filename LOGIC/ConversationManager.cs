@@ -6,8 +6,8 @@ public class ConversationManager : IManager<Conversation>, IConnecting<User>, II
     IData<Conversation> _conversationData;
     IData<Message> _messageData;
     IExtraData<Conversation> _extraData;
-    IIdData<Conversation> _getIdData;
-    public ConversationManager(IData<Conversation> conversationData, IData<Message> messageData, IExtraData<Conversation> extraData, IIdData<Conversation> getIdData)
+    IIdData<ConversationResult> _getIdData;
+    public ConversationManager(IData<Conversation> conversationData, IData<Message> messageData, IExtraData<Conversation> extraData, IIdData<ConversationResult> getIdData)
     {
         _conversationData = conversationData;
         _messageData = messageData;
@@ -30,7 +30,7 @@ public class ConversationManager : IManager<Conversation>, IConnecting<User>, II
     }
     public List<Conversation> GetAll(int data)
     {
-        List<Conversation>conversations = _getIdData.GetById(data);
+        List<Conversation>conversations = _conversationData.GetById(data);
         return conversations;
     }
     public List<Conversation> GetBySearch(string search)
@@ -62,7 +62,7 @@ public class ConversationManager : IManager<Conversation>, IConnecting<User>, II
                 sql += $"{id}";
             }
         }
-        conversationHolder = _extraData.GetManyByData(amountOfParticipants, sql);
+        conversationHolder = _extraData.GetByIdAndText(amountOfParticipants, sql);
         if (conversationHolder.Count > 0)
         {
             result.Conversations = conversationHolder;

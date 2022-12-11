@@ -9,10 +9,6 @@ public class UserManager : IManager<User>
         _userData = userData;
         _dataSearcher = dataSearcher;
     }
-    //hämta mina posts - usermanager
-    //hämta mina medd - messagemanager
-    //radera post - usermanager
-    //radera medd - usermanager
     public int? Create(User user)
     {
         return _userData.Create(user);
@@ -25,7 +21,7 @@ public class UserManager : IManager<User>
     }
     public User GetOne(int id, int data2)
     {
-        List<User> allUsers = _userData.Get();
+        List<User> allUsers = _userData.GetAll();
         User user = new();
         foreach (User item in allUsers)
         {

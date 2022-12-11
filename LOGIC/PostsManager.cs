@@ -16,7 +16,7 @@ public class PostsManager : IManager<Post>
         List<Post> searchedPosts = new();
         try
         {
-            List<Post> allPosts = _postData.Get();
+            List<Post> allPosts = _postData.GetAll();
             foreach (Post post in allPosts)
             {
                 if (post.Content.ToLower().Contains(search.ToLower()))
@@ -33,7 +33,7 @@ public class PostsManager : IManager<Post>
     }
     public Post GetOne(int id, int data2)
     {
-        List<Post> allPosts = _postData.Get();
+        List<Post> allPosts = _postData.GetAll();
         Post post = new();
         foreach (Post item in allPosts)
         {
@@ -58,7 +58,7 @@ public class PostsManager : IManager<Post>
         List<Post> chosenPosts = new();
         try
         {
-            List<Post> allPosts = _postData.Get();
+            List<Post> allPosts = _postData.GetAll();
             foreach (Post item in allPosts)
             {
                 if (item.UserId == data)

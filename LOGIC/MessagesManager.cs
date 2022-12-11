@@ -4,11 +4,9 @@ namespace LOGIC;
 public class MessgageManager : IManager<Message>
 {
     IData<Message> _messageManager;
-    IExtraData<Message> _extraData;
-    public MessgageManager(IData<Message> messageManager, IExtraData<Message> extraData)
+    public MessgageManager(IData<Message> messageManager)
     {
         _messageManager = messageManager;
-        _extraData = extraData;
     }
     public int? Create(Message message)
     {
@@ -17,9 +15,7 @@ public class MessgageManager : IManager<Message>
 
     public List<Message> GetAll(int conversationId)
     {
-        string text = "";
-        //fixa bättre interfaces
-        List<Message> selectedMessages = _extraData.GetManyByData(conversationId, text);
+        List<Message> selectedMessages = _messageManager.GetById(conversationId);
         if(selectedMessages == null && selectedMessages.Count() < 1)
         {
             return null;

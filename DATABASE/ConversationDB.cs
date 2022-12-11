@@ -3,9 +3,9 @@ using LOGIC;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IIdData<Conversation>
+public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IIdData<ConversationResult>
 {
-    public int? Create(Conversation conversation)
+    public int? Create(Conversation conversation)  //IDATA
     {
         int conversationId = 0;
         string query = "INSERT INTO conversations(creator_id) VALUES(@CreatorId);" +
@@ -16,7 +16,7 @@ public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IId
         }
         return conversationId;
     }
-    public int? Update(Conversation conversation)
+    public int? Update(Conversation conversation) //IDATA
     {
         int usersConversationId = 0;
         string query = "INSERT INTO users_conversations(users_id, conversations_id) VALUES (@participantId, @Id);" +
@@ -27,11 +27,11 @@ public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IId
         }
         return usersConversationId;
     }
-    public int? Delete(Conversation obj)
+    public int? Delete(Conversation obj)  //IDATA     HUR SKA MAN RADERA KONV OCH SKA MAN ELLER LÄGGA TILL BOOL ISVISIBLE?
     {
         throw new NotImplementedException();
     }
-    public List<Conversation> Get()
+    public List<Conversation> GetAll()  //IDATA
     {
         //här hämtar vi alla konversationer som man har i sin messenger
         List<Conversation> allConversations = new();
@@ -47,7 +47,7 @@ public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IId
         }
         return allConversations;
     }
-    public List<Conversation> GetManyByData(int amountOfUsers, string sql)
+    public List<Conversation> GetByIdAndText(int amountOfUsers, string sql)
     {
         List<Conversation> conversations = new();
         string query = $"SELECT uc.conversations_id AS 'ID', " +
@@ -62,12 +62,6 @@ public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IId
         }
         return conversations;
     }
-
-    Conversation IExtraData<Conversation>.GetOneByData(int data, string text)
-    {
-        throw new NotImplementedException();
-    }
-
     public ConversationResult GetIds(int conversationId)
     {
         List<User>users = new();
@@ -89,10 +83,10 @@ public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IId
             }
         return result;
     }
-    public List<Conversation> GetById(int data1)
+    public List<Conversation> GetById(int id)  //IDATA används den ens??
     {
         List<Conversation>conversations = new();
-        string query = $"SELECT uc.conversation_id as 'ID' FROM users_conversations uc WHERE uc.users_id = $data;"; 
+        string query = $"SELECT uc.conversation_id as 'ID' FROM users_conversations uc WHERE uc.users_id = @id;"; 
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
             conversations = con.Query<Conversation>(query).ToList();

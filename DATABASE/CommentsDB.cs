@@ -5,7 +5,7 @@ using MySqlConnector;
 namespace DATABASE;
 public class CommentsDB : IData<Comment>
 {
-    public int? Create(Comment obj)
+    public int? Create(Comment obj)  //IDATA
     {
         int messageId = 0;
         string query = "INSERT INTO posts (content, users_id, posts_types_id, on_post_id) " +
@@ -16,7 +16,7 @@ public class CommentsDB : IData<Comment>
         }
         return messageId;
     }
-    public int? Delete(Comment obj)
+    public int? Delete(Comment obj)  //IDATA   //fixa att man bara kan radera sin egen kommentar ELLER om dom är på SIN egen post
     {
         int messageId = 0;
         string query = "DELETE FROM posts WHERE id = @Id;";
@@ -26,7 +26,7 @@ public class CommentsDB : IData<Comment>
         }
         return messageId;
     }
-    public List<Comment> Get()
+    public List<Comment> GetAll()  //IDATA
     {
         List<Comment> comments = new();
         string query = "SELECT p.id, p.content, p.date_created as 'DateCreated', p.users_id as 'UserId', " +
@@ -39,13 +39,11 @@ public class CommentsDB : IData<Comment>
         }
         return comments;
     }
-
-    public Comment GetById(int data1, int data2)
+    public List<Comment> GetById(int id)   //IDATA
     {
         throw new NotImplementedException();
     }
-
-    public int? Update(Comment obj)
+    public int? Update(Comment obj) //IDATA
     {
         int rowsEffected = 0;
         string query = "UPDATE posts SET content = @Content WHERE id = @Id;";

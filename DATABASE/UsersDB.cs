@@ -8,7 +8,7 @@ public class UsersDB : IData<User>, IDataSearcher<User>
     //1.fixa hur det ska se ut överallt om man är inaktiv
     //namn ska synas som deleted user? ingen publik information osv 
   
-    public int? Create(User obj)
+    public int? Create(User obj)  //IDATA
     {
         int userId = 0;
         string query = "START TRANSACTION;" +
@@ -30,9 +30,8 @@ public class UsersDB : IData<User>, IDataSearcher<User>
             return null;
         }
     }
-    public int? Delete(User obj)
+    public int? Delete(User obj)  //IDATA
     {
-        //is_active är true by default 
         int rowsEffected = 0;
         string query = "UPDATE users SET is_active = false WHERE id = @id;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
@@ -41,7 +40,7 @@ public class UsersDB : IData<User>, IDataSearcher<User>
         }
         return rowsEffected;
     }
-    public List<User> Get()
+    public List<User> GetAll()  //IDATA
     {
         List<User> users = new();
         string query = 
@@ -56,7 +55,7 @@ public class UsersDB : IData<User>, IDataSearcher<User>
         }
         return users;
     }
-    public int? Update(User user)
+    public int? Update(User user)  //IDATA
     {
         int rowsEffected = 0;
         string query = "Update users SET first_name = @FirstName, last_name = @LastName, " +
@@ -87,6 +86,11 @@ public class UsersDB : IData<User>, IDataSearcher<User>
         using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
         foundUsers = con.Query<User>(query, new{@name = name}).ToList();
         return foundUsers;
+    }   
+
+    public List<User> GetById(int id)
+    {
+        throw new NotImplementedException();
     }
     
 

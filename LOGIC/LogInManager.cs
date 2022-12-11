@@ -11,7 +11,7 @@ public class LogInManager
 
     public User? UserLogIn(User user)
     {
-        List<User> allUsers = _userData.Get();
+        List<User> allUsers = _userData.GetAll();
         foreach (User item in allUsers)
         {
             if (item.Email == user.Email && item.PassWord == user.PassWord)

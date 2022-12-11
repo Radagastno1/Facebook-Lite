@@ -3,9 +3,9 @@ using CORE;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class MessagesDB : IData<Message>, IExtraData<Message>
+public class MessagesDB : IData<Message>
 {
-    public int? Create(Message obj)
+    public int? Create(Message obj)  //IDATA
     {
         int rowsEffected = 0;
         string query = "INSERT INTO messages (content, sender_id, conversations_id) " +
@@ -16,7 +16,7 @@ public class MessagesDB : IData<Message>, IExtraData<Message>
         }
         return rowsEffected;
     }
-    public int? Delete(Message obj)
+    public int? Delete(Message obj)  //IDATA
     {
         int rowsEffected = 0;
         string query = "DELETE FROM messages WHERE id = @Id;";
@@ -27,11 +27,11 @@ public class MessagesDB : IData<Message>, IExtraData<Message>
         }
         return rowsEffected;
     }
-    public List<Message> Get()
+    public List<Message> GetAll()   //IDATA
     {
         throw new NotImplementedException();
     }
-    public int? Update(Message obj)
+    public int? Update(Message obj)  //IDATA
     {
         int rowsEffected = 0;
         //fixa så att du bara kan ändra dina egna meddelanden
@@ -42,12 +42,7 @@ public class MessagesDB : IData<Message>, IExtraData<Message>
         }
         return rowsEffected;
     }
-    public Message GetById(int data1, int data2)
-    {
-        throw new NotImplementedException();
-    }
-
-    public List<Message> GetManyByData(int conversationId, string text)
+    public List<Message> GetById(int conversationId) ///IDATA
     {
         //MEDDE KOMMER INTE
         List<Message> messages = new();
@@ -60,13 +55,8 @@ public class MessagesDB : IData<Message>, IExtraData<Message>
        "ORDER BY m.date_created ASC;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
-            messages = con.Query<Message>(query, new{@conversationId = conversationId}).ToList();
+            messages = con.Query<Message>(query, new { @conversationId = conversationId }).ToList();
         }
         return messages;
-    }
-
-    Message IExtraData<Message>.GetOneByData(int data, string text)
-    {
-        throw new NotImplementedException();
     }
 }

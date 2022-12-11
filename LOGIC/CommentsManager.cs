@@ -16,7 +16,7 @@ public class CommentsManager : IManager<Comment>
     {
         try
         {
-            List<Comment> allComments = _commentsData.Get();
+            List<Comment> allComments = _commentsData.GetAll();
             List<Comment> selectedComments = new();
             foreach (Comment item in allComments)
             {

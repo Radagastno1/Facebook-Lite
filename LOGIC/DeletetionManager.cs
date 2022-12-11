@@ -9,7 +9,7 @@ public class DeletionManager : IManager<User>
     }
     public int? Create(User obj)
     {
-        List<User> usersToDelete = _userData.Get();
+        List<User> usersToDelete = _userData.GetAll();
         int usersToDeletedTable = 0;
         if (usersToDelete != null)
         {

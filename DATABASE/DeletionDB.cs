@@ -12,16 +12,16 @@ public class DeletionDB : IData<User>
     // SELECT u.id, u.first_name, u.last_name, u.email, u.pass_word,
     // u.birth_date, u.gender, u.about_me, (u.date_inactive + 30) as date_check
     // FROM users u WHERE @date_check < CURRENT_DATE();
-    public int? Create(User user)
+    public int? Create(User user)  //IDATA
     {
        throw new NotImplementedException();
     }
-    public int? Delete(User obj)
+    public int? Delete(User obj)  //IDATA
     {
         //vad används denna till hmmm
         throw new NotImplementedException();
     }
-    public List<User> Get()
+    public List<User> GetAll()   //IDATA
     { //hämta users som ska läggas in i deleted table, som har varit inaktiva i mer än 30 dagar
         List<User> users = new();
         string query = "SELECT u.id as 'Id', DATE_ADD(u.date_inactive, interval 30 day) " +
@@ -40,7 +40,7 @@ public class DeletionDB : IData<User>
             return null;
         }
     }
-    public int? Update(User obj)
+    public int? Update(User obj)  //IDATA
     {
         //uppdatera något? vet ej
          string query = "START TRANSACTION; " +
@@ -60,5 +60,10 @@ public class DeletionDB : IData<User>
         {
             return null;
         }throw new NotImplementedException();
+    }
+
+    public List<User> GetById(int id)   //IDATA
+    {
+        throw new NotImplementedException();
     }
 }

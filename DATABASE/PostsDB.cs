@@ -3,9 +3,9 @@ using CORE;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class PostsDB : IData<Post>, IExtraData<Post>
+public class PostsDB : IData<Post>
 {
-    public int? Create(Post obj)
+    public int? Create(Post obj)  //IDATA
     {
         int rowsEffected = 0;
         string query = "INSERT INTO posts (content, users_id, posts_types_id) " +
@@ -16,11 +16,11 @@ public class PostsDB : IData<Post>, IExtraData<Post>
         }
         return rowsEffected;
     }
-    public int? Delete(Post obj)
+    public int? Delete(Post obj)  //IDATA //MÅSTE HÄMTA ALLA POST ID SAMT COMMENT ID TILL USERN NÄR DEN LOGGAR IN 
     {
         int rowsEffected = 0;
         string query = "START TRANSACTION; " +
-        "DELETE FROM posts WHERE id = @id;" +
+        "DELETE FROM posts WHERE id = @id AND users_id = @usersId;" +
         "DELETE FROM posts WHERE on_post_id = @id;" + 
         "COMMIT;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
@@ -29,7 +29,7 @@ public class PostsDB : IData<Post>, IExtraData<Post>
         }
         return rowsEffected;
     }
-    public List<Post> Get()
+    public List<Post> GetAll() //IDATA
     {
         List<Post> posts = new();
         string query = $"SELECT p.id as 'Id', p.content as 'Content', p.date_created as 'DateCreated', u.first_name as 'FirstName', u.last_name as 'LastName', p.users_id as 'UserId' " +
@@ -47,7 +47,7 @@ public class PostsDB : IData<Post>, IExtraData<Post>
             return null;
         }
     }
-    public int? Update(Post obj)
+    public int? Update(Post obj)  //IDATA
     {
         int rowsEffected = 0;
         string query = "UPDATE posts SET content = @Content WHERE id = @Id;";
@@ -57,17 +57,7 @@ public class PostsDB : IData<Post>, IExtraData<Post>
         }
         return rowsEffected; 
     }
-    public Post GetById(int data1, int data2)
-    {
-        throw new NotImplementedException();
-    }
-
-    public List<Post> GetManyByData(int data, string text)
-    {
-        throw new NotImplementedException();
-    }
-
-    Post IExtraData<Post>.GetOneByData(int data, string text)
+    public List<Post> GetById(int id) //IDATA
     {
         throw new NotImplementedException();
     }

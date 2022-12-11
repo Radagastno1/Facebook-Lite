@@ -17,7 +17,7 @@ internal class Program
         PostsManager postsManager = new(new PostsDB());
         CommentsManager commentsManager = new(new CommentsDB());
         ConversationManager conversationManager = new(new ConversationDB(), new MessagesDB(), new ConversationDB(), new ConversationDB());
-        MessgageManager messageManager = new(new MessagesDB(), new MessagesDB());
+        MessgageManager messageManager = new(new MessagesDB());
         DeletionManager deletionManager = new(new DeletionDB());
         SignUpUI signUpUI = new(userManager);
         UserUI userUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, conversationManager, commentsManager, deletionManager);
