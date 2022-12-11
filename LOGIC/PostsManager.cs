@@ -53,22 +53,14 @@ public class PostsManager : IManager<Post>
         throw new NotImplementedException();
     }
 
-    public List<Post> GetAll(int data)
+    public List<Post> GetAll(int userId)
     {
-        List<Post> chosenPosts = new();
         try
         {
-            List<Post> allPosts = _postData.GetAll();
-            foreach (Post item in allPosts)
-            {
-                if (item.UserId == data)
-                {
-                    chosenPosts.Add(item);
-                }
-            }
-            return chosenPosts;
+            List<Post> allPosts = _postData.GetById(userId);
+            return allPosts;
         }
-        catch(NullReferenceException)
+        catch (NullReferenceException)
         {
             return null;
         }

@@ -39,6 +39,7 @@ public class UserUI
         int menuOptions = 0;
         while (true)
         {
+            int postId = 0;
             menuOptions = ConsoleInput.GetMenuOptions(overviewOptions);
             switch (menuOptions)
             {
@@ -83,7 +84,7 @@ public class UserUI
                     }
                     else
                     {
-                        int postId = ShowPosts(id);
+                        postId = ShowPosts(id);
                         if (postId != 0)
                         {
                             ConsoleKey key = ConsoleInput.GetPressedKey("\t[C] Comment   [V] View Comments", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.V));
@@ -119,7 +120,19 @@ public class UserUI
                     break;
                 case 3:
                     ShowProfile(user.ID);
-                    ShowPosts(user.ID);
+                    postId = ShowPosts(user.ID);
+                    if (postId != 0)
+                        {
+                            ConsoleKey key = ConsoleInput.GetPressedKey("\t[C] Comment   [V] View Comments", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.V));
+                            if (key == ConsoleKey.C)
+                            {
+                                CommentPost(user, postId);
+                            }
+                            else if (key == ConsoleKey.V)
+                            {
+                                ShowCommentsOnPost(postId);
+                            }
+                        }
                     Console.ReadKey();
                     break;
                 case 4:

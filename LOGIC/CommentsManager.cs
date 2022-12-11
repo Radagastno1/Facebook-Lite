@@ -12,22 +12,14 @@ public class CommentsManager : IManager<Comment>
     {
         return _commentsData.Create(obj);
     }
-    public List<Comment> GetAll(int data)
+    public List<Comment> GetAll(int postId)
     {
         try
         {
-            List<Comment> allComments = _commentsData.GetAll();
-            List<Comment> selectedComments = new();
-            foreach (Comment item in allComments)
-            {
-                if (item.OnPostId == data)
-                {
-                    selectedComments.Add(item);
-                }
-            }
-            return selectedComments;
+            List<Comment> allComments = _commentsData.GetById(postId);
+            return allComments;
         }
-        catch(NullReferenceException)
+        catch(InvalidOperationException)
         {
             return null;
         }

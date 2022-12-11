@@ -7,6 +7,7 @@ namespace UI;
 internal class Program
 {
     //ATT FIXA
+    // MAN SKA BARA KUNNA SÄTTA IS_VISIBLE SAMT RADERA IS_EDITED SINA POSTS MAN HAR GJORT! fixa buggen
     //1. lägga till is_visible till messages, posts
     //2. querys samt logik, kunna "radera" alltså sätta till is_visible = false PÅ SINA EGNA
     //3. lägga till is_edited på messages och posts

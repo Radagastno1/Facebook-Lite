@@ -53,12 +53,12 @@ public class PostService
         try
         {
             List<Comment> comments = _commentManager.GetAll(postId);
-            foreach(Comment item in comments)
+            foreach (Comment item in comments)
             {
                 Console.WriteLine($"{item.ToString()}\n");
             }
         }
-        catch(NullReferenceException)
+        catch (NullReferenceException)
         {
             Console.WriteLine("No comments yet..");
         }
