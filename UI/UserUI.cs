@@ -71,8 +71,8 @@ public class UserUI
 
     public void PublishPost(User user)
     {
-         PostService postService = new(_postManager, _commentManager);
-        int postId = MakePost(user);
+        PostService postService = new(_postManager, _commentManager);
+        int postId = postService.MakePost(user);
         postService.ShowPostById(postId);
         ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[E] Edit  [P] Publish", LogicTool.NewKeyList(ConsoleKey.E, ConsoleKey.P));
         if (pressedKey == ConsoleKey.E)
@@ -131,6 +131,7 @@ public class UserUI
         }
         else
         {
+            
             int newConversationId = AddPeopleToNewConversation(user);
             ShowMessages(newConversationId);
             MakeMessage(user, newConversationId);
@@ -168,25 +169,25 @@ public class UserUI
             if(isDeleted == true) Environment.Exit(0);
         }
     }
-    public void ShowChat(int id)
-    {
-        List<int> ids = new();
-        ids.Add(id);
-        List<Conversation>? conversations = _idManager.GetIds(ids).Conversations;
-        Console.WriteLine($"Chats");
-        if (conversations == null) Console.WriteLine("No conversation yet");
-        foreach (Conversation item in conversations)
-        {
-            Console.WriteLine(item.ToString());
-        }
-    }
-    public int MakePost(User user)
-    {
-        string content = ConsoleInput.GetString("What's on your mind?");
-        Post post = new(content, DateTime.Now, user.ID);
-        int? postId = _postManager.Create(post);
-        return postId.GetValueOrDefault();
-    }
+    // public void ShowChat(int id)
+    // {
+    //     List<int> ids = new();
+    //     ids.Add(id);
+    //     List<Conversation>? conversations = _idManager.GetIds(ids).Conversations;
+    //     Console.WriteLine($"Chats");
+    //     if (conversations == null) Console.WriteLine("No conversation yet");
+    //     foreach (Conversation item in conversations)
+    //     {
+    //         Console.WriteLine(item.ToString());
+    //     }
+    // }
+    // public int MakePost(User user)   //I POSTSERVICE
+    // {
+    //     string content = ConsoleInput.GetString("What's on your mind?");
+    //     Post post = new(content, DateTime.Now, user.ID);
+    //     int? postId = _postManager.Create(post);
+    //     return postId.GetValueOrDefault();
+    // }
     public void ShowSearches(string name)
     {
         List<User> users = _userManager.GetBySearch(name);
@@ -198,7 +199,7 @@ public class UserUI
             }
         }
     }
-    public int AddPeopleToNewConversation(User user)
+    public int AddPeopleToNewConversation(User user)  // I CONVERSATIONSERVICE
     {
         List<int> userIds = new();
         ConsoleKey pressedKey = new();
@@ -240,7 +241,7 @@ public class UserUI
             }
         }
     }
-    public void ShowConversationParticipants(int id)
+    public void ShowConversationParticipants(int id) 
     {
         List<int> ids = new();
         ids.Add(id);

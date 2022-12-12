@@ -10,11 +10,11 @@ public class PostService
         _postManager = postManager;
         _commentManager = commentManager;
     }
-    public void MakePost(User user)
+    public int MakePost(User user)
     {
         string content = ConsoleInput.GetString("What's on your mind?");
         Post post = new(content, DateTime.Now, user.ID);
-        _postManager.Create(post);
+        return _postManager.Create(post).GetValueOrDefault();
     }
     public int ShowPosts(int userId)
     {
