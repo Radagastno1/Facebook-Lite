@@ -1,5 +1,5 @@
 namespace LOGIC;
 public interface ILogInManager<T>
 {
-    public T? LogIn(T obj);
+    public T? LogIn(string email, string password);
 }

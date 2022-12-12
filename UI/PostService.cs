@@ -34,19 +34,23 @@ public class PostService
         int postId = ConsoleInput.GetInt("[0] Return   [ChoosePost] See Post");
         return postId;
     }
-
-    public ConsoleKey ChooseIfComment()
+    public void ShowPostById(int postId)
     {
-        List<ConsoleKey> keys = new();
-        keys.Add(ConsoleKey.C); keys.Add(ConsoleKey.V);
-        ConsoleKey key = ConsoleInput.GetPressedKey("\t[C] Comment   [V] View Comments", keys);
-        return key;
+        Post post = _postManager.GetOne(postId);
+        Console.WriteLine(post.ToString());
     }
     public void CommentPost(User user, int postId)
     {
         string content = ConsoleInput.GetString("Leave a comment: ");
         Comment comment = new Comment(content, DateTime.Now, user.ID, postId);
         _commentManager.Create(comment);
+    }
+    public ConsoleKey ChooseIfComment()
+    {
+        List<ConsoleKey> keys = new();
+        keys.Add(ConsoleKey.C); keys.Add(ConsoleKey.V);
+        ConsoleKey key = ConsoleInput.GetPressedKey("\t[C] Comment   [V] View Comments", keys);
+        return key;
     }
     public void ShowCommentsOnPost(int postId)
     {
@@ -63,7 +67,6 @@ public class PostService
             Console.WriteLine("No comments yet..");
         }
     }
-
     public void EditPost(int postId)
     {
         Post post = _postManager.GetOne(postId);

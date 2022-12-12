@@ -40,7 +40,8 @@ public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IId
                        "LEFT JOIN users_conversations uc " +
                        "ON c.id = uc.conversations_id " +
                        "LEFT JOIN users u " +
-                        "ON u.id = uc.users_id;";
+                        "ON u.id = uc.users_id " + 
+                        "WHERE u.is_active = true;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
             allConversations = con.Query<Conversation>(query).ToList();
@@ -72,7 +73,7 @@ public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IId
                            "ON uc.conversations_id = c.id " +
                            "INNER JOIN users u " +
                            "ON u.id = uc.users_id " +
-                           "WHERE c.id = @id;";
+                           "WHERE c.id = @id AND u.is_active = true;";
             using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
             {
                 result.Conversation = con.QuerySingle<Conversation>(query, new { @id = conversationId });

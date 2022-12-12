@@ -5,16 +5,22 @@ using MySqlConnector;
 namespace DATABASE;
 public class LogInDB : ILogInDB<User>
 {
-    public User GetMemberByLogIn(User user)
+    public User GetMemberByLogIn(string email, string passWord)
     {
         //OM DENNA SKA ANVÄNDAS SÅ ÄNDRA JOINEN
-        string query = "SELECT id, first_name as 'FirstName', last_name as 'LastName' " + 
-        "email, pass_word as 'PassWord', birth_date as 'BirthDate', gender, about_me as 'AboutMe' " +
-        "INNER JOIN roles r ON r.id = u.users_roles_id " +
-        "FROM users u WHERE email = @Email AND pass_word = @PassWord AND r.name = 'Member';";
-        using (MySqlConnection con = new MySqlConnection("connectionstring"))
+        User user = new();
+        string query = "START TRANSACTION;" +
+        "SELECT u.id as 'Id', u.first_name as 'FirstName', u.last_name as 'LastName', " + 
+        "u.email as 'Email', u.pass_word as 'PassWord', u.birth_date as 'BirthDate', u.gender as 'Gender', u.about_me as 'AboutMe' " +
+        "FROM users u " + 
+        "INNER JOIN users_roles ur ON ur.users_id = u.id " +
+        "INNER JOIN roles r ON ur.roles_id = r.id " +
+        "WHERE email = @Email AND pass_word = @PassWord AND r.name = 'Member' AND is_deleted = FALSE;" +
+        "UPDATE users u SET u.is_active = true WHERE u.email = @Email AND u.pass_word = @PassWord;" + 
+        "COMMIT;";
+        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=True;"))
         {
-            user = con.QuerySingle<User>(query, param : user);
+            user = con.QuerySingle<User>(query, new{@Email = email, @PassWord = passWord});
         }
         return user;
     }

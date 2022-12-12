@@ -71,20 +71,15 @@ public class UserUI
 
     public void PublishPost(User user)
     {
+         PostService postService = new(_postManager, _commentManager);
         int postId = MakePost(user);
-        ShowPostById(postId);
+        postService.ShowPostById(postId);
         ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[E] Edit  [P] Publish", LogicTool.NewKeyList(ConsoleKey.E, ConsoleKey.P));
         if (pressedKey == ConsoleKey.E)
         {
-            EditPost(postId);
+            postService.EditPost(postId);
         }
         else return;
-    }
-    public void EditPost(int postId)
-    {
-        Post post = _postManager.GetOne(postId);
-        post.Content = ConsoleInput.GetString("What's on your mind?");
-        _postManager.Update(post);
     }
     public void Searcher(User user)
     {
@@ -143,18 +138,19 @@ public class UserUI
     }
     public void MyPage(User user)
     {
+        PostService postService = new(_postManager, _commentManager);
         ShowProfile(user.ID);
-        int postId = ShowPosts(user.ID);
+        int postId = postService.ShowPosts(user.ID);
         if (postId != 0)
         {
             ConsoleKey key = ConsoleInput.GetPressedKey("\t[C] Comment   [V] View Comments", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.V));
             if (key == ConsoleKey.C)
             {
-                CommentPost(user, postId);
+                postService.CommentPost(user, postId);
             }
             else if (key == ConsoleKey.V)
             {
-                ShowCommentsOnPost(postId);
+                postService.ShowCommentsOnPost(postId);
             }
         }
     }
@@ -168,7 +164,8 @@ public class UserUI
         }
         else
         {
-            DeletingAccount(user);
+            bool isDeleted = DeletingAccount(user);
+            if(isDeleted == true) Environment.Exit(0);
         }
     }
     public void ShowChat(int id)
@@ -243,16 +240,6 @@ public class UserUI
             }
         }
     }
-    // public List<Conversation>? GetConversations(List<int> ids)
-    // {
-    //     //denna i logik?
-
-    //     if (_idManager.GetIds(ids).ConversationExists == true)
-    //     {
-    //         return _idManager.GetIds(ids).Conversations;
-    //     }
-    //     return null;
-    // }
     public void ShowConversationParticipants(int id)
     {
         List<int> ids = new();
@@ -316,13 +303,19 @@ public class UserUI
             Console.WriteLine("Something went wrong.");
         }
     }
-    public void DeletingAccount(User user)
+    public bool DeletingAccount(User user)
     {
         string password = ConsoleInput.GetString("Type your password to delete  your account.");
         if (user.PassWord == password)
         {
             _userManager.Remove(user);
             Console.WriteLine("Your account is now inactive. If you log in to your account you will be active again.");
+            Console.ReadKey();
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
     public void ShowMessages(int conversationId)
@@ -355,49 +348,5 @@ public class UserUI
         string content = ConsoleInput.GetString("Message: ");
         Message message = new(content, user.ID, conversationId);
         _messageManager.Create(message);
-    }
-    public int ShowPosts(int userId)
-    {
-        List<Post> allPosts = new();
-        try
-        {
-            allPosts = _postManager.GetAll(userId);
-            foreach (Post item in allPosts)
-            {
-                Console.WriteLine($"{item.ToString()}\n");
-            }
-        }
-        catch (NullReferenceException)
-        {
-            Console.WriteLine("\tNo posts yet..");
-        }
-        int postId = ConsoleInput.GetInt("[0] Return   [ChoosePost] See Post");
-        return postId;
-    }
-    public void ShowPostById(int postId)
-    {
-        Post post = _postManager.GetOne(postId);
-        Console.WriteLine(post.ToString());
-    }
-    public void CommentPost(User user, int postId)
-    {
-        string content = ConsoleInput.GetString("Leave a comment: ");
-        Comment comment = new Comment(content, DateTime.Now, user.ID, postId);
-        _commentManager.Create(comment);
-    }
-    public void ShowCommentsOnPost(int postId)
-    {
-        try
-        {
-            List<Comment> comments = _commentManager.GetAll(postId);
-            foreach (Comment item in comments)
-            {
-                Console.WriteLine($"{item.ToString()}\n");
-            }
-        }
-        catch (NullReferenceException)
-        {
-            Console.WriteLine("No comments yet..");
-        }
     }
 }

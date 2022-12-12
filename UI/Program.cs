@@ -7,12 +7,9 @@ namespace UI;
 internal class Program
 {
     //ATT FIXA
-    // MAN SKA BARA KUNNA SÄTTA IS_VISIBLE SAMT RADERA IS_EDITED SINA POSTS MAN HAR GJORT! fixa buggen
-    //1. lägga till is_visible till messages, posts
-    //2. querys samt logik, kunna "radera" alltså sätta till is_visible = false PÅ SINA EGNA
-    //3. lägga till is_edited på messages
-    //4. querys samt logik kunna redigera messages och posts (samt comments) som man själv har gjort
-    //5. i post och message, hämta ut med mer specifika idn, inte bara hämta ut alla och solla via logik!!
+    //1. när man väljer delete, ska ens posts, comments och messages sättas till is_visible = false
+    //2. i post och message, hämta ut med mer specifika idn, inte bara hämta ut alla och solla via logik!!
+    //3. Kopplingsdiagram ett uppdaterat nu
     private static void Main(string[] args)
     {
         UserManager userManager = new(new UsersDB(), new UsersDB(), new UsersDB());
@@ -21,7 +18,7 @@ internal class Program
         ConversationManager conversationManager = new(new ConversationDB(), new MessagesDB(), new ConversationDB(), new ConversationDB());
         MessgageManager messageManager = new(new MessagesDB());
         SignUpUI signUpUI = new(userManager);
-        LogInManager logInManager = new(new UsersDB());
+        LogInManager logInManager = new(new LogInDB());
         LogInService logInService = new(logInManager);
         UserUI userUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, conversationManager, commentsManager, userManager);
         //MENYN INSPIRERAD AV PETRUS BLODBANKEN PROJEKT

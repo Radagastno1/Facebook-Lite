@@ -11,13 +11,12 @@ public class LogInService
     }
     public User? LogIn()
     {
-        User user = new();
-        user.Email = ConsoleInput.GetEmail("Email: ");
-        user.PassWord = ConsoleInput.GetPassword("Password: ");
-        LogInManager logInManager = new(new UsersDB()); //DENNA SKA HA EN INTERFACE, NU HÅRDKOPPLAD
+        string email = ConsoleInput.GetEmail("Email: ");
+        string passWord = ConsoleInput.GetPassword("Password: ");
+         //DENNA SKA HA EN INTERFACE, NU HÅRDKOPPLAD
         try
         {
-            user = _logInManager.LogIn(user);
+            User user = _logInManager.LogIn(email, passWord);
             return user;
         }
         catch(NullReferenceException)

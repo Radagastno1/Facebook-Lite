@@ -16,14 +16,15 @@ public class MessagesDB : IData<Message>
         }
         return rowsEffected;
     }
-    public int? Delete(Message obj)  //IDATA
+    public int? Delete(Message message)  //hämta medd till personens lista och gör detta? 
     {
         int rowsEffected = 0;
-        string query = "DELETE FROM messages WHERE id = @Id;";
+        string query = "UPDATE messages m SET m.is_visible = false " + 
+        "WHERE id = @Id;";
         // du ska kunna deleta dina medd. samt dig själv från konversationen
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
-            rowsEffected = con.ExecuteScalar<int>(query, param: obj);
+            rowsEffected = con.ExecuteScalar<int>(query, new{@id = message.ID});
         }
         return rowsEffected;
     }

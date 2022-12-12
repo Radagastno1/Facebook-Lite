@@ -1,23 +1,23 @@
 using CORE;
 namespace LOGIC;
-public class LogInManager : ILogInManager<User>  
+public class LogInManager : ILogInManager<User>
 {
-    IData<User> _userData;
+    ILogInDB<User> _logInUser;
 
-    public LogInManager(IData<User> userData)
+    public LogInManager(ILogInDB<User> logInUser)
     {
-        _userData = userData;
+        _logInUser = logInUser;
     }
-    public User? LogIn(User user)
+    public User LogIn(string email, string passWord)  // ska ist prata med logindb!!
     {
-        List<User> allUsers = _userData.GetAll();
-        foreach (User item in allUsers)
+        try
         {
-            if (item.Email == user.Email && item.PassWord == user.PassWord)
-            {
-                return item;
-            }
+            User user = _logInUser.GetMemberByLogIn(email, passWord);
+            return user;
         }
-        return null;
+        catch (InvalidOperationException)
+        {
+            return null;
+        }
     }
 }
