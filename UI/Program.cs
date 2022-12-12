@@ -7,8 +7,6 @@ namespace UI;
 internal class Program
 {
     //ATT FIXA
-    //1. när man väljer delete, ska ens posts, comments och messages sättas till is_visible = false
-    //2. när man loggar in och blir is_active = true så ska posts osv sättas till is_visible = true
     //3. i post och message, hämta ut med mer specifika idn, inte bara hämta ut alla och solla via logik!!
     //4. Kopplingsdiagram ett uppdaterat nu
     //5. Fixa mer i UI, rensa ut metoder till conversationservice osv

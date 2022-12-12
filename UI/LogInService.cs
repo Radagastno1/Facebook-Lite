@@ -13,15 +13,15 @@ public class LogInService
     {
         string email = ConsoleInput.GetEmail("Email: ");
         string passWord = ConsoleInput.GetPassword("Password: ");
-         //DENNA SKA HA EN INTERFACE, NU HÅRDKOPPLAD
         try
         {
             User user = _logInManager.LogIn(email, passWord);
             return user;
         }
-        catch(NullReferenceException)
+        catch(Exception e)
         {
-            Console.WriteLine("Wrong email or password.");
+            Console.WriteLine("Wrong email or password." + e.Message);
+            Console.ReadLine();
             return null;
         }
     }

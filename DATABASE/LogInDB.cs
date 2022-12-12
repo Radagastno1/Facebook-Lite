@@ -9,19 +9,31 @@ public class LogInDB : ILogInDB<User>
     {
         //OM DENNA SKA ANVÄNDAS SÅ ÄNDRA JOINEN
         User user = new();
-        string query = "START TRANSACTION;" +
-        "SELECT u.id as 'Id', u.first_name as 'FirstName', u.last_name as 'LastName', " + 
+        string query = 
+        "SELECT u.id as 'Id', u.first_name as 'FirstName', u.last_name as 'LastName', " +
         "u.email as 'Email', u.pass_word as 'PassWord', u.birth_date as 'BirthDate', u.gender as 'Gender', u.about_me as 'AboutMe' " +
-        "FROM users u " + 
+        "FROM users u " +
         "INNER JOIN users_roles ur ON ur.users_id = u.id " +
         "INNER JOIN roles r ON ur.roles_id = r.id " +
-        "WHERE email = @Email AND pass_word = @PassWord AND r.name = 'Member' AND is_deleted = FALSE;" +
-        "UPDATE users u SET u.is_active = true WHERE u.email = @Email AND u.pass_word = @PassWord;" + 
+        "WHERE email = @Email AND pass_word = @PassWord AND r.name = 'Member' AND is_deleted = FALSE;";
+        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=True;"))
+        {
+            user = con.QuerySingle<User>(query, new { @Email = email, @PassWord = passWord });
+        }
+        return user;
+    }
+    public int UpdateToActivated(int userId)
+    {
+        int rows = 0;
+        string query = "START TRANSACTION;" +
+        "UPDATE users SET is_active = TRUE WHERE id = @id;" +
+        "UPDATE messages SET is_visible = TRUE WHERE sender_id = @id; " +
+        "UPDATE posts SET is_visible = TRUE WHERE users_id = @id; " +
         "COMMIT;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=True;"))
         {
-            user = con.QuerySingle<User>(query, new{@Email = email, @PassWord = passWord});
+            rows = con.ExecuteScalar<int>(query, new{@id = userId});
         }
-        return user;
+        return rows;   //returnerar ej rows
     }
 }

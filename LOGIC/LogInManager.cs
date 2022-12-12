@@ -13,6 +13,7 @@ public class LogInManager : ILogInManager<User>
         try
         {
             User user = _logInUser.GetMemberByLogIn(email, passWord);
+            _logInUser.UpdateToActivated(user.ID);
             return user;
         }
         catch (InvalidOperationException)
