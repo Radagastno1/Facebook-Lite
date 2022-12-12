@@ -32,7 +32,11 @@ public class UsersDB : IData<User>, IDataSearcher<User>, IDeletionData<User>
     public int? Delete(User obj)  //IDATA
     {
         int rowsEffected = 0;
-        string query = "UPDATE users SET is_active = false WHERE id = @id;";
+        string query = "START TRANSACTION;" +
+        "UPDATE users SET is_active = false WHERE id = @id;" + 
+        "UPDATE messages SET is_visible = FALSE WHERE sender_id = @id;" + 
+        "UPDATE posts SET is_visible = FALSE WHERE users_id = @id;" + 
+        "COMMIT;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
             rowsEffected = con.ExecuteScalar<int>(query, param: obj);
