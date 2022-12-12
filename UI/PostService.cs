@@ -63,4 +63,11 @@ public class PostService
             Console.WriteLine("No comments yet..");
         }
     }
+
+    public void EditPost(int postId)
+    {
+        Post post = _postManager.GetOne(postId);
+        post.Content = ConsoleInput.GetString("Edit post: ");
+        _postManager.Update(post);
+    }
 }

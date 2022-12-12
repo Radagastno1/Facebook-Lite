@@ -3,9 +3,11 @@ namespace LOGIC;
 public class PostsManager : IManager<Post>
 {
     IData<Post> _postData;
-    public PostsManager(IData<Post> postData)
+    IIdData<Post> _postIdData;
+    public PostsManager(IData<Post> postData, IIdData<Post> postIdData)
     {
         _postData = postData;
+        _postIdData = postIdData;
     }
     public int? Create(Post post)
     {
@@ -31,17 +33,17 @@ public class PostsManager : IManager<Post>
         }
         return searchedPosts;
     }
-    public Post GetOne(int id)
+    public Post GetOne(int postId)  //ska lösas via sql
     {
-        List<Post> allPosts = _postData.GetAll();
-        Post post = new();
-        foreach (Post item in allPosts)
-        {
-            if (item.ID == id)
-            {
-                post = item;
-            }
-        }
+        // List<Post> allPosts 
+         Post post = _postIdData.GetIds(postId);
+        // foreach (Post item in allPosts)
+        // {
+        //     if (item.ID == id)
+        //     {
+        //         post = item;
+        //     }
+        // }
         return post;
     }
     public int? Remove(Post post)   //man ska kunna radera sin post, alltså sätta till ej synlig
@@ -50,7 +52,7 @@ public class PostsManager : IManager<Post>
     }
     public int? Update(Post post)   //redigera sin post och lägg till is_edited i table
     {
-        throw new NotImplementedException();
+        return _postData.Update(post);
     }
 
     public List<Post> GetAll(int userId)

@@ -39,118 +39,136 @@ public class UserUI
         int menuOptions = 0;
         while (true)
         {
-            int postId = 0;
             menuOptions = ConsoleInput.GetMenuOptions(overviewOptions);
             switch (menuOptions)
             {
                 case 0:
-                    MakePost(user);
+                    PublishPost(user);
+                    Console.ReadKey();
                     break;
                 case 1:
-                    int conversationId = 0;
-                    string search = ConsoleInput.GetString("Search by name: ");
-                    ShowSearches(search);
-                    int id = ConsoleInput.GetInt("User to visit: ");
-                    ShowProfile(id);
-                    ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[M] Message  [P] Posts", LogicTool.NewKeyList(ConsoleKey.M, ConsoleKey.P));
-                    if (pressedKey == ConsoleKey.M)
-                    {
-                        List<int> ids = new();
-                        ids.Add(id);
-                        ids.Add(user.ID);
-                        List<Conversation>? conversations = _idManager.GetIds(ids).Conversations;
-                        if (conversations != null)
-                        {
-                            ShowConversations(conversations);
-                            conversationId = ConsoleInput.GetInt("Choose: ");
-                            ShowMessages(conversationId);
-                        }
-                        else
-                        {
-                            pressedKey = ConsoleInput.GetPressedKey("[S]Start conversation  [R] Return", LogicTool.NewKeyList(ConsoleKey.S, ConsoleKey.R));
-                            if (pressedKey == ConsoleKey.S)
-                            {
-                                ids = new();
-                                ids.Add(id);
-                                List<User> participants = GetUsersById(ids);
-                                conversationId = _connectionManager.MakeNew(participants, user).GetValueOrDefault();
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        }
-                        MakeMessage(user, conversationId);
-                    }
-                    else
-                    {
-                        postId = ShowPosts(id);
-                        if (postId != 0)
-                        {
-                            ConsoleKey key = ConsoleInput.GetPressedKey("\t[C] Comment   [V] View Comments", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.V));
-                            if (key == ConsoleKey.C)
-                            {
-                                CommentPost(user, postId);
-                            }
-                            else if (key == ConsoleKey.V)
-                            {
-                                ShowCommentsOnPost(postId);
-                            }
-                        }
-                    }
+                    Searcher(user);
                     Console.ReadKey();
                     break;
                 case 2:
                     //CHATPAGE
-                    ShowConversationParticipants(user.ID);
-                    pressedKey = ConsoleInput.GetPressedKey($"[C] Choose conversation  [N] New Conversation", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.N));
-                    if (pressedKey == ConsoleKey.C)
-                    {
-                        conversationId = ConsoleInput.GetInt("Choose: ");
-                        ShowMessages(conversationId);
-                        MakeMessage(user, conversationId);
-                    }
-                    else
-                    {
-                        int newConversationId = AddPeopleToNewConversation(user);
-                        ShowMessages(newConversationId);
-                        MakeMessage(user, newConversationId);
-                    }
+                    Messenger(user);
                     Console.ReadKey();
                     break;
                 case 3:
-                    ShowProfile(user.ID);
-                    postId = ShowPosts(user.ID);
-                    if (postId != 0)
-                        {
-                            ConsoleKey key = ConsoleInput.GetPressedKey("\t[C] Comment   [V] View Comments", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.V));
-                            if (key == ConsoleKey.C)
-                            {
-                                CommentPost(user, postId);
-                            }
-                            else if (key == ConsoleKey.V)
-                            {
-                                ShowCommentsOnPost(postId);
-                            }
-                        }
+                    MyPage(user);
                     Console.ReadKey();
                     break;
                 case 4:
                     //SETTINGSMENU
-                    pressedKey = ConsoleInput.GetPressedKey("[E] Edit profile [D] Delete account", LogicTool.NewKeyList(ConsoleKey.E, ConsoleKey.D));
-                    if (pressedKey == ConsoleKey.E)
-                    {
-                        EditInformation(user);
-                        user = _userManager.GetOne(user.ID);
-                    }
-                    else
-                    {
-                        DeletingAccount(user);
-                    }
+                    MySettings(user);
                     break;
                 case 5:
                     return;
             }
+        }
+    }
+
+    public void PublishPost(User user)
+    {
+        int postId = MakePost(user);
+        ShowPostById(postId);
+        ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[E] Edit  [P] Publish", LogicTool.NewKeyList(ConsoleKey.E, ConsoleKey.P));
+        if (pressedKey == ConsoleKey.E)
+        {
+            EditPost(postId);
+        }
+        else return;
+    }
+    public void EditPost(int postId)
+    {
+        Post post = _postManager.GetOne(postId);
+        post.Content = ConsoleInput.GetString("What's on your mind?");
+        _postManager.Update(post);
+    }
+    public void Searcher(User user)
+    {
+        int conversationId = 0;
+        string search = ConsoleInput.GetString("Search by name: ");
+        ShowSearches(search);
+        int id = ConsoleInput.GetInt("User to visit: ");
+        ShowProfile(id);
+        ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[M] Message  [P] Posts", LogicTool.NewKeyList(ConsoleKey.M, ConsoleKey.P));
+        if (pressedKey == ConsoleKey.M)
+        {
+            List<int> ids = new();
+            ids.Add(id);
+            ids.Add(user.ID);
+            List<Conversation>? conversations = _idManager.GetIds(ids).Conversations;
+            if (conversations != null)
+            {
+                ShowConversations(conversations);
+                conversationId = ConsoleInput.GetInt("Choose: ");
+                ShowMessages(conversationId);
+            }
+            else
+            {
+                pressedKey = ConsoleInput.GetPressedKey("[S]Start conversation  [R] Return", LogicTool.NewKeyList(ConsoleKey.S, ConsoleKey.R));
+                if (pressedKey == ConsoleKey.S)
+                {
+                    ids = new();
+                    ids.Add(id);
+                    List<User> participants = GetUsersById(ids);
+                    conversationId = _connectionManager.MakeNew(participants, user).GetValueOrDefault();
+                }
+                else
+                {
+                    return;
+                }
+            }
+            MakeMessage(user, conversationId);
+        }
+    }
+    public void Messenger(User user)
+    {
+        ShowConversationParticipants(user.ID);
+        ConsoleKey pressedKey = ConsoleInput.GetPressedKey($"[C] Choose conversation  [N] New Conversation", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.N));
+        if (pressedKey == ConsoleKey.C)
+        {
+            int conversationId = ConsoleInput.GetInt("Choose: ");
+                ShowMessages(conversationId);
+                MakeMessage(user, conversationId);
+        }
+        else
+        {
+            int newConversationId = AddPeopleToNewConversation(user);
+            ShowMessages(newConversationId);
+            MakeMessage(user, newConversationId);
+        }
+    }
+    public void MyPage(User user)
+    {
+        ShowProfile(user.ID);
+        int postId = ShowPosts(user.ID);
+        if (postId != 0)
+        {
+            ConsoleKey key = ConsoleInput.GetPressedKey("\t[C] Comment   [V] View Comments", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.V));
+            if (key == ConsoleKey.C)
+            {
+                CommentPost(user, postId);
+            }
+            else if (key == ConsoleKey.V)
+            {
+                ShowCommentsOnPost(postId);
+            }
+        }
+    }
+    public void MySettings(User user)
+    {
+        ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[E] Edit profile [D] Delete account", LogicTool.NewKeyList(ConsoleKey.E, ConsoleKey.D));
+        if (pressedKey == ConsoleKey.E)
+        {
+            EditInformation(user);
+            user = _userManager.GetOne(user.ID);
+        }
+        else
+        {
+            DeletingAccount(user);
         }
     }
     public void ShowChat(int id)
@@ -165,11 +183,12 @@ public class UserUI
             Console.WriteLine(item.ToString());
         }
     }
-    public void MakePost(User user)
+    public int MakePost(User user)
     {
         string content = ConsoleInput.GetString("What's on your mind?");
         Post post = new(content, DateTime.Now, user.ID);
-        _postManager.Create(post);
+        int? postId = _postManager.Create(post);
+        return postId.GetValueOrDefault();
     }
     public void ShowSearches(string name)
     {
@@ -354,6 +373,11 @@ public class UserUI
         }
         int postId = ConsoleInput.GetInt("[0] Return   [ChoosePost] See Post");
         return postId;
+    }
+    public void ShowPostById(int postId)
+    {
+        Post post = _postManager.GetOne(postId);
+        Console.WriteLine(post.ToString());
     }
     public void CommentPost(User user, int postId)
     {
