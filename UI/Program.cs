@@ -19,8 +19,8 @@ internal class Program
         MessgageManager messageManager = new(new MessagesDB());
         SignUpUI signUpUI = new(userManager);
         LogInManager logInManager = new(new LogInDB());
-        LogInService logInService = new(logInManager);
-        UserUI userUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, conversationManager, commentsManager, userManager);
+        LogInUI logInUI = new(logInManager);
+        UserUI userUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, conversationManager, commentsManager, userManager, userManager);
         //MENYN INSPIRERAD AV PETRUS BLODBANKEN PROJEKT
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.BackgroundColor = ConsoleColor.White;
@@ -57,7 +57,7 @@ internal class Program
                 {
                     case 0:
                         User? user = new();
-                        user = logInService.LogIn();
+                        user = logInUI.LogIn();
                         if (user != null)
                         {
                             userUI.ShowMyFacebook(user);

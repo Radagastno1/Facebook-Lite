@@ -12,8 +12,9 @@ public class UserUI
     IConnectingMultiple<User> _connectionManager;
     IManager<Comment> _commentManager;
     IDeletionManager<User> _deletionManager;
+    IMultipleDataGetter<User, int> _multipleUserData;
     List<ConsoleKey> keys = new();
-    public UserUI(IManager<User> userManager, IManager<Post> postManager, IManager<Conversation> conversationManager, IIdManager<Conversation> idManager, IManager<Message> messageManager, IConnectingMultiple<User> connectingManager, IManager<Comment> commentManager, IDeletionManager<User> deletionManager)
+    public UserUI(IManager<User> userManager, IManager<Post> postManager, IManager<Conversation> conversationManager, IIdManager<Conversation> idManager, IManager<Message> messageManager, IConnectingMultiple<User> connectingManager, IManager<Comment> commentManager, IDeletionManager<User> deletionManager, IMultipleDataGetter<User, int> multipleUserData)
     {
         _userManager = userManager;
         _postManager = postManager;
@@ -23,6 +24,7 @@ public class UserUI
         _connectionManager = connectingManager;
         _commentManager = commentManager;
         _deletionManager = deletionManager;
+        _multipleUserData = multipleUserData;
         deleted = _deletionManager.SetAsDeleted();
         ShowAccountDeleted();
     }
@@ -32,6 +34,7 @@ public class UserUI
     }
     public void ShowMyFacebook(User user)
     {
+        PostUI postUI = new(_postManager, _commentManager);
         string[] overviewOptions = new string[]
         { "[PUBLISH]","[SEARCH]","[CHAT]", "[MY PAGE]","[SETTINGS]", "[LOG OUT]" };
         int menuOptions = 0;
@@ -41,7 +44,7 @@ public class UserUI
             switch (menuOptions)
             {
                 case 0:
-                    PublishPost(user);
+                    postUI.PublishPost(user);
                     Console.ReadKey();
                     break;
                 case 1:
@@ -67,34 +70,22 @@ public class UserUI
             }
         }
     }
-    public void PublishPost(User user) //klar
-    {
-        PostService postService = new(_postManager, _commentManager);
-        int postId = postService.MakePost(user);
-        postService.ShowPostById(postId);
-        ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[E] Edit  [P] Publish", LogicTool.NewKeyList(ConsoleKey.E, ConsoleKey.P));
-        if (pressedKey == ConsoleKey.E)
-        {
-            postService.EditPost(postId);
-        }
-        else return;
-    }
     public int Searcher(User user)
     {
         string search = ConsoleInput.GetString("Search by name: ");
         ShowSearches(search);
-        int id = ConsoleInput.GetInt("User to visit: ");
+        int id = ConsoleInput.GetInt("User: ");
         return id;
     }
     public void InteractWithUser(User user, int id)
     {
-        MessageService messageService = new(_messageManager);
-        ConversationService conversationService = new(_conversationManager, _messageManager, _idManager);
+        MessageUI messageUI = new(_messageManager);
+        ConversationUI conversationUI = new(_conversationManager, _messageManager, _idManager);
         ShowProfile(id);
         ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[M] Message  [P] Posts", LogicTool.NewKeyList(ConsoleKey.M, ConsoleKey.P));
         if (pressedKey == ConsoleKey.M)
         {
-            int conversationId = conversationService.GetDialogue(user, id).GetValueOrDefault();
+            int conversationId = conversationUI.ShowDialogue(user, id).GetValueOrDefault();
             if (conversationId < 1)
             {
                 pressedKey = ConsoleInput.GetPressedKey("[S]Start conversation  [R] Return", LogicTool.NewKeyList(ConsoleKey.S, ConsoleKey.R));
@@ -102,34 +93,34 @@ public class UserUI
                 {
                     List<int> ids = new();
                     ids.Add(id);
-                    List<User> participants = GetUsersById(ids);
+                    List<User> participants = _multipleUserData.GetUsersById(ids);
                     conversationId = _connectionManager.MakeNew(participants, user).GetValueOrDefault();
                 }
                 else return;
             }
-            messageService.MakeMessage(user, conversationId);
+            messageUI.MakeMessage(user, conversationId);
         }
         else
         {
-            PostService postService = new(_postManager, _commentManager);
-            int postId = postService.ShowPosts(id);
+            PostUI postUI = new(_postManager, _commentManager);
+            int postId = postUI.ShowPosts(id);
             if (postId != 0)
             {
                 ConsoleKey key = ConsoleInput.GetPressedKey("\t[C] Comment   [V] View Comments", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.V));
                 if (key == ConsoleKey.C)
                 {
-                    postService.CommentPost(user, postId);
+                    postUI.CommentPost(user, postId);
                 }
                 else if (key == ConsoleKey.V)
                 {
-                    postService.ShowCommentsOnPost(postId);
+                    postUI.ShowCommentsOnPost(postId);
                 }
             }
         }
     }
     public void Messenger(User user)
     {
-        MessageService messageService = new(_messageManager);
+        MessageUI messageUI = new(_messageManager);
         List<int> ids = new();
         ids.Add(user.ID);
         ShowConversationParticipants(ids);
@@ -138,30 +129,49 @@ public class UserUI
         {
             int conversationId = ConsoleInput.GetInt("Choose: ");
             ShowMessages(conversationId);
-            messageService.MakeMessage(user, conversationId);
+            messageUI.MakeMessage(user, conversationId);
         }
         else
         {
             int newConversationId = AddPeopleToNewConversation(user);
             ShowMessages(newConversationId);
-            messageService.MakeMessage(user, newConversationId);
+            messageUI.MakeMessage(user, newConversationId);
         }
+    }
+    public int AddPeopleToNewConversation(User user)
+    {
+        //fixa så att man inte kan göra en ny konversation mellan två om det redan finns en specifik mellan tvÅ
+        List<int> userIds = new();
+        ConsoleKey pressedKey = new();
+        int conversationId = 0;
+        do
+        {
+            pressedKey = ConsoleInput.GetPressedKey("[A] Add user  [D] Done", LogicTool.NewKeyList(ConsoleKey.A, ConsoleKey.D));
+            if (pressedKey == ConsoleKey.A)
+            {
+                int id = Searcher(user);
+                userIds.Add(id);
+            }
+        } while (pressedKey != ConsoleKey.D);
+        List<User> participants = _multipleUserData.GetUsersById(userIds);
+        conversationId = _connectionManager.MakeNew(participants, user).GetValueOrDefault();
+        return conversationId;
     }
     public void MyPage(User user)
     {
-        PostService postService = new(_postManager, _commentManager);
+        PostUI postUI = new(_postManager, _commentManager);
         ShowProfile(user.ID);
-        int postId = postService.ShowPosts(user.ID);
+        int postId = postUI.ShowPosts(user.ID);
         if (postId != 0)
         {
             ConsoleKey key = ConsoleInput.GetPressedKey("\t[C] Comment   [V] View Comments", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.V));
             if (key == ConsoleKey.C)
             {
-                postService.CommentPost(user, postId);
+                postUI.CommentPost(user, postId);
             }
             else if (key == ConsoleKey.V)
             {
-                postService.ShowCommentsOnPost(postId);
+                postUI.ShowCommentsOnPost(postId);
             }
         }
     }
@@ -193,27 +203,6 @@ public class UserUI
         {
             Console.WriteLine("No person found by search: " + name);
         }
-    }
-    public int AddPeopleToNewConversation(User user)
-    {
-        //fixa så att man inte kan göra en ny konversation mellan två om det redan finns en specifik mellan tvÅ
-        List<int> userIds = new();
-        ConsoleKey pressedKey = new();
-        int conversationId = 0;
-        do
-        {
-            pressedKey = ConsoleInput.GetPressedKey("[A] Add user  [D] Done", LogicTool.NewKeyList(ConsoleKey.A, ConsoleKey.D));
-            if (pressedKey == ConsoleKey.A)
-            {
-                string userName = ConsoleInput.GetString($"Search for user by name: ");
-                ShowSearches(userName);
-                int id = ConsoleInput.GetInt("Choose by ID");
-                userIds.Add(id);
-            }
-        } while (pressedKey != ConsoleKey.D);
-        List<User> participants = GetUsersById(userIds);
-        conversationId = _connectionManager.MakeNew(participants, user).GetValueOrDefault();
-        return conversationId;
     }
     public void ShowProfile(int id)
     {
@@ -257,13 +246,6 @@ public class UserUI
             Console.WriteLine("No conversations yet..");
         }
     }
-    public void ShowConversations(List<Conversation> conversations)
-    {
-        foreach (Conversation item in conversations)
-        {
-            Console.WriteLine(item.ToString());
-        }
-    }
     public void EditInformation(User user)
     {
         List<ConsoleKey> keys = new();
@@ -304,6 +286,7 @@ public class UserUI
         {
             _userManager.Remove(user);
             Console.WriteLine("Your account is now inactive. If you log in to your account you will be active again.");
+            Console.WriteLine("Press any key to accept.");
             Console.ReadKey();
             return true;
         }
@@ -326,15 +309,5 @@ public class UserUI
                 Console.WriteLine(item.ToString());
             }
         }
-    }
-    public List<User> GetUsersById(List<int> ids)
-    {//DENNA SKA VARA I LOGIK?
-        List<User> participants = new();
-        foreach (int id in ids)
-        {
-            User participant = _userManager.GetOne(id);
-            participants.Add(participant);
-        }
-        return participants;
     }
 }

@@ -1,6 +1,6 @@
 using CORE;
 namespace LOGIC;
-public class UserManager : IManager<User>, IDeletionManager<User>
+public class UserManager : IManager<User>, IDeletionManager<User>, IMultipleDataGetter<User, int>
 {
     IData<User> _userData;
     IDataSearcher<User> _dataSearcher;
@@ -33,6 +33,16 @@ public class UserManager : IManager<User>, IDeletionManager<User>
             }
         }
         return user;
+    }
+    public List<User> GetUsersById(List<int> ids)
+    {
+        List<User> participants = new();
+        foreach (int id in ids)
+        {
+            User participant = GetOne(id);
+            participants.Add(participant);
+        }
+        return participants;
     }
     public int? Remove(User user)
     {

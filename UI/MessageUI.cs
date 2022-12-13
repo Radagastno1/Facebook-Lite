@@ -2,11 +2,11 @@ using CORE;
 using LOGIC;
 namespace UI;
 
-public class MessageService
+public class MessageUI
 {
     IManager<Message> _messageManager;
 
-    public MessageService(IManager<Message> messageManager)
+    public MessageUI(IManager<Message> messageManager)
     {
         _messageManager = messageManager;
     }

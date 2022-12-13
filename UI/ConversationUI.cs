@@ -1,12 +1,12 @@
 using LOGIC;
 using CORE;
 namespace UI;
-public class ConversationService
+public class ConversationUI
 {
     IManager<Conversation> _conversationManager;
     IManager<Message> _messageManager;
     IIdManager<Conversation> _idManager;
-    public ConversationService(IManager<Conversation> conversationManager, IManager<Message> messageManager, IIdManager<Conversation> idManager)
+    public ConversationUI(IManager<Conversation> conversationManager, IManager<Message> messageManager, IIdManager<Conversation> idManager)
     {
         _conversationManager = conversationManager;
         _messageManager = messageManager;
@@ -35,13 +35,13 @@ public class ConversationService
             Console.WriteLine("No conversations yet..");
         }
     }
-    public int? GetDialogue(User user, int id)
+    public int? ShowDialogue(User user, int id)
     {
-        MessageService messageService = new(_messageManager);
+        MessageUI messageUI = new(_messageManager);
         Conversation conversation = _idManager.GetDialogueId(user.ID, id);
         if (conversation != null)
         {
-            messageService.ShowMessages(conversation.ID);
+            messageUI.ShowMessages(conversation.ID);
             return conversation.ID;
         }
         else
@@ -49,6 +49,14 @@ public class ConversationService
             return null;
         }
     }
+    public void ShowConversations(List<Conversation> conversations)
+    {
+        foreach (Conversation item in conversations)
+        {
+            Console.WriteLine(item.ToString());
+        }
+    }
+
 
     // public void ShowConversations(List<Conversation>conversations)
     // {

@@ -2,10 +2,10 @@ using CORE;
 using LOGIC;
 using DATABASE; //UI måste känna till database pga loginmanager? egentligen inte i lök va?
 namespace UI;
-public class LogInService
+public class LogInUI
 {
     ILogInManager<User> _logInManager;
-    public LogInService(ILogInManager<User> logInManager)
+    public LogInUI(ILogInManager<User> logInManager)
     {
         _logInManager = logInManager;
     }

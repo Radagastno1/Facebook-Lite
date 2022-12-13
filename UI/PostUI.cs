@@ -1,11 +1,11 @@
 using CORE;
 using LOGIC;
 namespace UI;
-public class PostService
+public class PostUI
 {
     IManager<Post> _postManager;
     IManager<Comment> _commentManager;
-    public PostService(IManager<Post> postManager, IManager<Comment> commentManager)
+    public PostUI(IManager<Post> postManager, IManager<Comment> commentManager)
     {
         _postManager = postManager;
         _commentManager = commentManager;
@@ -15,6 +15,17 @@ public class PostService
         string content = ConsoleInput.GetString("What's on your mind?");
         Post post = new(content, DateTime.Now, user.ID);
         return _postManager.Create(post).GetValueOrDefault();
+    }
+    public void PublishPost(User user) 
+    {
+        int postId = MakePost(user);
+        ShowPostById(postId);
+        ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[E] Edit  [P] Publish", LogicTool.NewKeyList(ConsoleKey.E, ConsoleKey.P));
+        if (pressedKey == ConsoleKey.E)
+        {
+            EditPost(postId);
+        }
+        else return;
     }
     public int ShowPosts(int userId)
     {
