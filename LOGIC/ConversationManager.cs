@@ -30,7 +30,7 @@ public class ConversationManager : IManager<Conversation>, IConnectingMultiple<U
     }
     public List<Conversation> GetAll(int data)
     {
-        List<Conversation>conversations = _conversationData.GetById(data);
+        List<Conversation> conversations = _conversationData.GetById(data);
         return conversations;
     }
     public List<Conversation> GetBySearch(string name)
@@ -92,17 +92,29 @@ public class ConversationManager : IManager<Conversation>, IConnectingMultiple<U
     public List<Conversation> GetById(List<int> ids)
     {
         ConversationResult result = new();
-        List<Conversation>conversations = new();
+        List<Conversation> conversations = new();
         bool success;
         foreach (int id in ids)
         {
             result.Conversation = _getIdData.GetIds(id).Conversation;
-            success =_getIdData.GetIds(id).ConversationExists;
+            success = _getIdData.GetIds(id).ConversationExists;
             if (success == true)
             {
                 conversations.Add(result.Conversation);
             }
         }
         return conversations;
+    }
+    public Conversation GetDialogueId(int userId, int id)
+    {
+        try
+        {
+            Conversation dialogue = _extraData.GetDialogueId(userId, id);
+            return dialogue;
+        }
+        catch(InvalidOperationException)
+        {
+            return null;
+        }
     }
 }
