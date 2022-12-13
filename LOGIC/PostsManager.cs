@@ -35,15 +35,7 @@ public class PostsManager : IManager<Post>
     }
     public Post GetOne(int postId)  //ska lösas via sql
     {
-        // List<Post> allPosts 
          Post post = _postIdData.GetIds(postId);
-        // foreach (Post item in allPosts)
-        // {
-        //     if (item.ID == id)
-        //     {
-        //         post = item;
-        //     }
-        // }
         return post;
     }
     public int? Remove(Post post)   //man ska kunna radera sin post, alltså sätta till ej synlig
