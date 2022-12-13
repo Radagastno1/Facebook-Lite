@@ -49,7 +49,7 @@ public class UserUI
                     break;
                 case 1:
                     int id = Searcher(user);
-                    InteractWithUser(user, id);
+                    if (id != 0) InteractWithUser(user, id);
                     Console.ReadKey();
                     break;
                 case 2:
@@ -72,9 +72,12 @@ public class UserUI
     }
     public int Searcher(User user)
     {
+        int id = 0;
         string search = ConsoleInput.GetString("Search by name: ");
-        ShowSearches(search);
-        int id = ConsoleInput.GetInt("User: ");
+        if (ShowSearches(search))
+        {
+            id = ConsoleInput.GetInt("User: ");
+        }
         return id;
     }
     public void InteractWithUser(User user, int id)
@@ -190,20 +193,23 @@ public class UserUI
             if (isDeleted == true) Environment.Exit(0);
         }
     }
-    public void ShowSearches(string name)
+    public bool ShowSearches(string name)
     {
+        bool isResult = false;
         List<User> users = _userManager.GetBySearch(name);
-        if (users != null)
+        if (users.Count > 0)
         {
             foreach (User item in users)
             {
                 Console.WriteLine(item.ToString());
             }
+            isResult = true;
         }
         else
         {
             Console.WriteLine("No person found by search: " + name);
         }
+        return isResult;
     }
     public void ShowProfile(int id)
     {
