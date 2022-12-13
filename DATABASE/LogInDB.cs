@@ -7,7 +7,6 @@ public class LogInDB : ILogInDB<User>
 {
     public User GetMemberByLogIn(string email, string passWord)
     {
-        //OM DENNA SKA ANVÄNDAS SÅ ÄNDRA JOINEN
         User user = new();
         string query = 
         "SELECT u.id as 'Id', u.first_name as 'FirstName', u.last_name as 'LastName', " +

@@ -16,7 +16,7 @@ public class MessagesDB : IData<Message>
         }
         return rowsEffected;
     }
-    public int? Delete(Message message)  //hämta medd till personens lista och gör detta? 
+    public int? Delete(Message message) 
     {
         int rowsEffected = 0;
         string query = "UPDATE messages m SET m.is_visible = false " + 

@@ -12,8 +12,7 @@ public class ConversationService
         _messageManager = messageManager;
         _idManager = idManager;
     }
-
-     public void ShowConversationParticipants(int id)
+    public void ShowConversationParticipants(int id)
     {
         List<int> ids = new();
         ids.Add(id);
@@ -36,7 +35,21 @@ public class ConversationService
             Console.WriteLine("No conversations yet..");
         }
     }
-   
+    public int? GetDialogue(User user, int id)
+    {
+        MessageService messageService = new(_messageManager);
+        Conversation conversation = _idManager.GetDialogueId(user.ID, id);
+        if (conversation != null)
+        {
+            messageService.ShowMessages(conversation.ID);
+            return conversation.ID;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     // public void ShowConversations(List<Conversation>conversations)
     // {
     //     foreach (Conversation item in conversations)

@@ -5,7 +5,7 @@ using MySqlConnector;
 namespace DATABASE;
 public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IIdData<ConversationResult>
 {
-    public int? Create(Conversation conversation)  //IDATA
+    public int? Create(Conversation conversation)  
     {
         int conversationId = 0;
         string query = "INSERT INTO conversations(creator_id) VALUES(@CreatorId);" +
@@ -16,7 +16,7 @@ public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IId
         }
         return conversationId;
     }
-    public int? Update(Conversation conversation) //IDATA
+    public int? Update(Conversation conversation) 
     {
         int usersConversationId = 0;
         string query = "INSERT INTO users_conversations(users_id, conversations_id) VALUES (@participantId, @Id);" +
@@ -27,13 +27,12 @@ public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IId
         }
         return usersConversationId;
     }
-    public int? Delete(Conversation obj)  //IDATA     HUR SKA MAN RADERA KONV OCH SKA MAN ELLER LÄGGA TILL BOOL ISVISIBLE?
+    public int? Delete(Conversation obj)   //HUR SKA MAN RADERA KONV OCH SKA MAN ELLER LÄGGA TILL BOOL ISVISIBLE?
     {
         throw new NotImplementedException();
     }
-    public List<Conversation> GetAll()  //IDATA
+    public List<Conversation> GetAll()   //ANVÄNDS INTE ?
     {
-        //här hämtar vi alla konversationer som man har i sin messenger
         List<Conversation> allConversations = new();
         string query = "SELECT uc.conversations_id as 'Id', c.date_created as 'DateCreated', c.creator_id as 'CreatorId', u.id as 'ParticipantId'" +
                        "FROM conversations c " +
@@ -84,7 +83,7 @@ public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IId
         }
         return result;
     }
-    public List<Conversation> GetById(int id)  //IDATA används den ens??
+    public List<Conversation> GetById(int id)  //ANVÄNDS VÄL EJ?
     {
         List<Conversation> conversations = new();
         string query = $"SELECT uc.conversation_id as 'ID' FROM users_conversations uc WHERE uc.users_id = @id;";

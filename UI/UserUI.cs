@@ -3,7 +3,6 @@ using CORE;
 namespace UI;
 public class UserUI
 {
-    //RENSA INTERFACES STRUKTURERA db och logik, vad används?
     static int? deleted = 0;
     IManager<User> _userManager;
     IManager<Post> _postManager;
@@ -29,10 +28,9 @@ public class UserUI
     }
     public void ShowAccountDeleted()
     {
-        Console.WriteLine(deleted + " accounts deleted.");
-        Console.ReadKey();
+        Console.WriteLine(deleted + " accounts deleted.");  //för admin sen, kan vara kul 
     }
-    public void ShowFacebookOverview(User user)
+    public void ShowMyFacebook(User user)
     {
         string[] overviewOptions = new string[]
         { "[PUBLISH]","[SEARCH]","[CHAT]", "[MY PAGE]","[SETTINGS]", "[LOG OUT]" };
@@ -47,7 +45,8 @@ public class UserUI
                     Console.ReadKey();
                     break;
                 case 1:
-                    Searcher(user);
+                    int id = Searcher(user);
+                    InteractWithUser(user, id);
                     Console.ReadKey();
                     break;
                 case 2:
@@ -68,8 +67,7 @@ public class UserUI
             }
         }
     }
-
-    public void PublishPost(User user)
+    public void PublishPost(User user) //klar
     {
         PostService postService = new(_postManager, _commentManager);
         int postId = postService.MakePost(user);
@@ -81,60 +79,72 @@ public class UserUI
         }
         else return;
     }
-    public void Searcher(User user)
+    public int Searcher(User user)
     {
-        int conversationId = 0;
         string search = ConsoleInput.GetString("Search by name: ");
         ShowSearches(search);
         int id = ConsoleInput.GetInt("User to visit: ");
+        return id;
+    }
+    public void InteractWithUser(User user, int id)
+    {
+        MessageService messageService = new(_messageManager);
+        ConversationService conversationService = new(_conversationManager, _messageManager, _idManager);
         ShowProfile(id);
         ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[M] Message  [P] Posts", LogicTool.NewKeyList(ConsoleKey.M, ConsoleKey.P));
         if (pressedKey == ConsoleKey.M)
         {
-            //ENDAST ENSKILDA DIALOGEN NÄR MAN GÅR IN VIA NÅGONS PROFIL TILL MEDD.
-            Conversation conversation = _idManager.GetDialogueId(user.ID, id);
-            if (conversation != null)
-            {
-                // ShowConversations(conversations);
-                // conversationId = ConsoleInput.GetInt("Choose: ");
-                ShowMessages(conversation.ID);
-            }
-            else
+            int conversationId = conversationService.GetDialogue(user, id).GetValueOrDefault();
+            if (conversationId < 1)
             {
                 pressedKey = ConsoleInput.GetPressedKey("[S]Start conversation  [R] Return", LogicTool.NewKeyList(ConsoleKey.S, ConsoleKey.R));
                 if (pressedKey == ConsoleKey.S)
                 {
-                    List<int>ids = new();
+                    List<int> ids = new();
                     ids.Add(id);
                     List<User> participants = GetUsersById(ids);
                     conversationId = _connectionManager.MakeNew(participants, user).GetValueOrDefault();
                 }
-                else
+                else return;
+            }
+            messageService.MakeMessage(user, conversationId);
+        }
+        else
+        {
+            PostService postService = new(_postManager, _commentManager);
+            int postId = postService.ShowPosts(id);
+            if (postId != 0)
+            {
+                ConsoleKey key = ConsoleInput.GetPressedKey("\t[C] Comment   [V] View Comments", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.V));
+                if (key == ConsoleKey.C)
                 {
-                    return;
+                    postService.CommentPost(user, postId);
+                }
+                else if (key == ConsoleKey.V)
+                {
+                    postService.ShowCommentsOnPost(postId);
                 }
             }
-            MakeMessage(user, conversationId);
         }
     }
     public void Messenger(User user)
     {
-        List<int>ids = new();
+        MessageService messageService = new(_messageManager);
+        List<int> ids = new();
         ids.Add(user.ID);
         ShowConversationParticipants(ids);
         ConsoleKey pressedKey = ConsoleInput.GetPressedKey($"[C] Choose conversation  [N] New Conversation", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.N));
         if (pressedKey == ConsoleKey.C)
         {
             int conversationId = ConsoleInput.GetInt("Choose: ");
-                ShowMessages(conversationId);
-                MakeMessage(user, conversationId);
+            ShowMessages(conversationId);
+            messageService.MakeMessage(user, conversationId);
         }
         else
         {
-            
             int newConversationId = AddPeopleToNewConversation(user);
             ShowMessages(newConversationId);
-            MakeMessage(user, newConversationId);
+            messageService.MakeMessage(user, newConversationId);
         }
     }
     public void MyPage(User user)
@@ -166,7 +176,7 @@ public class UserUI
         else
         {
             bool isDeleted = DeletingAccount(user);
-            if(isDeleted == true) Environment.Exit(0);
+            if (isDeleted == true) Environment.Exit(0);
         }
     }
     public void ShowSearches(string name)
@@ -179,15 +189,20 @@ public class UserUI
                 Console.WriteLine(item.ToString());
             }
         }
+        else
+        {
+            Console.WriteLine("No person found by search: " + name);
+        }
     }
-    public int AddPeopleToNewConversation(User user)  // I CONVERSATIONSERVICE
+    public int AddPeopleToNewConversation(User user)
     {
+        //fixa så att man inte kan göra en ny konversation mellan två om det redan finns en specifik mellan tvÅ
         List<int> userIds = new();
         ConsoleKey pressedKey = new();
         int conversationId = 0;
         do
         {
-            pressedKey = ConsoleInput.GetPressedKey("[A] Add user  [R] Return", LogicTool.NewKeyList(ConsoleKey.A, ConsoleKey.R));
+            pressedKey = ConsoleInput.GetPressedKey("[A] Add user  [D] Done", LogicTool.NewKeyList(ConsoleKey.A, ConsoleKey.D));
             if (pressedKey == ConsoleKey.A)
             {
                 string userName = ConsoleInput.GetString($"Search for user by name: ");
@@ -195,8 +210,7 @@ public class UserUI
                 int id = ConsoleInput.GetInt("Choose by ID");
                 userIds.Add(id);
             }
-
-        } while (pressedKey != ConsoleKey.R);
+        } while (pressedKey != ConsoleKey.D);
         List<User> participants = GetUsersById(userIds);
         conversationId = _connectionManager.MakeNew(participants, user).GetValueOrDefault();
         return conversationId;
@@ -222,7 +236,7 @@ public class UserUI
             }
         }
     }
-    public void ShowConversationParticipants(List<int>ids) 
+    public void ShowConversationParticipants(List<int> ids)
     {
         try
         {
@@ -322,11 +336,5 @@ public class UserUI
             participants.Add(participant);
         }
         return participants;
-    }
-    public void MakeMessage(User user, int conversationId)
-    {
-        string content = ConsoleInput.GetString("Message: ");
-        Message message = new(content, user.ID, conversationId);
-        _messageManager.Create(message);
     }
 }

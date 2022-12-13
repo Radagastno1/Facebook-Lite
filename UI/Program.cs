@@ -60,7 +60,7 @@ internal class Program
                         user = logInService.LogIn();
                         if (user != null)
                         {
-                            userUI.ShowFacebookOverview(user);
+                            userUI.ShowMyFacebook(user);
                         }
                         break;
                     case 1:
