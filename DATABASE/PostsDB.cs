@@ -21,13 +21,14 @@ public class PostsDB : IData<Post>, IIdData<Post>
     //     "DELETE FROM posts WHERE id = @id AND users_id = @usersId;" +
     //     "DELETE FROM posts WHERE on_post_id = @id;" + 
     //     "COMMIT;";
-    public int? Delete(Post obj)  //IDATA //MÅSTE HÄMTA ALLA POST ID SAMT COMMENT ID TILL USERN NÄR DEN LOGGAR IN 
-    {
+    public int? Delete(Post post)  //om man väljer att deleta en post, så kommer den bli visible när du loggar in
+    // därför behövs en tilll bool is_deleted som sätts när man deletar istället! 
+    {              
         int rowsEffected = 0;
-        string query = "Update posts SET is_visible = FALSE WHERE id = @Id;";
+        string query = "Update posts SET is_deleted = TRUE WHERE id = @Id;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
-            rowsEffected = con.ExecuteScalar<int>(query, param: obj);
+            rowsEffected = con.ExecuteScalar<int>(query, new{@Id = post.ID});
         }
         return rowsEffected;
     }
@@ -35,7 +36,7 @@ public class PostsDB : IData<Post>, IIdData<Post>
     {
         List<Post> posts = new();
         string query = $"SELECT p.id as 'Id', p.content as 'Content', p.date_created as 'DateCreated', u.first_name as 'FirstName', u.last_name as 'LastName', p.users_id as 'UserId' " +
-         $"FROM posts p INNER JOIN users u ON p.users_id = u.id WHERE p.posts_types_id = 1 AND is_visible = TRUE;";
+         $"FROM posts p INNER JOIN users u ON p.users_id = u.id WHERE p.posts_types_id = 1 AND p.is_visible = TRUE AND p.is_deleted = FALSE;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
             posts = con.Query<Post>(query).ToList();
@@ -63,7 +64,7 @@ public class PostsDB : IData<Post>, IIdData<Post>
     {
          List<Post> posts = new();
         string query = $"SELECT p.id as 'Id', p.content as 'Content', p.date_created as 'DateCreated', u.first_name as 'FirstName', u.last_name as 'LastName', p.users_id as 'UserId' " +
-         $"FROM posts p INNER JOIN users u ON p.users_id = u.id WHERE p.posts_types_id = 1 AND is_visible = TRUE AND p.users_id = @userId;";
+         $"FROM posts p INNER JOIN users u ON p.users_id = u.id WHERE p.posts_types_id = 1 AND p.is_visible = TRUE AND p.is_deleted = FALSE AND p.users_id = @userId;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
             posts = con.Query<Post>(query, new{@userId = userId}).ToList();
@@ -81,7 +82,7 @@ public class PostsDB : IData<Post>, IIdData<Post>
     {
         Post post = new();
         string query = $"SELECT p.id as 'Id', p.content as 'Content', p.date_created as 'DateCreated', u.first_name as 'FirstName', u.last_name as 'LastName', p.users_id as 'UserId' " +
-         $"FROM posts p INNER JOIN users u ON p.users_id = u.id WHERE p.posts_types_id = 1 AND is_visible = TRUE AND p.id = @postId;";
+         $"FROM posts p INNER JOIN users u ON p.users_id = u.id WHERE p.posts_types_id = 1 AND p.is_visible = TRUE AND p.is_deleted = FALSE AND p.id = @postId;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
             post = con.QuerySingle<Post>(query, new{@postId = postId});

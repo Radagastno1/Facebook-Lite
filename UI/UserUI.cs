@@ -162,6 +162,7 @@ public class UserUI
         PostUI postUI = new(_postManager, _commentManager);
         ShowProfile(user.ID);
         int postId = postUI.ShowPosts(user.ID);
+        postUI.DeletePost(user, postId);
         if (postId != 0)
         {
             ConsoleKey key = ConsoleInput.GetPressedKey("\t[C] Comment   [V] View Comments", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.V));

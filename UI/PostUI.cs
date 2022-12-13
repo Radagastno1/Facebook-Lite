@@ -16,7 +16,7 @@ public class PostUI
         Post post = new(content, DateTime.Now, user.ID);
         return _postManager.Create(post).GetValueOrDefault();
     }
-    public void PublishPost(User user) 
+    public void PublishPost(User user)
     {
         int postId = MakePost(user);
         ShowPostById(postId);
@@ -83,5 +83,17 @@ public class PostUI
         Post post = _postManager.GetOne(postId);
         post.Content = ConsoleInput.GetString("Edit post: ");
         _postManager.Update(post);
+    }
+
+    public void DeletePost(User user, int postId)
+    {
+        ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[D] Delete post  [R] Return", LogicTool.NewKeyList(ConsoleKey.D, ConsoleKey.R));
+        if (pressedKey == ConsoleKey.D)
+        {
+            Post post = _postManager.GetOne(postId);
+            if (post.UserId == user.ID)
+                _postManager.Remove(post);
+        }
+        else return;
     }
 }
