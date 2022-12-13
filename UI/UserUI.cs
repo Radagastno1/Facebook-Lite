@@ -47,11 +47,12 @@ public class UserUI
                     Console.ReadKey();
                     break;
                 case 1:
-                    Searcher(user);
+                int id = SearchUser();
+                ShowProfile(id);
+                InteractWithUser(id, user);
                     Console.ReadKey();
                     break;
                 case 2:
-                    //CHATPAGE
                     Messenger(user);
                     Console.ReadKey();
                     break;
@@ -69,7 +70,7 @@ public class UserUI
         }
     }
 
-    public void PublishPost(User user)
+    public void PublishPost(User user)  //ok struktur
     {
         PostService postService = new(_postManager, _commentManager);
         int postId = postService.MakePost(user);
@@ -81,13 +82,16 @@ public class UserUI
         }
         else return;
     }
-    public void Searcher(User user)
+    public int SearchUser()
     {
         int conversationId = 0;
         string search = ConsoleInput.GetString("Search by name: ");
         ShowSearches(search);
         int id = ConsoleInput.GetInt("User to visit: ");
-        ShowProfile(id);
+        return id;
+    }
+    public void InteractWithUser(int id, User user)
+    {
         ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[M] Message  [P] Posts", LogicTool.NewKeyList(ConsoleKey.M, ConsoleKey.P));
         if (pressedKey == ConsoleKey.M)
         {
@@ -95,6 +99,7 @@ public class UserUI
             ids.Add(id);
             ids.Add(user.ID);
             List<Conversation>? conversations = _idManager.GetIds(ids).Conversations;
+            int conversationId = 0;
             if (conversations != null)
             {
                 ShowConversations(conversations);
@@ -126,12 +131,12 @@ public class UserUI
         if (pressedKey == ConsoleKey.C)
         {
             int conversationId = ConsoleInput.GetInt("Choose: ");
-                ShowMessages(conversationId);
-                MakeMessage(user, conversationId);
+            ShowMessages(conversationId);
+            MakeMessage(user, conversationId);
         }
         else
         {
-            
+
             int newConversationId = AddPeopleToNewConversation(user);
             ShowMessages(newConversationId);
             MakeMessage(user, newConversationId);
@@ -166,7 +171,7 @@ public class UserUI
         else
         {
             bool isDeleted = DeletingAccount(user);
-            if(isDeleted == true) Environment.Exit(0);
+            if (isDeleted == true) Environment.Exit(0);
         }
     }
     // public void ShowChat(int id)
@@ -241,7 +246,7 @@ public class UserUI
             }
         }
     }
-    public void ShowConversationParticipants(int id) 
+    public void ShowConversationParticipants(int id)
     {
         List<int> ids = new();
         ids.Add(id);

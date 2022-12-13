@@ -41,7 +41,7 @@ public class User
         Bigender,
         Nonbinary
     }
-    public enum Roles
+    public enum Roles  //ej använt mycket av roles varken utnyttjat users_roles eller i c#, för utveckling får det bli 
     {
         Undecided,
         Member,
