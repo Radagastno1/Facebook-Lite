@@ -27,7 +27,7 @@ public class PostUI
         }
         else return;
     }
-    public int ShowPosts(int userId)
+    public void ShowPosts(int userId)
     {
         List<Post> allPosts = new();
         try
@@ -42,18 +42,17 @@ public class PostUI
         {
             Console.WriteLine("\tNo posts yet..");
         }
-        int postId = ConsoleInput.GetInt("[0] Return   [ChoosePost] See Post");
-        return postId;
+        // int postId = ConsoleInput.GetInt("[0] Return   [ChoosePost] See Post");
     }
     public void ShowPostById(int postId)
     {
         Post post = _postManager.GetOne(postId);
         Console.WriteLine(post.ToString());
     }
-    public void CommentPost(User user, int postId)
+    public void CommentPost(int userId, int postId)
     {
         string content = ConsoleInput.GetString("Leave a comment: ");
-        Comment comment = new Comment(content, DateTime.Now, user.ID, postId);
+        Comment comment = new Comment(content, DateTime.Now, userId, postId);
         _commentManager.Create(comment);
     }
     public ConsoleKey ChooseIfComment()
@@ -85,14 +84,16 @@ public class PostUI
         _postManager.Update(post);
     }
 
-    public void DeletePost(User user, int postId)
+    public void DeletePost(User user)
     {
+        int postId = ConsoleInput.GetInt("Post to delete: ");
+        Post post = _postManager.GetOne(postId);
         ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[D] Delete post  [R] Return", LogicTool.NewKeyList(ConsoleKey.D, ConsoleKey.R));
         if (pressedKey == ConsoleKey.D)
         {
-            Post post = _postManager.GetOne(postId);
             if (post.UserId == user.ID)
                 _postManager.Remove(post);
+                Console.WriteLine("Post deleted!");
         }
         else return;
     }

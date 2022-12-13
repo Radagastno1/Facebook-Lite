@@ -31,4 +31,12 @@ public class LogicTool
         keys.Add(key2);
         return keys;
     }
+      public static List<ConsoleKey> NewKeyList(ConsoleKey key1, ConsoleKey key2, ConsoleKey key3)
+    {
+        List<ConsoleKey>keys = new();
+        keys.Add(key1);
+        keys.Add(key2);
+        keys.Add(key3);
+        return keys;
+    }
 }

@@ -96,26 +96,20 @@ public class UserUI
                     List<User> participants = _multipleUserData.GetUsersById(ids);
                     conversationId = _connectionManager.MakeNew(participants, user).GetValueOrDefault();
                 }
-                else return;
+                else
+                {
+                    return;
+                }
             }
             messageUI.MakeMessage(user, conversationId);
         }
         else
         {
             PostUI postUI = new(_postManager, _commentManager);
-            int postId = postUI.ShowPosts(id);
-            if (postId != 0)
-            {
-                ConsoleKey key = ConsoleInput.GetPressedKey("\t[C] Comment   [V] View Comments", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.V));
-                if (key == ConsoleKey.C)
-                {
-                    postUI.CommentPost(user, postId);
-                }
-                else if (key == ConsoleKey.V)
-                {
-                    postUI.ShowCommentsOnPost(postId);
-                }
-            }
+            postUI.ShowPosts(id);
+            pressedKey = ConsoleInput.GetPressedKey("[C] Comments  [R] Return", LogicTool.NewKeyList(ConsoleKey.D, ConsoleKey.C, ConsoleKey.R));
+            if (pressedKey == ConsoleKey.C) ChooseIfComment(id);
+            else return;
         }
     }
     public void Messenger(User user)
@@ -161,21 +155,27 @@ public class UserUI
     {
         PostUI postUI = new(_postManager, _commentManager);
         ShowProfile(user.ID);
-        int postId = postUI.ShowPosts(user.ID);
-        postUI.DeletePost(user, postId);
-        if (postId != 0)
+        postUI.ShowPosts(user.ID);
+        ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[D]Delete post  [C] Comments  [R] Return", LogicTool.NewKeyList(ConsoleKey.D, ConsoleKey.C, ConsoleKey.R));
+        if (pressedKey == ConsoleKey.D) postUI.DeletePost(user);
+        else if (pressedKey == ConsoleKey.C) ChooseIfComment(user.ID);
+        else return;
+    }
+    public void ChooseIfComment(int userId)
+    {
+        PostUI postUI = new(_postManager, _commentManager);
+        int postId = ConsoleInput.GetInt("Choose post: ");
+        ConsoleKey key = ConsoleInput.GetPressedKey("\t[C] Comment   [V] View Comments", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.V));
+        if (key == ConsoleKey.C)
         {
-            ConsoleKey key = ConsoleInput.GetPressedKey("\t[C] Comment   [V] View Comments", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.V));
-            if (key == ConsoleKey.C)
-            {
-                postUI.CommentPost(user, postId);
-            }
-            else if (key == ConsoleKey.V)
-            {
-                postUI.ShowCommentsOnPost(postId);
-            }
+            postUI.CommentPost(userId, postId);
+        }
+        else if (key == ConsoleKey.V)
+        {
+            postUI.ShowCommentsOnPost(postId);
         }
     }
+
     public void MySettings(User user)
     {
         ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[E] Edit profile [D] Delete account", LogicTool.NewKeyList(ConsoleKey.E, ConsoleKey.D));
@@ -312,3 +312,4 @@ public class UserUI
         }
     }
 }
+

@@ -16,11 +16,6 @@ public class PostsDB : IData<Post>, IIdData<Post>
         }
         return id;
     }
-    //FRÅGA KRISTER, SKA INLÄGG OCH KOMMENTARER RADERAS HELT ELLER FLAGGAS?
-    // "START TRANSACTION; " +
-    //     "DELETE FROM posts WHERE id = @id AND users_id = @usersId;" +
-    //     "DELETE FROM posts WHERE on_post_id = @id;" + 
-    //     "COMMIT;";
     public int? Delete(Post post)  //om man väljer att deleta en post, så kommer den bli visible när du loggar in
     // därför behövs en tilll bool is_deleted som sätts när man deletar istället! 
     {              

@@ -7,9 +7,9 @@ namespace UI;
 internal class Program
 {
     //ATT FIXA
-    //3. i post och message, hämta ut med mer specifika idn, inte bara hämta ut alla och solla via logik!!
-    //4. Kopplingsdiagram ett uppdaterat nu
-    //5. Fixa mer i UI, rensa ut metoder till conversationservice osv
+    //1. Fixa mer i UI, rensa ut metoder till conversationservice osv
+    //2. om man är inaktiv/raderad och har en dialog-konversation ska den stå som is_visible = false 
+    //2.5 lägg till is_visible på conversations table
     private static void Main(string[] args)
     {
         UserManager userManager = new(new UsersDB(), new UsersDB(), new UsersDB());
