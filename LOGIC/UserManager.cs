@@ -1,11 +1,11 @@
 using CORE;
 namespace LOGIC;
-public class UserManager : IManager<User>, IDeletionManager<User>, IMultipleDataGetter<User, int>
+public class UserManager : IManager<User,User>, IDeletionManager<User>, IMultipleDataGetter<User, int>
 {
-    IData<User> _userData;
+    IData<User, User> _userData;
     IDataSearcher<User> _dataSearcher;
     IDeletionData<User> _deletionData;
-    public UserManager(IData<User> userData, IDataSearcher<User> dataSearcher, IDeletionData<User> deletionData)
+    public UserManager(IData<User, User> userData, IDataSearcher<User> dataSearcher, IDeletionData<User> deletionData)
     {
         _userData = userData;
         _dataSearcher = dataSearcher;
@@ -61,7 +61,7 @@ public class UserManager : IManager<User>, IDeletionManager<User>, IMultipleData
         }
     }
 
-    public List<User> GetAll(int data)
+    public List<User> GetAll(int data, User user)
     {
         throw new NotImplementedException();
     }

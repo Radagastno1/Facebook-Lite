@@ -3,7 +3,7 @@ using CORE;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class MessagesDB : IData<Message>
+public class MessagesDB : IData<Message,User>
 {
     public int? Create(Message obj)  //IDATA
     {
@@ -43,7 +43,7 @@ public class MessagesDB : IData<Message>
         }
         return rowsEffected;
     }
-    public List<Message> GetById(int conversationId) ///IDATA
+    public List<Message> GetById(int conversationId, User user) ///IDATA
     {
         //MEDDE KOMMER INTE
         List<Message> messages = new();

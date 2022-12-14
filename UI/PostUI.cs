@@ -3,9 +3,9 @@ using LOGIC;
 namespace UI;
 public class PostUI
 {
-    IManager<Post> _postManager;
-    IManager<Comment> _commentManager;
-    public PostUI(IManager<Post> postManager, IManager<Comment> commentManager)
+    IManager<Post, User> _postManager;
+    IManager<Comment, User> _commentManager;
+    public PostUI(IManager<Post, User> postManager, IManager<Comment,User> commentManager)
     {
         _postManager = postManager;
         _commentManager = commentManager;
@@ -27,12 +27,12 @@ public class PostUI
         }
         else return;
     }
-    public void ShowPosts(int userId)
+    public void ShowPosts(int userId, User user)
     {
         List<Post> allPosts = new();
         try
         {
-            allPosts = _postManager.GetAll(userId);
+            allPosts = _postManager.GetAll(userId, user);
             foreach (Post item in allPosts)
             {
                 Console.WriteLine($"{item.ToString()}\n");
@@ -62,11 +62,11 @@ public class PostUI
         ConsoleKey key = ConsoleInput.GetPressedKey("\t[C] Comment   [V] View Comments", keys);
         return key;
     }
-    public void ShowCommentsOnPost(int postId)
+    public void ShowCommentsOnPost(int postId, User user)
     {
         try
         {
-            List<Comment> comments = _commentManager.GetAll(postId);
+            List<Comment> comments = _commentManager.GetAll(postId, user);
             foreach (Comment item in comments)
             {
                 Console.WriteLine($"{item.ToString()}\n");

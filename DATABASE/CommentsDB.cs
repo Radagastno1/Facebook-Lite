@@ -3,7 +3,7 @@ using LOGIC;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class CommentsDB : IData<Comment>
+public class CommentsDB : IData<Comment, User>
 {
     public int? Create(Comment obj)  //IDATA
     {
@@ -39,7 +39,7 @@ public class CommentsDB : IData<Comment>
         }
         return comments;
     }
-    public List<Comment> GetById(int postId)
+    public List<Comment> GetById(int postId, User user)
     {
         List<Comment> commentsOnPost = new();
         string query = "SELECT p.id, p.content, p.date_created AS 'DateCreated', p.users_id AS 'UserId', " +

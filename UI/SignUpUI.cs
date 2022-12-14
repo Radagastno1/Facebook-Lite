@@ -3,8 +3,8 @@ using CORE;
 namespace UI;
 public class SignUpUI
 {
-    IManager<User> _userManager;
-    public SignUpUI(IManager<User> userManager)
+    IManager<User, User> _userManager;
+    public SignUpUI(IManager<User, User> userManager)
     {
         _userManager = userManager;
     }

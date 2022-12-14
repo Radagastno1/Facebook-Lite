@@ -3,7 +3,7 @@ using LOGIC;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IIdData<ConversationResult>
+public class ConversationDB : IData<Conversation, User>, IExtraData<Conversation>, IIdData<ConversationResult>
 {
     public int? Create(Conversation conversation)  
     {
@@ -83,7 +83,7 @@ public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IId
         }
         return result;
     }
-    public List<Conversation> GetById(int id)  //ANVÄNDS VÄL EJ?
+    public List<Conversation> GetById(int id, User user)  //ANVÄNDS VÄL EJ?
     {
         List<Conversation> conversations = new();
         string query = $"SELECT uc.conversation_id as 'ID' FROM users_conversations uc WHERE uc.users_id = @id;";

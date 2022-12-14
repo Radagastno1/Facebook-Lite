@@ -3,10 +3,10 @@ using CORE;
 namespace UI;
 public class ConversationUI
 {
-    IManager<Conversation> _conversationManager;
-    IManager<Message> _messageManager;
+    IManager<Conversation, User> _conversationManager;
+    IManager<Message, User> _messageManager;
     IIdManager<Conversation> _idManager;
-    public ConversationUI(IManager<Conversation> conversationManager, IManager<Message> messageManager, IIdManager<Conversation> idManager)
+    public ConversationUI(IManager<Conversation, User> conversationManager, IManager<Message, User> messageManager, IIdManager<Conversation> idManager)
     {
         _conversationManager = conversationManager;
         _messageManager = messageManager;
@@ -41,7 +41,7 @@ public class ConversationUI
         Conversation conversation = _idManager.GetDialogueId(user.ID, id);
         if (conversation != null)
         {
-            messageUI.ShowMessages(conversation.ID);
+            messageUI.ShowMessages(conversation.ID, user);
             return conversation.ID;
         }
         else

@@ -3,7 +3,7 @@ using CORE;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class UsersDB : IData<User>, IDataSearcher<User>, IDeletionData<User>
+public class UsersDB : IData<User,User>, IDataSearcher<User>, IDeletionData<User>
 {
     //1.fixa hur det ska se ut överallt om man är inaktiv
     //namn ska synas som deleted user? ingen publik information osv 
@@ -82,7 +82,7 @@ public class UsersDB : IData<User>, IDataSearcher<User>, IDeletionData<User>
         foundUsers = con.Query<User>(query, new { @name = name }).ToList();
         return foundUsers;
     }
-    public List<User> GetById(int id)
+    public List<User> GetById(int id, User user)
     {
         throw new NotImplementedException();
     }

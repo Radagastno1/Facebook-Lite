@@ -4,9 +4,9 @@ namespace UI;
 
 public class MessageUI
 {
-    IManager<Message> _messageManager;
+    IManager<Message, User> _messageManager;
 
-    public MessageUI(IManager<Message> messageManager)
+    public MessageUI(IManager<Message, User> messageManager)
     {
         _messageManager = messageManager;
     }
@@ -19,9 +19,9 @@ public class MessageUI
         Message message = new(content, user.ID, conversationId);
         _messageManager.Create(message);
     }
-    public void ShowMessages(int conversationId)
+    public void ShowMessages(int conversationId,User user)
     {
-        List<Message> messages = _messageManager.GetAll(conversationId);
+        List<Message> messages = _messageManager.GetAll(conversationId, user);
         if (messages == null || messages.Count() < 1)
         {
             Console.WriteLine("No messages here yet..");

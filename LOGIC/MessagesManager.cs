@@ -1,10 +1,10 @@
 using CORE;
 namespace LOGIC;
 
-public class MessgageManager : IManager<Message>
+public class MessgageManager : IManager<Message, User>
 {
-    IData<Message> _messageManager;
-    public MessgageManager(IData<Message> messageManager)
+    IData<Message, User> _messageManager;
+    public MessgageManager(IData<Message, User> messageManager)
     {
         _messageManager = messageManager;
     }
@@ -13,9 +13,9 @@ public class MessgageManager : IManager<Message>
         return _messageManager.Create(message);
     }
 
-    public List<Message> GetAll(int conversationId)
+    public List<Message> GetAll(int conversationId, User user)
     {
-        List<Message> selectedMessages = _messageManager.GetById(conversationId);
+        List<Message> selectedMessages = _messageManager.GetById(conversationId, user);
         if(selectedMessages == null && selectedMessages.Count() < 1)
         {
             return null;

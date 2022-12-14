@@ -1,13 +1,13 @@
 using CORE;
 namespace LOGIC;
 
-public class ConversationManager : IManager<Conversation>, IConnectingMultiple<User>, IIdManager<Conversation>
+public class ConversationManager : IManager<Conversation,User>, IConnectingMultiple<User>, IIdManager<Conversation>
 {
-    IData<Conversation> _conversationData;
-    IData<Message> _messageData;
+    IData<Conversation, User> _conversationData;
+    IData<Message, User> _messageData;
     IExtraData<Conversation> _extraData;
     IIdData<ConversationResult> _getIdData;
-    public ConversationManager(IData<Conversation> conversationData, IData<Message> messageData, IExtraData<Conversation> extraData, IIdData<ConversationResult> getIdData)
+    public ConversationManager(IData<Conversation, User> conversationData, IData<Message, User> messageData, IExtraData<Conversation> extraData, IIdData<ConversationResult> getIdData)
     {
         _conversationData = conversationData;
         _messageData = messageData;
@@ -28,9 +28,9 @@ public class ConversationManager : IManager<Conversation>, IConnectingMultiple<U
         int? usersConversationId = _conversationData.Update(conversation);
         return usersConversationId;
     }
-    public List<Conversation> GetAll(int data)
+    public List<Conversation> GetAll(int data, User user)
     {
-        List<Conversation> conversations = _conversationData.GetById(data);
+        List<Conversation> conversations = _conversationData.GetById(data, user);
         return conversations;
     }
     public List<Conversation> GetBySearch(string name)

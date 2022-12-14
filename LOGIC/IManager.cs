@@ -1,11 +1,11 @@
 namespace LOGIC;
-public interface IManager<T>
+public interface IManager<Tone, Ttwo>
 {
-    public int? Create(T obj);
-    public List<T>GetBySearch(string search);
-    public int? Remove(T obj);
-    public T GetOne(int data);
-    public List<T> GetAll(int data);
-    public int? Update(T obj);
+    public int? Create(Tone obj);
+    public List<Tone>GetBySearch(string search);
+    public int? Remove(Tone obj);
+    public Tone GetOne(int data);
+    public List<Tone> GetAll(int data, Ttwo obj);
+    public int? Update(Tone obj);
 
 }

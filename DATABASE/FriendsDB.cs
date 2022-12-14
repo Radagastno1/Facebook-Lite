@@ -1,7 +1,7 @@
 using CORE;
 using LOGIC;
 namespace DATABASE;
-public class FriendsDB : IData<User>
+public class FriendsDB : IData<User, User>
 {
     public int? Create(User obj)
     {   //om en skickar förfrågan så körs insert för den som skickar förfrågan.
@@ -27,7 +27,7 @@ public class FriendsDB : IData<User>
         throw new NotImplementedException();
     }
 
-    public List<User> GetById(int id)
+    public List<User> GetById(int id, User user)
     {
         string query = "SELECT u.id, u.first_name, u.last_name FROM users u " +
                     "INNER JOIN users_friends uf ON uf.users_id2 = u.id " +

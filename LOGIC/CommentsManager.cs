@@ -1,10 +1,10 @@
 using CORE;
 using LOGIC;
 
-public class CommentsManager : IManager<Comment>
+public class CommentsManager : IManager<Comment, User>
 {
-    IData<Comment> _commentsData;
-    public CommentsManager(IData<Comment> commentsData)
+    IData<Comment, User> _commentsData;
+    public CommentsManager(IData<Comment,User> commentsData)
     {
         _commentsData = commentsData;
     }
@@ -12,11 +12,11 @@ public class CommentsManager : IManager<Comment>
     {
         return _commentsData.Create(obj);
     }
-    public List<Comment> GetAll(int postId)
+    public List<Comment> GetAll(int postId, User user)
     {
         try
         {
-            List<Comment> allComments = _commentsData.GetById(postId);
+            List<Comment> allComments = _commentsData.GetById(postId, user);
             return allComments;
         }
         catch(InvalidOperationException)

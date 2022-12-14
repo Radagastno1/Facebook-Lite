@@ -1,10 +1,10 @@
 using CORE;
 namespace LOGIC;
-public class PostsManager : IManager<Post>
+public class PostsManager : IManager<Post, User>
 {
-    IData<Post> _postData;
+    IData<Post, User> _postData;
     IIdData<Post> _postIdData;
-    public PostsManager(IData<Post> postData, IIdData<Post> postIdData)
+    public PostsManager(IData<Post, User> postData, IIdData<Post> postIdData)
     {
         _postData = postData;
         _postIdData = postIdData;
@@ -47,11 +47,11 @@ public class PostsManager : IManager<Post>
         return _postData.Update(post);
     }
 
-    public List<Post> GetAll(int userId)
+    public List<Post> GetAll(int userId, User user)
     {
         try
         {
-            List<Post> allPosts = _postData.GetById(userId);
+            List<Post> allPosts = _postData.GetById(userId, user);
             return allPosts;
         }
         catch (NullReferenceException)

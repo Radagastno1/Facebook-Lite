@@ -4,17 +4,17 @@ namespace UI;
 public class UserUI
 {
     static int? deleted = 0;
-    IManager<User> _userManager;
-    IManager<Post> _postManager;
-    IManager<Conversation> _conversationManager;
-    IManager<Message> _messageManager;
+    IManager<User, User> _userManager;
+    IManager<Post, User> _postManager;
+    IManager<Conversation, User> _conversationManager;
+    IManager<Message, User> _messageManager;
     IIdManager<Conversation> _idManager;
     IConnectingMultiple<User> _connectionManager;
-    IManager<Comment> _commentManager;
+    IManager<Comment, User> _commentManager;
     IDeletionManager<User> _deletionManager;
     IMultipleDataGetter<User, int> _multipleUserData;
     List<ConsoleKey> keys = new();
-    public UserUI(IManager<User> userManager, IManager<Post> postManager, IManager<Conversation> conversationManager, IIdManager<Conversation> idManager, IManager<Message> messageManager, IConnectingMultiple<User> connectingManager, IManager<Comment> commentManager, IDeletionManager<User> deletionManager, IMultipleDataGetter<User, int> multipleUserData)
+    public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IIdManager<Conversation> idManager, IManager<Message, User> messageManager, IConnectingMultiple<User> connectingManager, IManager<Comment, User> commentManager, IDeletionManager<User> deletionManager, IMultipleDataGetter<User, int> multipleUserData)
     {
         _userManager = userManager;
         _postManager = postManager;
@@ -107,9 +107,9 @@ public class UserUI
         else
         {
             PostUI postUI = new(_postManager, _commentManager);
-            postUI.ShowPosts(id);
+            postUI.ShowPosts(id, user);
             pressedKey = ConsoleInput.GetPressedKey("[C] Comments  [R] Return", LogicTool.NewKeyList(ConsoleKey.D, ConsoleKey.C, ConsoleKey.R));
-            if (pressedKey == ConsoleKey.C) ChooseIfComment(id);
+            if (pressedKey == ConsoleKey.C) ChooseIfComment(id, user);
             else return;
         }
     }
@@ -123,13 +123,13 @@ public class UserUI
         if (pressedKey == ConsoleKey.C)
         {
             int conversationId = ConsoleInput.GetInt("Choose: ");
-            ShowMessages(conversationId);
+            ShowMessages(conversationId, user);
             messageUI.MakeMessage(user, conversationId);
         }
         else
         {
             int newConversationId = AddPeopleToNewConversation(user);
-            ShowMessages(newConversationId);
+            ShowMessages(newConversationId, user);
             messageUI.MakeMessage(user, newConversationId);
         }
     }
@@ -156,13 +156,13 @@ public class UserUI
     {
         PostUI postUI = new(_postManager, _commentManager);
         ShowProfile(user.ID);
-        postUI.ShowPosts(user.ID);
+        postUI.ShowPosts(user.ID, user);
         ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[D]Delete post  [C] Comments  [R] Return", LogicTool.NewKeyList(ConsoleKey.D, ConsoleKey.C, ConsoleKey.R));
         if (pressedKey == ConsoleKey.D) postUI.DeletePost(user);
-        else if (pressedKey == ConsoleKey.C) ChooseIfComment(user.ID);
+        else if (pressedKey == ConsoleKey.C) ChooseIfComment(user.ID, user);
         else return;
     }
-    public void ChooseIfComment(int userId)
+    public void ChooseIfComment(int userId, User user)
     {
         PostUI postUI = new(_postManager, _commentManager);
         int postId = ConsoleInput.GetInt("Choose post: ");
@@ -173,7 +173,7 @@ public class UserUI
         }
         else if (key == ConsoleKey.V)
         {
-            postUI.ShowCommentsOnPost(postId);
+            postUI.ShowCommentsOnPost(postId, user);
         }
     }
 
@@ -300,9 +300,9 @@ public class UserUI
             return false;
         }
     }
-    public void ShowMessages(int conversationId)
+    public void ShowMessages(int conversationId, User user)
     {
-        List<Message> messages = _messageManager.GetAll(conversationId);
+        List<Message> messages = _messageManager.GetAll(conversationId, user);
         if (messages == null || messages.Count() < 1)
         {
             Console.WriteLine("No messages here yet..");
