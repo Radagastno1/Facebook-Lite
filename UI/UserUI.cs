@@ -36,7 +36,7 @@ public class UserUI
     {
         PostUI postUI = new(_postManager, _commentManager);
         string[] overviewOptions = new string[]
-        { "[PUBLISH]","[SEARCH]","[CHAT]", "[MY PAGE]","[SETTINGS]", "[LOG OUT]" };
+        { "[PUBLISH]","[SEARCH]","[MESSENGER]", "[MY PAGE]","[SETTINGS]", "[LOG OUT]" };
         int menuOptions = 0;
         while (true)
         {
@@ -53,7 +53,6 @@ public class UserUI
                     Console.ReadKey();
                     break;
                 case 2:
-                    //CHATPAGE
                     Messenger(user);
                     Console.ReadKey();
                     break;
@@ -62,7 +61,6 @@ public class UserUI
                     Console.ReadKey();
                     break;
                 case 4:
-                    //SETTINGSMENU
                     MySettings(user);
                     break;
                 case 5:
