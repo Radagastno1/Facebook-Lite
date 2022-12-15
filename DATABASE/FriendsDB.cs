@@ -1,7 +1,7 @@
 using CORE;
 using LOGIC;
 namespace DATABASE;
-public class FriendsDB : IData<User, User>
+public class FriendsDB : IData<User>
 {
     public int? Create(User obj)
     {   //om en skickar förfrågan så körs insert för den som skickar förfrågan.

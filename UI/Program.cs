@@ -12,11 +12,11 @@ internal class Program
     //2.5 lägg till is_visible på conversations table
     private static void Main(string[] args)
     {
-        UserManager userManager = new(new UsersDB(), new UsersDB(), new UsersDB());
-        PostsManager postsManager = new(new PostsDB(), new PostsDB());
-        CommentsManager commentsManager = new(new CommentsDB());
-        ConversationManager conversationManager = new(new ConversationDB(), new MessagesDB(), new ConversationDB(), new ConversationDB());
-        MessgageManager messageManager = new(new MessagesDB());
+        UserManager userManager = new(new UsersDB(), new UsersDB(), new UsersDB(), new UsersDB());
+        PostsManager postsManager = new(new PostsDB(), new PostsDB(), new PostsDB());
+        CommentsManager commentsManager = new(new CommentsDB(), new CommentsDB());
+        ConversationManager conversationManager = new(new ConversationDB(), new ConversationDB(), new MessagesDB(), new ConversationDB(), new ConversationDB());
+        MessgageManager messageManager = new(new MessagesDB(), new MessagesDB());
         SignUpUI signUpUI = new(userManager);
         LogInManager logInManager = new(new LogInDB());
         LogInUI logInUI = new(logInManager);

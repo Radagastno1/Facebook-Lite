@@ -3,16 +3,18 @@ namespace LOGIC;
 
 public class ConversationManager : IManager<Conversation,User>, IConnectingMultiple<User>, IIdManager<Conversation>
 {
-    IData<Conversation, User> _conversationData;
-    IData<Message, User> _messageData;
+    IData<Conversation> _conversationData;
+    IDataToList<Conversation, User> _conversationsDataToList;
+    IData<Message> _messageData;
     IExtraData<Conversation> _extraData;
     IIdData<ConversationResult> _getIdData;
-    public ConversationManager(IData<Conversation, User> conversationData, IData<Message, User> messageData, IExtraData<Conversation> extraData, IIdData<ConversationResult> getIdData)
+    public ConversationManager(IData<Conversation> conversationData,IDataToList<Conversation, User> conversationsDataToList, IData<Message> messageData, IExtraData<Conversation> extraData, IIdData<ConversationResult> getIdData)
     {
         _conversationData = conversationData;
         _messageData = messageData;
         _extraData = extraData;
         _getIdData = getIdData;
+        _conversationsDataToList = conversationsDataToList;
     }
     public int? Create(Conversation conversation)
     {
@@ -30,10 +32,10 @@ public class ConversationManager : IManager<Conversation,User>, IConnectingMulti
     }
     public List<Conversation> GetAll(int data, User user)
     {
-        List<Conversation> conversations = _conversationData.GetById(data, user);
+        List<Conversation> conversations = _conversationsDataToList.GetById(data, user);
         return conversations;
     }
-    public List<Conversation> GetBySearch(string name)
+    public List<Conversation> GetBySearch(string name, User user)
     {
         throw new NotImplementedException();    //ska kunna söka efter konversationer via namn i sin chatt
     }

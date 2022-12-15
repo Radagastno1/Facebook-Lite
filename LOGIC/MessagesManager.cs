@@ -3,10 +3,12 @@ namespace LOGIC;
 
 public class MessgageManager : IManager<Message, User>
 {
-    IData<Message, User> _messageManager;
-    public MessgageManager(IData<Message, User> messageManager)
+    IData<Message> _messageManager;
+    IDataToList<Message, User> _messageDataToList;
+    public MessgageManager(IData<Message> messageManager, IDataToList<Message, User> messageDataToList)
     {
         _messageManager = messageManager;
+        _messageDataToList = messageDataToList;
     }
     public int? Create(Message message)
     {
@@ -15,7 +17,7 @@ public class MessgageManager : IManager<Message, User>
 
     public List<Message> GetAll(int conversationId, User user)
     {
-        List<Message> selectedMessages = _messageManager.GetById(conversationId, user);
+        List<Message> selectedMessages = _messageDataToList.GetById(conversationId, user);
         if(selectedMessages == null && selectedMessages.Count() < 1)
         {
             return null;
@@ -46,7 +48,7 @@ public class MessgageManager : IManager<Message, User>
         // }
     }
 
-    public List<Message> GetBySearch(string search)   //söka i meddelandet efter datum eller ord?
+    public List<Message> GetBySearch(string searc, User user)   //söka i meddelandet efter datum eller ord?
     {
         throw new NotImplementedException();
     }

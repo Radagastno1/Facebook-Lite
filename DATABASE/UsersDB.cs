@@ -3,7 +3,7 @@ using CORE;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class UsersDB : IData<User,User>, IDataSearcher<User>, IDeletionData<User>
+public class UsersDB : IData<User>, IDataSearcher<User>, IDeletionData<User>, IDataToObject<User>
 {
     //1.fixa hur det ska se ut överallt om man är inaktiv
     //namn ska synas som deleted user? ingen publik information osv 
@@ -33,9 +33,9 @@ public class UsersDB : IData<User,User>, IDataSearcher<User>, IDeletionData<User
     {
         int rowsEffected = 0;
         string query = "START TRANSACTION;" +
-        "UPDATE users SET is_active = false WHERE id = @id;" + 
-        "UPDATE messages SET is_visible = FALSE WHERE sender_id = @id;" + 
-        "UPDATE posts SET is_visible = FALSE WHERE users_id = @id;" + 
+        "UPDATE users SET is_active = false WHERE id = @id;" +
+        "UPDATE messages SET is_visible = FALSE WHERE sender_id = @id;" +
+        "UPDATE posts SET is_visible = FALSE WHERE users_id = @id;" +
         "COMMIT;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
@@ -73,27 +73,27 @@ public class UsersDB : IData<User,User>, IDataSearcher<User>, IDeletionData<User
     public List<User> GetSearches(string name)
     {
         List<User> foundUsers = new();
-        string query = "SELECT u.id as 'ID', u.first_name as 'FirstName', u.last_name as 'LastName', " +
-        "u.birth_date as 'BirthDate', u.gender, u.about_me as 'AboutMe' " +
-        "FROM users u LEFT JOIN users_roles ur ON ur.users_id = u.id " +
-        "LEFT JOIN roles r ON r.id = ur.roles_id " +
-        $"WHERE u.first_name LIKE '%{name}%' AND r.id = 5 AND u.is_active = true;";
-        //DENNA METODEN BEHÖVER TA IN EN USER SÅ MAN KAN KOLLA ENS ID ANG USERS_BLOCKED
-        //SAMT FIXA QUERYN SÅ DEN INNEHÅLLER SLUTET PÅ QUERYN UNDER HÄR:
+        string query = "SELECT u.id as 'ID' FROM users u " +
+        $"WHERE u.first_name LIKE '%{name}%' OR u.last_name LIKE '%{name}%' AND u.is_active = true;";
+        //SÖKNING FÅR SKE ATT FÖRST KÖRS DENNA - OCH SEDAN HÄMTAS VAR OCH EN AV DE HITTADE USERS GENOM GETBYID
         using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
         foundUsers = con.Query<User>(query, new { @name = name }).ToList();
         return foundUsers;
     }
-    public List<User> GetById(int id, User user)
+    public User GetById(int id, User user)
     {
-        string query = "SELECT u.id, u.first_name as 'FirstName', u.last_name as 'LastName', "+
-        "DATE_FORMAT(u.birth_date, '%Y-%m-%d') as 'BirthDate', u.gender, " + 
-        "u.about_me as 'AboutMe', r.name as 'Role' " + 
-        "FROM users u LEFT JOIN users_roles ur ON ur.users_id = u.id " + 
-        "LEFT JOIN roles r ON r.id = ur.roles_id WHERE u.is_deleted = false " + 
-        "AND u.id not in (select blocked_user_id from users_blocked where users_id = 23) " + 
-        "AND u.id not in (select users_id FROM users_blocked where blocked_user_id = 23);";
-        throw new NotImplementedException();
+        User foundUser = new();
+        string query = "SELECT u.id, u.first_name as 'FirstName', u.last_name as 'LastName', " +
+        "DATE_FORMAT(u.birth_date, '%Y-%m-%d') as 'BirthDate', u.gender, " +
+        "u.about_me as 'AboutMe', r.name as 'Role' " +
+        "FROM users u LEFT JOIN users_roles ur ON ur.users_id = u.id " +
+        "LEFT JOIN roles r ON r.id = ur.roles_id WHERE u.is_deleted = false " +
+        "AND u.id = @id " +
+        "AND u.id not in (select blocked_user_id from users_blocked where users_id = @userId) " +
+        "AND u.id not in (select users_id FROM users_blocked where blocked_user_id = @userId);";
+        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+        foundUser = con.QuerySingle<User>(query, new { @id = id, @userId = user.ID });
+        return foundUser;
     }
 
     public List<User> GetInactive()

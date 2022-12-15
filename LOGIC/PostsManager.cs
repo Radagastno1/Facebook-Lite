@@ -2,18 +2,20 @@ using CORE;
 namespace LOGIC;
 public class PostsManager : IManager<Post, User>
 {
-    IData<Post, User> _postData;
+    IData<Post> _postData;
     IIdData<Post> _postIdData;
-    public PostsManager(IData<Post, User> postData, IIdData<Post> postIdData)
+    IDataToList<Post, User> _postDataToList;
+    public PostsManager(IData<Post> postData, IIdData<Post> postIdData, IDataToList<Post, User> postDataToList)
     {
         _postData = postData;
         _postIdData = postIdData;
+        _postDataToList = postDataToList;
     }
     public int? Create(Post post)
     {
         return _postData.Create(post);
     }
-    public List<Post> GetBySearch(string search)
+    public List<Post> GetBySearch(string search, User user)
     {
         List<Post> searchedPosts = new();
         try
@@ -51,7 +53,7 @@ public class PostsManager : IManager<Post, User>
     {
         try
         {
-            List<Post> allPosts = _postData.GetById(userId, user);
+            List<Post> allPosts = _postDataToList.GetById(userId, user);
             return allPosts;
         }
         catch (NullReferenceException)

@@ -3,10 +3,12 @@ using LOGIC;
 
 public class CommentsManager : IManager<Comment, User>
 {
-    IData<Comment, User> _commentsData;
-    public CommentsManager(IData<Comment,User> commentsData)
+    IData<Comment> _commentsData;
+    IDataToList<Comment, User> _commentsList;
+    public CommentsManager(IData<Comment> commentsData,  IDataToList<Comment, User> commentsList)
     {
         _commentsData = commentsData;
+        _commentsList = commentsList;
     }
     public int? Create(Comment obj)
     {
@@ -16,7 +18,7 @@ public class CommentsManager : IManager<Comment, User>
     {
         try
         {
-            List<Comment> allComments = _commentsData.GetById(postId, user);
+            List<Comment> allComments = _commentsList.GetById(postId, user);
             return allComments;
         }
         catch(InvalidOperationException)
@@ -24,7 +26,7 @@ public class CommentsManager : IManager<Comment, User>
             return null;
         }
     }
-    public List<Comment> GetBySearch(string name)
+    public List<Comment> GetBySearch(string name, User user)
     {
         throw new NotImplementedException();  //sök efter kommentarer i en post via namn?
     }

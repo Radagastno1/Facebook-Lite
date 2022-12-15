@@ -3,7 +3,7 @@ using LOGIC;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class ConversationDB : IData<Conversation, User>, IExtraData<Conversation>, IIdData<ConversationResult>
+public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IIdData<ConversationResult>, IDataToList<Conversation, User>
 {
     public int? Create(Conversation conversation)  
     {

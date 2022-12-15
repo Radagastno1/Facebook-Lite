@@ -1,25 +1,35 @@
 using CORE;
 namespace LOGIC;
-public class UserManager : IManager<User,User>, IDeletionManager<User>, IMultipleDataGetter<User, int>
+public class UserManager : IManager<User, User>, IDeletionManager<User>, IMultipleDataGetter<User, int>
 {
-    IData<User, User> _userData;
+    IData<User> _userData;
     IDataSearcher<User> _dataSearcher;
     IDeletionData<User> _deletionData;
-    public UserManager(IData<User, User> userData, IDataSearcher<User> dataSearcher, IDeletionData<User> deletionData)
+    IDataToObject<User> _userDataToObject;
+    public UserManager(IData<User> userData, IDataSearcher<User> dataSearcher, IDeletionData<User> deletionData, IDataToObject<User> userDataToObject)
     {
         _userData = userData;
         _dataSearcher = dataSearcher;
         _deletionData = deletionData;
+        _userDataToObject = userDataToObject;
     }
     public int? Create(User user)
     {
         return _userData.Create(user);
     }
-    public List<User> GetBySearch(string name)
+    public List<User> GetBySearch(string name, User user)
     {
-        List<User> searchedUsers = new();
-        searchedUsers = _dataSearcher.GetSearches(name);
-        return searchedUsers;
+        List<User> foundUsers = _dataSearcher.GetSearches(name);
+        List<User> usersAvailable = new();
+        foreach (User u in foundUsers)
+        {
+            User availableUser = _userDataToObject.GetById(u.ID, user);
+            if(availableUser != null)
+            {
+                usersAvailable.Add(availableUser);
+            }
+        }
+        return usersAvailable;
     }
     public User GetOne(int id)
     {

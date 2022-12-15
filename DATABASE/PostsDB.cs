@@ -3,7 +3,7 @@ using CORE;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class PostsDB : IData<Post, User>, IIdData<Post>
+public class PostsDB : IData<Post>, IIdData<Post>, IDataToList<Post, User>
 {
     public int? Create(Post obj)  
     {

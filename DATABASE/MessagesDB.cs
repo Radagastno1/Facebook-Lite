@@ -3,7 +3,7 @@ using CORE;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class MessagesDB : IData<Message,User>
+public class MessagesDB : IData<Message>, IDataToList<Message, User>
 {
     public int? Create(Message obj)  //IDATA
     {

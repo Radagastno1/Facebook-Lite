@@ -69,7 +69,7 @@ public class UserUI
     {
         int id = 0;
         string search = ConsoleInput.GetString("Search by name: ");
-        if (ShowSearches(search))
+        if (ShowSearches(search, user) == true)
         {
             id = ConsoleInput.GetInt("User: ");
         }
@@ -188,21 +188,22 @@ public class UserUI
             if (isDeleted == true) Environment.Exit(0);
         }
     }
-    public bool ShowSearches(string name)
+    public bool ShowSearches(string name, User user)
     {
         bool isResult = false;
-        List<User> users = _userManager.GetBySearch(name);
-        if (users.Count > 0)
+        List<User> users = _userManager.GetBySearch(name, user);
+        if(users == null || users.Count < 1)
+        {
+            Console.WriteLine("No person by " + name + " found.");
+            isResult = false;
+        }
+        else
         {
             foreach (User item in users)
             {
                 Console.WriteLine(item.ToString());
             }
             isResult = true;
-        }
-        else
-        {
-            Console.WriteLine("No person found by search: " + name);
         }
         return isResult;
     }

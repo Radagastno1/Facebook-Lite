@@ -1,7 +1,7 @@
 using CORE;
 using LOGIC;
 namespace DATABASE;
-public class Blocking : IData<User,User>
+public class BlockingsDB : IData<User>, IDataToList<User, User>
 {
     public int? Create(User obj)
     {

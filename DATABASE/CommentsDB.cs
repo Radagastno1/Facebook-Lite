@@ -3,7 +3,7 @@ using LOGIC;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class CommentsDB : IData<Comment, User>
+public class CommentsDB : IData<Comment>, IDataToList<Comment, User>
 {
     public int? Create(Comment obj)  //IDATA
     {

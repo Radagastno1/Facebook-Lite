@@ -1,9 +1,8 @@
 namespace LOGIC;
-public interface IData<Tone, Ttwo>
+public interface IData<T>
 {
-    List<Tone> GetAll();
-    List<Tone> GetById(int id, Ttwo bjo);
-    int? Create(Tone obj);
-    int? Update(Tone obj);
-    int? Delete(Tone obj);
+    List<T> GetAll();
+    int? Create(T obj);
+    int? Update(T obj);
+    int? Delete(T obj);
 }
