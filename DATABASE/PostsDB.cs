@@ -5,7 +5,7 @@ using MySqlConnector;
 namespace DATABASE;
 public class PostsDB : IData<Post, User>, IIdData<Post>
 {
-    public int? Create(Post obj)  //IDATA
+    public int? Create(Post obj)  
     {
         int id = 0;
         string query = "INSERT INTO posts (content, users_id, posts_types_id) " +
