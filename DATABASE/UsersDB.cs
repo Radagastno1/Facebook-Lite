@@ -78,12 +78,21 @@ public class UsersDB : IData<User,User>, IDataSearcher<User>, IDeletionData<User
         "FROM users u LEFT JOIN users_roles ur ON ur.users_id = u.id " +
         "LEFT JOIN roles r ON r.id = ur.roles_id " +
         $"WHERE u.first_name LIKE '%{name}%' AND r.id = 5 AND u.is_active = true;";
+        //DENNA METODEN BEHÖVER TA IN EN USER SÅ MAN KAN KOLLA ENS ID ANG USERS_BLOCKED
+        //SAMT FIXA QUERYN SÅ DEN INNEHÅLLER SLUTET PÅ QUERYN UNDER HÄR:
         using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
         foundUsers = con.Query<User>(query, new { @name = name }).ToList();
         return foundUsers;
     }
     public List<User> GetById(int id, User user)
     {
+        string query = "SELECT u.id, u.first_name as 'FirstName', u.last_name as 'LastName', "+
+        "DATE_FORMAT(u.birth_date, '%Y-%m-%d') as 'BirthDate', u.gender, " + 
+        "u.about_me as 'AboutMe', r.name as 'Role' " + 
+        "FROM users u LEFT JOIN users_roles ur ON ur.users_id = u.id " + 
+        "LEFT JOIN roles r ON r.id = ur.roles_id WHERE u.is_deleted = false " + 
+        "AND u.id not in (select blocked_user_id from users_blocked where users_id = 23) " + 
+        "AND u.id not in (select users_id FROM users_blocked where blocked_user_id = 23);";
         throw new NotImplementedException();
     }
 

@@ -14,6 +14,7 @@ public class UserUI
     IDeletionManager<User> _deletionManager;
     IMultipleDataGetter<User, int> _multipleUserData;
     List<ConsoleKey> keys = new();
+    Action<int>OnStartDelegate;
     public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IIdManager<Conversation> idManager, IManager<Message, User> messageManager, IConnectingMultiple<User> connectingManager, IManager<Comment, User> commentManager, IDeletionManager<User> deletionManager, IMultipleDataGetter<User, int> multipleUserData)
     {
         _userManager = userManager;
@@ -26,11 +27,7 @@ public class UserUI
         _deletionManager = deletionManager;
         _multipleUserData = multipleUserData;
         deleted = _deletionManager.SetAsDeleted();
-        ShowAccountDeleted();
-    }
-    public void ShowAccountDeleted()
-    {
-        Console.WriteLine(deleted + " accounts deleted.");  //för admin sen, kan vara kul 
+       Console.WriteLine(deleted + " accounts deleted.");
     }
     public void ShowMyFacebook(User user)
     {

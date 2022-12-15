@@ -59,8 +59,11 @@ public class PostsDB : IData<Post, User>, IIdData<Post>
     {
          List<Post> posts = new();
         string query = $"SELECT p.id as 'Id', p.content as 'Content', p.date_created as 'DateCreated', u.first_name as 'FirstName', u.last_name as 'LastName', p.users_id as 'UserId' " +
-         $"FROM posts p INNER JOIN users u ON p.users_id = u.id WHERE p.posts_types_id = 1 AND p.is_visible = TRUE AND p.is_deleted = FALSE AND p.users_id = @userId AND p.users_id not in " +
-        "(select blocked_user_id from users_blocked where users_id = @myId);";
+         $"FROM posts p INNER JOIN users u ON p.users_id = u.id WHERE p.posts_types_id = 1 AND p.is_visible = TRUE AND p.is_deleted = FALSE AND p.users_id = @userId " +
+         "AND p.users_id not in " +
+        "(select blocked_user_id from users_blocked where users_id = @myId) "+
+        "AND p.users_id not in " + 
+        "(select users_id from users_blocked where blocked_user_id = @myId);";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
             posts = con.Query<Post>(query, new{@userId = userId, @myId = user.ID}).ToList();
