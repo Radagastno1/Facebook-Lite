@@ -35,7 +35,7 @@ public class ConversationUI
             Console.WriteLine("No conversations yet..");
         }
     }
-    public int? ShowDialogue(User user, int id)
+    public int ShowDialogue(User user, int id)
     {
         MessageUI messageUI = new(_messageManager);
         Conversation conversation = _idManager.GetDialogueId(user.ID, id);
@@ -46,7 +46,7 @@ public class ConversationUI
         }
         else
         {
-            return null;
+            return 0;
         }
     }
     public void ShowConversations(List<Conversation> conversations)

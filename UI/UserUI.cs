@@ -13,7 +13,8 @@ public class UserUI
     IManager<Comment, User> _commentManager;
     IDeletionManager<User> _deletionManager;
     IMultipleDataGetter<User, int> _multipleUserData;
-    // public Func<User, int, int> MyFuncDelegate;
+    public Func<User, int, int> OnDialogue;
+    public Action<User, int> OnMakeMessage;
     List<ConsoleKey> keys = new();
     // public Action<int> OnStartDelegate;
     
@@ -31,42 +32,42 @@ public class UserUI
         deleted = _deletionManager.SetAsDeleted();
        Console.WriteLine(deleted + " accounts deleted.");
     }
-    public void ShowMyFacebook(User user)
-    {
-        PostUI postUI = new(_postManager, _commentManager);
-        string[] overviewOptions = new string[]
-        { "[PUBLISH]","[SEARCH]","[MESSENGER]", "[MY PAGE]","[SETTINGS]", "[LOG OUT]" };
-        int menuOptions = 0;
-        while (true)
-        {
-            menuOptions = ConsoleInput.GetMenuOptions(overviewOptions);
-            switch (menuOptions)
-            {
-                case 0:
-                    postUI.PublishPost(user);
-                    Console.ReadKey();
-                    break;
-                case 1:
-                    int id = Searcher(user);
-                    if (id != 0) InteractWithUser(user, id);
-                    Console.ReadKey();
-                    break;
-                case 2:
-                    Messenger(user);
-                    Console.ReadKey();
-                    break;
-                case 3:
-                    MyPage(user);
-                    Console.ReadKey();
-                    break;
-                case 4:
-                    MySettings(user);
-                    break;
-                case 5:
-                    return;
-            }
-        }
-    }
+    // public void ShowMyFacebook(User user)
+    // {
+    //     PostUI postUI = new(_postManager, _commentManager);
+    //     string[] overviewOptions = new string[]
+    //     { "[PUBLISH]","[SEARCH]","[MESSENGER]", "[MY PAGE]","[SETTINGS]", "[LOG OUT]" };
+    //     int menuOptions = 0;
+    //     while (true)
+    //     {
+    //         menuOptions = ConsoleInput.GetMenuOptions(overviewOptions);
+    //         switch (menuOptions)
+    //         {
+    //             case 0:
+    //                 postUI.PublishPost(user);
+    //                 Console.ReadKey();
+    //                 break;
+    //             case 1:
+    //                 int id = Searcher(user);
+    //                 if (id != 0) InteractWithUser(user, id);
+    //                 Console.ReadKey();
+    //                 break;
+    //             case 2:
+    //                 Messenger(user);
+    //                 Console.ReadKey();
+    //                 break;
+    //             case 3:
+    //                 MyPage(user);
+    //                 Console.ReadKey();
+    //                 break;
+    //             case 4:
+    //                 MySettings(user);
+    //                 break;
+    //             case 5:
+    //                 return;
+    //         }
+    //     }
+    // }
     public int Searcher(User user)
     {
         int id = 0;
@@ -85,9 +86,10 @@ public class UserUI
         ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[M] Message  [P] Posts", LogicTool.NewKeyList(ConsoleKey.M, ConsoleKey.P));
         if (pressedKey == ConsoleKey.M)
         {
-            //DELEGAT HÄR delegate(user, int)
-            // int? conversationId = MyFuncDelegate?.Invoke(user, id);
-            int conversationId = conversationUI.ShowDialogue(user, id).GetValueOrDefault();
+            //DELEGAT HÄR GJORT
+            int? nullableConversationId = OnDialogue?.Invoke(user, id);
+            int conversationId = nullableConversationId.GetValueOrDefault();
+            // int conversationId = conversationUI.ShowDialogue(user, id);
             if (conversationId < 1)
             {
                 pressedKey = ConsoleInput.GetPressedKey("[S]Start conversation  [R] Return", LogicTool.NewKeyList(ConsoleKey.S, ConsoleKey.R));
@@ -96,7 +98,7 @@ public class UserUI
                     List<int> ids = new();
                     ids.Add(id);
                     List<User> participants = _multipleUserData.GetUsersById(ids);
-                    //DELEGAT HÄR
+                    // GÖRA DELEGAT HÄR
                     conversationId = _connectionManager.MakeNew(participants, user).GetValueOrDefault();
                 }
                 else
@@ -104,13 +106,14 @@ public class UserUI
                     return;
                 }
             }
-            //DELEGAT HÄT
-            messageUI.MakeMessage(user, conversationId);
+            //DELEGAT HÄR GJORT
+            OnMakeMessage?.Invoke(user, conversationId);
+            // messageUI.MakeMessage(user, conversationId);
         }
         else
         {
             PostUI postUI = new(_postManager, _commentManager);
-            //DELEGAT HÄR
+            //DELEGAT HÄR GÖRA
             postUI.ShowPosts(id, user);
             pressedKey = ConsoleInput.GetPressedKey("[C] Comments  [R] Return", LogicTool.NewKeyList(ConsoleKey.D, ConsoleKey.C, ConsoleKey.R));
             if (pressedKey == ConsoleKey.C) ChooseIfComment(id, user);

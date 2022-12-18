@@ -1,29 +1,32 @@
 ﻿using CORE;
 using LOGIC;
-using DATABASE; 
+using DATABASE;
 using Dapper;
 using MySqlConnector;
 namespace UI;
 internal class Program
 {
+    static UserManager userManager = new(new UsersDB(), new UsersDB(), new UsersDB(), new UsersDB());
+    static PostsManager postsManager = new(new PostsDB(), new PostsDB(), new PostsDB());
+    static CommentsManager commentsManager = new(new CommentsDB(), new CommentsDB());
+    static ConversationManager conversationManager = new(new ConversationDB(), new ConversationDB(), new MessagesDB(), new ConversationDB(), new ConversationDB());
+    static MessgageManager messageManager = new(new MessagesDB(), new MessagesDB());
+    static SignUpUI signUpUI = new(userManager);
+    static LogInManager logInManager = new(new LogInDB());
+    static LogInUI logInUI = new(logInManager);
+    static UserUI userUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, conversationManager, commentsManager, userManager, userManager);
+    static PostUI postUI = new(postsManager, commentsManager);
+    static ConversationUI conversationUI = new(conversationManager, messageManager, conversationManager);
+    static MessageUI messageUI = new(messageManager);
     //ATT FIXA
     //1. Fixa mer i UI, rensa ut metoder till conversationservice osv
     //2. om man är inaktiv/raderad och har en dialog-konversation ska den stå som is_visible = false 
     //2.5 lägg till is_visible på conversations table
     private static void Main(string[] args)
     {
-        UserManager userManager = new(new UsersDB(), new UsersDB(), new UsersDB(), new UsersDB());
-        PostsManager postsManager = new(new PostsDB(), new PostsDB(), new PostsDB());
-        CommentsManager commentsManager = new(new CommentsDB(), new CommentsDB());
-        ConversationManager conversationManager = new(new ConversationDB(), new ConversationDB(), new MessagesDB(), new ConversationDB(), new ConversationDB());
-        MessgageManager messageManager = new(new MessagesDB(), new MessagesDB());
-        SignUpUI signUpUI = new(userManager);
-        LogInManager logInManager = new(new LogInDB());
-        LogInUI logInUI = new(logInManager);
-        UserUI userUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, conversationManager, commentsManager, userManager, userManager);
-        ConversationUI conversationUI = new(conversationManager, messageManager, conversationManager);
-        //MENYN INSPIRERAD AV PETRUS BLODBANKEN PROJEKT
-            //   userUI.MyFuncDelegate = conversationUI.ShowDialogue(user, id);
+        userUI.OnDialogue += conversationUI.ShowDialogue;
+        userUI.OnMakeMessage += messageUI.MakeMessage;
+   
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.BackgroundColor = ConsoleColor.White;
         string title = @"   _____ _    ____ _____ ____   ___   ___  _  __  _     ___ _____ _____ 
@@ -62,7 +65,8 @@ internal class Program
                         user = logInUI.LogIn();
                         if (user != null)
                         {
-                            userUI.ShowMyFacebook(user);
+                            // userUI.ShowMyFacebook(user);
+                            ShowMyFacebook(user);
                         }
                         break;
                     case 1:
@@ -74,6 +78,41 @@ internal class Program
                         //FORGOT PASSWORD - EMAIL-SERVICE för utveckling
                         break;
                 }
+            }
+        }
+    }
+    public static void ShowMyFacebook(User user)
+    {
+        string[] overviewOptions = new string[]
+        { "[PUBLISH]","[SEARCH]","[MESSENGER]", "[MY PAGE]","[SETTINGS]", "[LOG OUT]" };
+        int menuOptions = 0;
+        while (true)
+        {
+            menuOptions = ConsoleInput.GetMenuOptions(overviewOptions);
+            switch (menuOptions)
+            {
+                case 0:
+                    postUI.PublishPost(user);
+                    Console.ReadKey();
+                    break;
+                case 1:
+                    int id = userUI.Searcher(user);
+                    if (id != 0) userUI.InteractWithUser(user, id);
+                    Console.ReadKey();
+                    break;
+                case 2:
+                    userUI.Messenger(user);
+                    Console.ReadKey();
+                    break;
+                case 3:
+                    userUI.MyPage(user);
+                    Console.ReadKey();
+                    break;
+                case 4:
+                    userUI.MySettings(user);
+                    break;
+                case 5:
+                    return;
             }
         }
     }
