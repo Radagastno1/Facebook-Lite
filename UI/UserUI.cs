@@ -13,8 +13,10 @@ public class UserUI
     IManager<Comment, User> _commentManager;
     IDeletionManager<User> _deletionManager;
     IMultipleDataGetter<User, int> _multipleUserData;
+    // public Func<User, int, int> MyFuncDelegate;
     List<ConsoleKey> keys = new();
-    Action<int>OnStartDelegate;
+    // public Action<int> OnStartDelegate;
+    
     public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IIdManager<Conversation> idManager, IManager<Message, User> messageManager, IConnectingMultiple<User> connectingManager, IManager<Comment, User> commentManager, IDeletionManager<User> deletionManager, IMultipleDataGetter<User, int> multipleUserData)
     {
         _userManager = userManager;
@@ -83,6 +85,8 @@ public class UserUI
         ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[M] Message  [P] Posts", LogicTool.NewKeyList(ConsoleKey.M, ConsoleKey.P));
         if (pressedKey == ConsoleKey.M)
         {
+            //DELEGAT HÄR delegate(user, int)
+            // int? conversationId = MyFuncDelegate?.Invoke(user, id);
             int conversationId = conversationUI.ShowDialogue(user, id).GetValueOrDefault();
             if (conversationId < 1)
             {
@@ -92,6 +96,7 @@ public class UserUI
                     List<int> ids = new();
                     ids.Add(id);
                     List<User> participants = _multipleUserData.GetUsersById(ids);
+                    //DELEGAT HÄR
                     conversationId = _connectionManager.MakeNew(participants, user).GetValueOrDefault();
                 }
                 else
@@ -99,11 +104,13 @@ public class UserUI
                     return;
                 }
             }
+            //DELEGAT HÄT
             messageUI.MakeMessage(user, conversationId);
         }
         else
         {
             PostUI postUI = new(_postManager, _commentManager);
+            //DELEGAT HÄR
             postUI.ShowPosts(id, user);
             pressedKey = ConsoleInput.GetPressedKey("[C] Comments  [R] Return", LogicTool.NewKeyList(ConsoleKey.D, ConsoleKey.C, ConsoleKey.R));
             if (pressedKey == ConsoleKey.C) ChooseIfComment(id, user);

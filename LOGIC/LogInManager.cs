@@ -3,6 +3,7 @@ namespace LOGIC;
 public class LogInManager : ILogInManager<User>
 {
     ILogInDB<User> _logInUser;
+    // public Action<int> ActivateOnLogIn;
 
     public LogInManager(ILogInDB<User> logInUser)
     {
@@ -13,6 +14,7 @@ public class LogInManager : ILogInManager<User>
         try
         {
             User user = _logInUser.GetMemberByLogIn(email, passWord);
+            // ActivateOnLogIn?.Invoke(user.ID);
             _logInUser.UpdateToActivated(user.ID);
             return user;
         }

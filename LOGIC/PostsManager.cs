@@ -21,17 +21,11 @@ public class PostsManager : IManager<Post, User>
         try
         {
             List<Post> allPosts = _postData.GetAll();
-            foreach (Post post in allPosts)
-            {
-                if (post.Content.ToLower().Contains(search.ToLower()))
-                {
-                    searchedPosts.Add(post);
-                }
-            }
+            searchedPosts = allPosts.Where(p => p.Content == search).ToList();
         }
         catch (InvalidOperationException e)
         {
-            Console.WriteLine(e);
+           return null;
         }
         return searchedPosts;
     }

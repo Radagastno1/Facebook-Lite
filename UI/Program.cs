@@ -21,7 +21,9 @@ internal class Program
         LogInManager logInManager = new(new LogInDB());
         LogInUI logInUI = new(logInManager);
         UserUI userUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, conversationManager, commentsManager, userManager, userManager);
+        ConversationUI conversationUI = new(conversationManager, messageManager, conversationManager);
         //MENYN INSPIRERAD AV PETRUS BLODBANKEN PROJEKT
+            //   userUI.MyFuncDelegate = conversationUI.ShowDialogue(user, id);
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.BackgroundColor = ConsoleColor.White;
         string title = @"   _____ _    ____ _____ ____   ___   ___  _  __  _     ___ _____ _____ 
