@@ -6,11 +6,13 @@ public class ConversationUI
     IManager<Conversation, User> _conversationManager;
     IManager<Message, User> _messageManager;
     IIdManager<Conversation> _idManager;
-    public ConversationUI(IManager<Conversation, User> conversationManager, IManager<Message, User> messageManager, IIdManager<Conversation> idManager)
+    IConnectingMultiple<User> _connectingMultiple;
+    public ConversationUI(IManager<Conversation, User> conversationManager, IManager<Message, User> messageManager, IIdManager<Conversation> idManager, IConnectingMultiple<User> connectingMultiple)
     {
         _conversationManager = conversationManager;
         _messageManager = messageManager;
         _idManager = idManager;
+        _connectingMultiple = connectingMultiple;
     }
     public void ShowConversationParticipants(int id)
     {
@@ -55,6 +57,12 @@ public class ConversationUI
         {
             Console.WriteLine(item.ToString());
         }
+    }
+    public int MakeNewConversation(List<User> participants, User user)
+    {
+        int conversationId = _connectingMultiple.MakeNew(participants, user);
+        if(conversationId > 0)return conversationId;
+        else Console.WriteLine("Something went wrong."); return 0;
     }
 
 

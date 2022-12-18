@@ -76,12 +76,11 @@ public class ConversationManager : IManager<Conversation,User>, IConnectingMulti
         }
         return result;
     }
-    public int? MakeNew(List<User> participants, User user)
+    public int MakeNew(List<User> participants, User user)
     {
-        //DENNA I LOGIK!
         Conversation conversation = new();
         conversation.CreatorId = user.ID;
-        int? conversationId = Create(conversation);
+        int conversationId = Create(conversation).GetValueOrDefault();
         //den som startar konversationen är en del av participants med:
         participants.Add(user);
         foreach (User item in participants)

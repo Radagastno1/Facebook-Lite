@@ -9,23 +9,24 @@ public class UserUI
     IManager<Conversation, User> _conversationManager;
     IManager<Message, User> _messageManager;
     IIdManager<Conversation> _idManager;
-    IConnectingMultiple<User> _connectionManager;
+    // IConnectingMultiple<User> _connectionManager;
     IManager<Comment, User> _commentManager;
     IDeletionManager<User> _deletionManager;
     IMultipleDataGetter<User, int> _multipleUserData;
     public Func<User, int, int> OnDialogue;
+    public Func<List<User>, User, int> OnMakeConversation;
     public Action<User, int> OnMakeMessage;
     List<ConsoleKey> keys = new();
     // public Action<int> OnStartDelegate;
     
-    public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IIdManager<Conversation> idManager, IManager<Message, User> messageManager, IConnectingMultiple<User> connectingManager, IManager<Comment, User> commentManager, IDeletionManager<User> deletionManager, IMultipleDataGetter<User, int> multipleUserData)
+    public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IIdManager<Conversation> idManager, IManager<Message, User> messageManager, IManager<Comment, User> commentManager, IDeletionManager<User> deletionManager, IMultipleDataGetter<User, int> multipleUserData)
     {
         _userManager = userManager;
         _postManager = postManager;
         _conversationManager = conversationManager;
         _idManager = idManager;
         _messageManager = messageManager;
-        _connectionManager = connectingManager;
+        // _connectionManager = connectingManager;
         _commentManager = commentManager;
         _deletionManager = deletionManager;
         _multipleUserData = multipleUserData;
@@ -81,14 +82,13 @@ public class UserUI
     public void InteractWithUser(User user, int id)
     {
         MessageUI messageUI = new(_messageManager);
-        ConversationUI conversationUI = new(_conversationManager, _messageManager, _idManager);
+        // ConversationUI conversationUI = new(_conversationManager, _messageManager, _idManager);
         ShowProfile(id);
         ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[M] Message  [P] Posts", LogicTool.NewKeyList(ConsoleKey.M, ConsoleKey.P));
         if (pressedKey == ConsoleKey.M)
         {
             //DELEGAT HÄR GJORT
-            int? nullableConversationId = OnDialogue?.Invoke(user, id);
-            int conversationId = nullableConversationId.GetValueOrDefault();
+            int conversationId = (int)OnDialogue?.Invoke(user, id);
             // int conversationId = conversationUI.ShowDialogue(user, id);
             if (conversationId < 1)
             {
@@ -98,8 +98,9 @@ public class UserUI
                     List<int> ids = new();
                     ids.Add(id);
                     List<User> participants = _multipleUserData.GetUsersById(ids);
-                    // GÖRA DELEGAT HÄR
-                    conversationId = _connectionManager.MakeNew(participants, user).GetValueOrDefault();
+                    // DELEGAT HÄR GJORT
+                    // conversationId = _connectionManager.MakeNew(participants, user).GetValueOrDefault();
+                    conversationId = (int)OnMakeConversation?.Invoke(participants, user);
                 }
                 else
                 {
@@ -156,7 +157,9 @@ public class UserUI
             }
         } while (pressedKey != ConsoleKey.D);
         List<User> participants = _multipleUserData.GetUsersById(userIds);
-        conversationId = _connectionManager.MakeNew(participants, user).GetValueOrDefault();
+        // DENNA DELEGAT ANVÄNDS ANDRA GÅNGEN HÄR
+        conversationId = (int)OnMakeConversation?.Invoke(participants, user);
+        // conversationId = _connectionManager.MakeNew(participants, user);
         return conversationId;
     }
     public void MyPage(User user)

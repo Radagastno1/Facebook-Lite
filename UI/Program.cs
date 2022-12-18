@@ -14,9 +14,9 @@ internal class Program
     static SignUpUI signUpUI = new(userManager);
     static LogInManager logInManager = new(new LogInDB());
     static LogInUI logInUI = new(logInManager);
-    static UserUI userUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, conversationManager, commentsManager, userManager, userManager);
+    static UserUI userUI = new(userManager, postsManager, conversationManager,conversationManager, messageManager, commentsManager, userManager, userManager);
     static PostUI postUI = new(postsManager, commentsManager);
-    static ConversationUI conversationUI = new(conversationManager, messageManager, conversationManager);
+    static ConversationUI conversationUI = new(conversationManager, messageManager, conversationManager, conversationManager);
     static MessageUI messageUI = new(messageManager);
     //ATT FIXA
     //1. Fixa mer i UI, rensa ut metoder till conversationservice osv
@@ -26,6 +26,7 @@ internal class Program
     {
         userUI.OnDialogue += conversationUI.ShowDialogue;
         userUI.OnMakeMessage += messageUI.MakeMessage;
+        userUI.OnMakeConversation += conversationUI.MakeNewConversation;
    
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.BackgroundColor = ConsoleColor.White;
