@@ -6,6 +6,8 @@ public class UserManager : IManager<User, User>, IDeletionManager<User>, IMultip
     IDataSearcher<User> _dataSearcher;
     IDeletionData<User> _deletionData;
     IDataToObject<User> _userDataToObject;
+    public Action<User> OnDelete;
+
     public UserManager(IData<User> userData, IDataSearcher<User> dataSearcher, IDeletionData<User> deletionData, IDataToObject<User> userDataToObject)
     {
         _userData = userData;
@@ -24,7 +26,7 @@ public class UserManager : IManager<User, User>, IDeletionManager<User>, IMultip
         foreach (User u in foundUsers)
         {
             User availableUser = _userDataToObject.GetById(u.ID, user);
-            if(availableUser != null)
+            if (availableUser != null)
             {
                 usersAvailable.Add(availableUser);
             }
@@ -80,11 +82,12 @@ public class UserManager : IManager<User, User>, IDeletionManager<User>, IMultip
     {
         List<User> usersToDelete = _deletionData.GetInactive();
         int usersToDeletedTable = 0;
-        if (usersToDelete != null)
+        // if (usersToDelete == null) throw new InvalidOperationException("No users to delete");
+        if(usersToDelete != null)
         {
             foreach (User item in usersToDelete)
             {
-                _deletionData.UpdateToDeleted(item);
+                OnDelete?.Invoke(item);
                 usersToDeletedTable++;
             }
         }

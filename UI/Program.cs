@@ -24,9 +24,12 @@ internal class Program
     //2.5 lägg till is_visible på conversations table
     private static void Main(string[] args)
     {
-        userUI.OnDialogue += conversationUI.ShowDialogue;
-        userUI.OnMakeMessage += messageUI.MakeMessage;
-        userUI.OnMakeConversation += conversationUI.MakeNewConversation;
+        // userUI.OnDialogue += conversationUI.ShowDialogue;
+        // userUI.OnMakeMessage += messageUI.MakeMessage;
+        // userUI.OnMakeConversation += conversationUI.MakeNewConversation;
+        // userUI.OnShow += postUI.ShowPosts;
+        UsersDB usersDB = new();
+        userManager.OnDelete += usersDB.UpdateToDeleted;
    
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.BackgroundColor = ConsoleColor.White;

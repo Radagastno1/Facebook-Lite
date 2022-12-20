@@ -6,7 +6,8 @@ namespace DATABASE;
 public class UsersDB : IData<User>, IDataSearcher<User>, IDeletionData<User>, IDataToObject<User>
 {
     //1.fixa hur det ska se ut överallt om man är inaktiv
-    //namn ska synas som deleted user? ingen publik information osv 
+    //namn ska synas som deleted user? ingen publik information osv
+    // när deletas man helt? eller om man ens gör det från fb
     public int? Create(User obj)  //IDATA
     {
         int userId = 0;
@@ -116,25 +117,13 @@ public class UsersDB : IData<User>, IDataSearcher<User>, IDeletionData<User>, ID
         }
     }
 
-    public int? UpdateToDeleted(User user)
+    public void UpdateToDeleted(User user)
     {
-        //uppdatera något? vet ej
         string query = "START TRANSACTION; " +
         "UPDATE users SET is_deleted = true WHERE id = @Id; " +
         "UPDATE messages SET is_visible = false WHERE sender_id = @Id;" +
         "COMMIT;";
-        int rows = 0;
-        try
-        {
-            using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=true;"))
-
-                rows = con.ExecuteScalar<int>(query, param: user);
-
-            return rows;
-        }
-        catch (InvalidOperationException)
-        {
-            return null;
-        }
+        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=true;"))
+            con.ExecuteScalar<int>(query, param: user);
     }
 }
