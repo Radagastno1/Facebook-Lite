@@ -5,6 +5,7 @@ namespace UI;
 public class LogInUI
 {
     ILogInManager<User> _logInManager;
+      public Func<User, List<User>> OnLoggedIn;
     public LogInUI(ILogInManager<User> logInManager)
     {
         _logInManager = logInManager;
@@ -16,6 +17,7 @@ public class LogInUI
         try
         {
             User user = _logInManager.LogIn(email, passWord);
+            OnLoggedIn?.Invoke(user);
             return user;
         }
         catch(Exception e)

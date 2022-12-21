@@ -19,11 +19,10 @@ public class FriendManager
             // en delegat som kollar om man är vänner än eller ej, som kör denna och ändrar till att det står att man är vän? 
             _friendData.CheckIfFriends(user, friendId);
         }
-
     }
     public List<User> GetMyFriends(User user)
     {
-        List<User> friends = _friendData.GetMyFriends(user);
-        return friends;
+        user.MyFriends = _friendData.GetMyFriends(user);
+        return user.MyFriends;
     }
 }

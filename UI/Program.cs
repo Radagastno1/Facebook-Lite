@@ -6,6 +6,7 @@ using MySqlConnector;
 namespace UI;
 internal class Program
 {
+    //KOLLA UPP EV TRIGGER ELLER ANNAT SOM KOLLAR AUTOMATISKT OM MAN ÄR BLOCKAD/INAKTIV/DELETED
     static UserManager userManager = new(new UsersDB(), new UsersDB(), new UsersDB(), new UsersDB());
     static PostsManager postsManager = new(new PostsDB(), new PostsDB(), new PostsDB());
     static CommentsManager commentsManager = new(new CommentsDB(), new CommentsDB());
@@ -30,6 +31,9 @@ internal class Program
         // userUI.OnShow += postUI.ShowPosts;
         UsersDB usersDB = new();
         userManager.OnDelete += usersDB.UpdateToDeleted;
+
+        FriendManager friendManager = new(new FriendsDB());
+        logInUI.OnLoggedIn += friendManager.GetMyFriends;
    
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.BackgroundColor = ConsoleColor.White;

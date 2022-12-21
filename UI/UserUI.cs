@@ -15,10 +15,10 @@ public class UserUI
     public Func<User, int, int> OnDialogue;
     public Func<List<User>, User, int> OnMakeConversation;
     public Action<User, int> OnMakeMessage;
-    public Action<int, User> OnShow;
+    public Action<int, User> OnStart;
     List<ConsoleKey> keys = new();
     // public Action<int> OnStartDelegate;
-    
+
     public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IIdManager<Conversation> idManager, IManager<Message, User> messageManager, IManager<Comment, User> commentManager, IDeletionManager<User> deletionManager, IMultipleDataGetter<User, int> multipleUserData)
     {
         _userManager = userManager;
@@ -31,6 +31,7 @@ public class UserUI
         _multipleUserData = multipleUserData;
         deleted = _deletionManager.SetAsDeleted();  //deletar users som varit inaktiva i mer än 30 dagar när den startar
     }
+
     public int Searcher(User user)
     {
         int id = 0;
@@ -76,10 +77,10 @@ public class UserUI
         }
         else
         {
-            // PostUI postUI = new(_postManager, _commentManager);
+            PostUI postUI = new(_postManager, _commentManager);
             //DELEGAT HÄR GJORT
-            // postUI.ShowPosts(id, user);
-            OnShow?.Invoke(id, user);
+            postUI.ShowPosts(id, user);
+            // OnShow?.Invoke(id, user);
             pressedKey = ConsoleInput.GetPressedKey("[C] Comments  [R] Return", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.R));
             if (pressedKey == ConsoleKey.C) ChooseIfComment(id, user);
             else return;
@@ -130,11 +131,29 @@ public class UserUI
     {
         PostUI postUI = new(_postManager, _commentManager);
         ShowProfile(user.ID);
-        postUI.ShowPosts(user.ID, user);
-        ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[D]Delete post  [C] Comments  [R] Return", LogicTool.NewKeyList(ConsoleKey.D, ConsoleKey.C, ConsoleKey.R));
-        if (pressedKey == ConsoleKey.D) postUI.DeletePost(user);
-        else if (pressedKey == ConsoleKey.C) ChooseIfComment(user.ID, user);
-        else return;
+        Console.WriteLine("[Press any key]");
+        Console.ReadLine();
+        string[] overviewOptions = new string[]
+        { "[MY POSTS]","[MY FRIENDS]","[RETURN]"};
+        int menuOptions = 0;
+        menuOptions = ConsoleInput.GetMenuOptions(overviewOptions);
+        switch (menuOptions)
+        {
+            case 0:
+                postUI.ShowPosts(user.ID, user);
+                ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[D]Delete post  [C] Comments  [R] Return", LogicTool.NewKeyList(ConsoleKey.D, ConsoleKey.C, ConsoleKey.R));
+                if (pressedKey == ConsoleKey.D) postUI.DeletePost(user);
+                else if (pressedKey == ConsoleKey.C) ChooseIfComment(user.ID, user);
+                else return;
+                break;
+                case 1: 
+                FriendsUI.ShowMyFriends(user);
+                break;
+                case 2:
+                return;
+        }
+
+
     }
     public void ChooseIfComment(int userId, User user)
     {
@@ -169,7 +188,7 @@ public class UserUI
     {
         bool isResult = false;
         List<User> users = _userManager.GetBySearch(name, user);
-        if(users == null || users.Count < 1)
+        if (users == null || users.Count < 1)
         {
             Console.WriteLine("No person by " + name + " found.");
             isResult = false;
