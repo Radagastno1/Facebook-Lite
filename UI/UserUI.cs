@@ -12,6 +12,7 @@ public class UserUI
     IManager<Comment, User> _commentManager;
     IDeletionManager<User> _deletionManager;
     IMultipleDataGetter<User, int> _multipleUserData;
+    IFriendManager _friendManager;
     public Func<User, int, int> OnDialogue;
     public Func<List<User>, User, int> OnMakeConversation;
     public Action<User, int> OnMakeMessage;
@@ -19,7 +20,7 @@ public class UserUI
     List<ConsoleKey> keys = new();
     // public Action<int> OnStartDelegate;
 
-    public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IIdManager<Conversation> idManager, IManager<Message, User> messageManager, IManager<Comment, User> commentManager, IDeletionManager<User> deletionManager, IMultipleDataGetter<User, int> multipleUserData)
+    public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IIdManager<Conversation> idManager, IManager<Message, User> messageManager, IManager<Comment, User> commentManager, IDeletionManager<User> deletionManager, IMultipleDataGetter<User, int> multipleUserData, IFriendManager friendManager)
     {
         _userManager = userManager;
         _postManager = postManager;
@@ -30,6 +31,7 @@ public class UserUI
         _deletionManager = deletionManager;
         _multipleUserData = multipleUserData;
         deleted = _deletionManager.SetAsDeleted();  //deletar users som varit inaktiva i mer än 30 dagar när den startar
+        _friendManager = friendManager;
     }
 
     public int Searcher(User user)
@@ -44,10 +46,19 @@ public class UserUI
     }
     public void InteractWithUser(User user, int id)
     {
-        //dessa här under behövs inte pga delegaterna så skönt :)
+           FriendsUI friendsUI = new(_friendManager);
+        //dessa här under behövs inte pga delegaterna men blir konstigt
         // MessageUI messageUI = new(_messageManager);
         // ConversationUI conversationUI = new(_conversationManager, _messageManager, _idManager);
         ShowProfile(id);
+        if (!FriendsUI.IsFriends(user, id))
+        {
+            ConsoleKey key = ConsoleInput.GetPressedKey("[F] Friendrequest  [N] Not now", LogicTool.NewKeyList(ConsoleKey.F, ConsoleKey.N));
+            if (key == ConsoleKey.F)
+            {
+                friendsUI.FriendRequest(user, id);
+            }
+        }
         ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[M] Message  [P] Posts", LogicTool.NewKeyList(ConsoleKey.M, ConsoleKey.P));
         if (pressedKey == ConsoleKey.M)
         {
@@ -146,10 +157,10 @@ public class UserUI
                 else if (pressedKey == ConsoleKey.C) ChooseIfComment(user.ID, user);
                 else return;
                 break;
-                case 1: 
+            case 1:
                 FriendsUI.ShowMyFriends(user);
                 break;
-                case 2:
+            case 2:
                 return;
         }
 
@@ -214,7 +225,7 @@ public class UserUI
                 $"\tI N F O R M A T I O N            ",
                 $"\tGender: {user.Gender}            ",
                 $"\tAbout me: {user.AboutMe}          ",
-                $"                                    "
+                $"                                    ",
            };
         if (user != null)
         {

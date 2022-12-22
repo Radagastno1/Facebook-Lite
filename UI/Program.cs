@@ -12,10 +12,11 @@ internal class Program
     static CommentsManager commentsManager = new(new CommentsDB(), new CommentsDB());
     static ConversationManager conversationManager = new(new ConversationDB(), new ConversationDB(), new MessagesDB(), new ConversationDB(), new ConversationDB());
     static MessgageManager messageManager = new(new MessagesDB(), new MessagesDB());
+    static FriendManager friendManager = new(new FriendsDB());
     static SignUpUI signUpUI = new(userManager);
     static LogInManager logInManager = new(new LogInDB());
     static LogInUI logInUI = new(logInManager);
-    static UserUI userUI = new(userManager, postsManager, conversationManager,conversationManager, messageManager, commentsManager, userManager, userManager);
+    static UserUI userUI = new(userManager, postsManager, conversationManager,conversationManager, messageManager, commentsManager, userManager, userManager, friendManager);
     static PostUI postUI = new(postsManager, commentsManager);
     static ConversationUI conversationUI = new(conversationManager, messageManager, conversationManager, conversationManager);
     static MessageUI messageUI = new(messageManager);

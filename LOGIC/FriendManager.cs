@@ -1,6 +1,6 @@
 using CORE;
 namespace LOGIC;
-public class FriendManager
+public class FriendManager : IFriendManager
 {
     IFriendData<User> _friendData;
     public FriendManager(IFriendData<User> friendData)

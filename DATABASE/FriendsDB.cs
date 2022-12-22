@@ -10,13 +10,14 @@ public class FriendsDB : IFriendData<User>
         //om den andra svarar ja, så körs insert även för den som svarar ja.
         //på det viset blir båda satta som users_id1 och var och en har en relation med varandra
         //när man SVARAR JA på en friendrequest så kommer table uppdateras för båda till is_accepted = TRUE via update
-        string query =
-        "INSERT INTO users_friends (users_id1, users_id2) VALUES(@userId, @friendId);";
-        throw new NotImplementedException();
+        using MySqlConnection connection = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+        string query = "INSERT INTO users_friends (users_id1, users_id2) VALUES(@userId, @friendId);";
+        return connection.ExecuteScalar<int>(query, new { @userId = user.ID, @friendId = friendId});
     }
     public int? DeleteFriendship(User user, int friendId)
     {
         //däremot om en raderar relationen, så försvinner den från båda håll
+        using MySqlConnection connection = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
         string query = "START TRANSACTION;" +
         "DELETE FROM TABLE users_friends WHERE users_id1 = @userId AND users_id2 = @friendId;" +
         "DELETE FROM TABLE users_friends WHERE users_id1 = @friendId AND users_id2 = @userId;" +
