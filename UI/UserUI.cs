@@ -12,6 +12,7 @@ public class UserUI
     IManager<Comment, User> _commentManager;
     IDeletionManager<User> _deletionManager;
     IMultipleDataGetter<User, int> _multipleUserData;
+    // IConnectingMultiple<User> _connectingMultiple;
     IFriendManager _friendManager;
     public Func<User, int, int> OnDialogue;
     public Func<List<User>, User, int> OnMakeConversation;
@@ -62,6 +63,7 @@ public class UserUI
         ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[M] Message  [P] Posts", LogicTool.NewKeyList(ConsoleKey.M, ConsoleKey.P));
         if (pressedKey == ConsoleKey.M)
         {
+            // ConversationUI conversationUI = new(_conversationManager, _messageManager, _idManager, _multipleUserData);
             //DELEGAT HÄR GJORT
             int conversationId = (int)OnDialogue?.Invoke(user, id);
             // int conversationId = conversationUI.ShowDialogue(user, id);

@@ -84,17 +84,24 @@ public class UsersDB : IData<User>, IDataSearcher<User>, IDeletionData<User>, ID
     public User GetById(int id, User user)
     {
         User foundUser = new();
-        string query = "SELECT u.id, u.first_name as 'FirstName', u.last_name as 'LastName', " +
-        "DATE_FORMAT(u.birth_date, '%Y-%m-%d') as 'BirthDate', u.gender, " +
-        "u.about_me as 'AboutMe', r.name as 'Role' " +
-        "FROM users u LEFT JOIN users_roles ur ON ur.users_id = u.id " +
-        "LEFT JOIN roles r ON r.id = ur.roles_id WHERE u.is_deleted = false " +
-        "AND u.id = @id " +
-        "AND u.id not in (select blocked_user_id from users_blocked where users_id = @userId) " +
-        "AND u.id not in (select users_id FROM users_blocked where blocked_user_id = @userId);";
-        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
-        foundUser = con.QuerySingle<User>(query, new { @id = id, @userId = user.ID });
-        return foundUser;
+        try
+        {
+            string query = "SELECT u.id, u.first_name as 'FirstName', u.last_name as 'LastName', " +
+               "DATE_FORMAT(u.birth_date, '%Y-%m-%d') as 'BirthDate', u.gender, " +
+               "u.about_me as 'AboutMe', r.name as 'Role' " +
+               "FROM users u LEFT JOIN users_roles ur ON ur.users_id = u.id " +
+               "LEFT JOIN roles r ON r.id = ur.roles_id WHERE u.is_deleted = false " +
+               "AND u.id = @id " +
+               "AND u.id not in (select blocked_user_id from users_blocked where users_id = @userId) " +
+               "AND u.id not in (select users_id FROM users_blocked where blocked_user_id = @userId);";
+            using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+            foundUser = con.QuerySingle<User>(query, new { @id = id, @userId = user.ID });
+            return foundUser;
+        }
+        catch(InvalidOperationException)
+        {
+            return null;
+        }
     }
 
     public List<User> GetInactive()

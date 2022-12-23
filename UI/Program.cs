@@ -26,14 +26,13 @@ internal class Program
     //2.5 lägg till is_visible på conversations table
     private static void Main(string[] args)
     {
-        // userUI.OnDialogue += conversationUI.ShowDialogue;
-        // userUI.OnMakeMessage += messageUI.MakeMessage;
+        FriendManager friendManager = new(new FriendsDB());
+        userUI.OnDialogue += conversationUI.ShowDialogue;
+        userUI.OnMakeMessage += messageUI.MakeMessage;
         // userUI.OnMakeConversation += conversationUI.MakeNewConversation;
         // userUI.OnShow += postUI.ShowPosts;
         UsersDB usersDB = new();
         userManager.OnDelete += usersDB.UpdateToDeleted;
-
-        FriendManager friendManager = new(new FriendsDB());
         logInUI.OnLoggedIn += friendManager.GetMyFriends;
    
         Console.ForegroundColor = ConsoleColor.Blue;

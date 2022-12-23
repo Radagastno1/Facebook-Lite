@@ -31,6 +31,6 @@ public class FriendsUI
 
     public void FriendRequest(User user, int friendId)
     {
-        _friendManager.FriendRequest(user, friendId);
+        if(_friendManager.FriendRequest(user, friendId))Console.WriteLine("You are friends!");
     }
 }

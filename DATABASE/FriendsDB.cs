@@ -12,7 +12,7 @@ public class FriendsDB : IFriendData<User>
         //när man SVARAR JA på en friendrequest så kommer table uppdateras för båda till is_accepted = TRUE via update
         using MySqlConnection connection = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
         string query = "INSERT INTO users_friends (users_id1, users_id2) VALUES(@userId, @friendId);";
-        return connection.ExecuteScalar<int>(query, new { @userId = user.ID, @friendId = friendId});
+        return connection.ExecuteScalar<int>(query, new { @userId = user.ID, @friendId = friendId });
     }
     public int? DeleteFriendship(User user, int friendId)
     {
@@ -34,15 +34,22 @@ public class FriendsDB : IFriendData<User>
         List<User> friends = connection.Query<User>(query, new { @userId = user.ID }).ToList();
         return friends;
     }
-    public int CheckIfFriends(User user, int friendId)
+    public List<int> CheckIfFriends(User user, int friendId)
+    {
+        List<int> ids = new();
+        using MySqlConnection connection = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+        string query = "SELECT id FROM users_friends WHERE users_id1 = @userId AND users_id2 = @friendId " +
+        " OR users_id1 = @friendId AND users_id2 = @userId;";
+        ids = connection.Query<int>(query, new { @userId = user.ID, @friendId = friendId }).ToList();
+        return ids;
+    }
+    public int CheckIfBefriended(User user, int friendId)
     {
         using MySqlConnection connection = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
-        string query = "SELECT id FROM users_friends WHERE users_id1 = @userId AND users_id2 = @friendId " + 
-        " OR users_id1 = @friendId AND users_id2 = @userId;";
+        string query = "SELECT id FROM users_friends WHERE users_id1 = @userId AND users_id2 = @friendId";
         int id = connection.QuerySingle<int>(query, new { @userId = user.ID, @friendId = friendId });
         return id;
     }
-
     public int? Update(User user, int friendId) //uppdaterar till att man har accepterat förfrågan
     {
         string query = "START TRANSACTION;" +

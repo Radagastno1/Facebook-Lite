@@ -7,7 +7,7 @@ public class FriendManager : IFriendManager
     {
         _friendData = friendData;
     }
-    public void FriendRequest(User user, int friendId)
+    public bool FriendRequest(User user, int friendId)
     {
         // hämta alla mina vänner
         List<User> friends = _friendData.GetMyFriends(user);
@@ -17,8 +17,12 @@ public class FriendManager : IFriendManager
             // skicka vänförfrågan 
             _friendData.CreateFriendRequest(user, friendId);
             // en delegat som kollar om man är vänner än eller ej, som kör denna och ändrar till att det står att man är vän? 
-            _friendData.CheckIfFriends(user, friendId);
+            if (_friendData.CheckIfFriends(user, friendId).Count() == 2)
+            {
+                return true;
+            }
         }
+        return false;
     }
     public List<User> GetMyFriends(User user)
     {
