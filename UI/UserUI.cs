@@ -47,17 +47,20 @@ public class UserUI
     }
     public void InteractWithUser(User user, int id)
     {
-           FriendsUI friendsUI = new(_friendManager);
+        FriendsUI friendsUI = new(_friendManager);
         //dessa här under behövs inte pga delegaterna men blir konstigt
         // MessageUI messageUI = new(_messageManager);
         // ConversationUI conversationUI = new(_conversationManager, _messageManager, _idManager);
         ShowProfile(id);
         if (!FriendsUI.IsFriends(user, id))
         {
-            ConsoleKey key = ConsoleInput.GetPressedKey("[F] Friendrequest  [N] Not now", LogicTool.NewKeyList(ConsoleKey.F, ConsoleKey.N));
-            if (key == ConsoleKey.F)
+            if (!friendsUI.IsFriendRequestSent(user, id))
             {
-                friendsUI.FriendRequest(user, id);
+                ConsoleKey key = ConsoleInput.GetPressedKey("[F] Friendrequest  [N] Not now", LogicTool.NewKeyList(ConsoleKey.F, ConsoleKey.N));
+                if (key == ConsoleKey.F)
+                {
+                    friendsUI.FriendRequest(user, id);
+                }
             }
         }
         ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[M] Message  [P] Posts", LogicTool.NewKeyList(ConsoleKey.M, ConsoleKey.P));

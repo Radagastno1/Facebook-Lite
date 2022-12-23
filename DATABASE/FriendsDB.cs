@@ -36,6 +36,7 @@ public class FriendsDB : IFriendData<User>
     }
     public List<int> CheckIfFriends(User user, int friendId)
     {
+        //NÄSTA STEG, KOLLA OM MAN ÄR VÄN OCH ISÅFALL UPPDATERA TILL VÄNNER
         List<int> ids = new();
         using MySqlConnection connection = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
         string query = "SELECT id FROM users_friends WHERE users_id1 = @userId AND users_id2 = @friendId " +

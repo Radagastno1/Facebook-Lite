@@ -9,20 +9,17 @@ public class FriendManager : IFriendManager
     }
     public bool FriendRequest(User user, int friendId)
     {
-        // hämta alla mina vänner
-        List<User> friends = _friendData.GetMyFriends(user);
-        if (friends.Where(friend => friend.ID == friendId).Count() < 1)
+        _friendData.CreateFriendRequest(user, friendId);
+        // en delegat som kollar om man är vänner än eller ej, som kör denna och ändrar till att det står att man är vän? 
+        if (_friendData.CheckIfFriends(user, friendId).Count() == 2)
         {
-            // om inte vi redan är vänner 
-            // skicka vänförfrågan 
-            _friendData.CreateFriendRequest(user, friendId);
-            // en delegat som kollar om man är vänner än eller ej, som kör denna och ändrar till att det står att man är vän? 
-            if (_friendData.CheckIfFriends(user, friendId).Count() == 2)
-            {
-                return true;
-            }
+            return true;
         }
-        return false;
+        else return false;
+    }
+    public int CheckIfBefriended(User user, int friendId)
+    {
+        return _friendData.CheckIfBefriended(user, friendId);
     }
     public List<User> GetMyFriends(User user)
     {

@@ -28,6 +28,18 @@ public class FriendsUI
         }
         return false;
     }
+    public bool IsFriendRequestSent(User user, int friendId)
+    {
+        if(_friendManager.CheckIfBefriended(user, friendId) == null || _friendManager.CheckIfBefriended(user, friendId) < 0)
+        {
+            return false;
+        }
+        else
+        {
+            Console.WriteLine("Friendrequest sent!");
+            return true;
+        }
+    }
 
     public void FriendRequest(User user, int friendId)
     {
