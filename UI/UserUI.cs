@@ -12,14 +12,12 @@ public class UserUI
     IManager<Comment, User> _commentManager;
     IDeletionManager<User> _deletionManager;
     IMultipleDataGetter<User, int> _multipleUserData;
-    // IConnectingMultiple<User> _connectingMultiple;
     IFriendManager _friendManager;
     public Func<User, int, int> OnDialogue;
     public Func<List<User>, User, int> OnMakeConversation;
     public Action<User, int> OnMakeMessage;
     public Action<int, User> OnStart;
     List<ConsoleKey> keys = new();
-    // public Action<int> OnStartDelegate;
     public Action<User> LoadFriends;
 
     public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IIdManager<Conversation> idManager, IManager<Message, User> messageManager, IManager<Comment, User> commentManager, IDeletionManager<User> deletionManager, IMultipleDataGetter<User, int> multipleUserData, IFriendManager friendManager)
@@ -35,7 +33,6 @@ public class UserUI
         deleted = _deletionManager.SetAsDeleted();  //deletar users som varit inaktiva i mer än 30 dagar när den startar
         _friendManager = friendManager;
     }
-
     public int Searcher(User user)
     {
         int id = 0;
@@ -69,13 +66,11 @@ public class UserUI
             {
                 case 0:
                     PostUI postUI = new(_postManager, _commentManager);
-                    //DELEGAT HÄR GJORT
                     postUI.ShowPosts(id, user);
-                    // OnShow?.Invoke(id, user);
                     key = ConsoleInput.GetPressedKey("[C] Comments  [R] Return", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.R));
                     if (key == ConsoleKey.C)
                     {
-                        ChooseIfComment(id, user);
+                        ChooseIfComment(user);
                     }
                     else return;
                     Console.ReadKey();
@@ -90,8 +85,6 @@ public class UserUI
                             List<int> ids = new();
                             ids.Add(id);
                             List<User> participants = _multipleUserData.GetUsersById(ids, user);
-                            // DELEGAT HÄR GJORT
-                            // conversationId = _connectionManager.MakeNew(participants, user).GetValueOrDefault();
                             conversationId = (int)OnMakeConversation?.Invoke(participants, user);
                         }
                         else
@@ -99,9 +92,7 @@ public class UserUI
                             return;
                         }
                     }
-                    //DELEGAT HÄR GJORT
                     OnMakeMessage?.Invoke(user, conversationId);
-                    // messageUI.MakeMessage(user, conversationId);
                     Console.ReadKey();
                     break;
                 case 2:
@@ -109,8 +100,6 @@ public class UserUI
                 case 3:
                     if (status == 1)
                     {
-                        //lägg till add friend i arrayen att välja på !! :) 
-                        //sen detta om man väljer att adda friend
                         friendsUI.FriendRequest(user, id);
                         LoadFriends?.Invoke(user);
                     }
@@ -176,7 +165,7 @@ public class UserUI
                 postUI.ShowPosts(user.ID, user);
                 ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[D]Delete post  [C] Comments  [R] Return", LogicTool.NewKeyList(ConsoleKey.D, ConsoleKey.C, ConsoleKey.R));
                 if (pressedKey == ConsoleKey.D) postUI.DeletePost(user);
-                else if (pressedKey == ConsoleKey.C) ChooseIfComment(user.ID, user);
+                else if (pressedKey == ConsoleKey.C) ChooseIfComment(user);
                 else return;
                 break;
             case 1:
@@ -185,24 +174,21 @@ public class UserUI
             case 2:
                 return;
         }
-
-
     }
-    public void ChooseIfComment(int userId, User user)
+    public void ChooseIfComment(User user)
     {
         PostUI postUI = new(_postManager, _commentManager);
         int postId = ConsoleInput.GetInt("Choose post: ");
         ConsoleKey key = ConsoleInput.GetPressedKey("\t[C] Comment   [V] View Comments", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.V));
         if (key == ConsoleKey.C)
         {
-            postUI.CommentPost(userId, postId);
+            postUI.CommentPost(user.ID, postId);
         }
         else if (key == ConsoleKey.V)
         {
             postUI.ShowCommentsOnPost(postId, user);
         }
     }
-
     public void MySettings(User user)
     {
         ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[E] Edit profile [D] Delete account", LogicTool.NewKeyList(ConsoleKey.E, ConsoleKey.D));

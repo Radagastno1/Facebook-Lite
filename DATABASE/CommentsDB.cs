@@ -5,24 +5,24 @@ using MySqlConnector;
 namespace DATABASE;
 public class CommentsDB : IData<Comment>, IDataToList<Comment, User>
 {
-    public int? Create(Comment obj)  //IDATA
+    public int? Create(Comment comment)  //IDATA
     {
         int messageId = 0;
         string query = "INSERT INTO posts (content, users_id, posts_types_id, on_post_id) " +
         "VALUES (@Content, @UserId, 2, @OnPostId);";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
-            messageId = con.ExecuteScalar<int>(query, param: obj);
+            messageId = con.ExecuteScalar<int>(query, param: comment);
         }
         return messageId;
     }
-    public int? Delete(Comment obj)  //IDATA   //fixa att man bara kan radera sin egen kommentar ELLER om dom är på SIN egen post
+    public int? Delete(Comment comment)  //IDATA   //fixa att man bara kan radera sin egen kommentar ELLER om dom är på SIN egen post
     {
         int messageId = 0;
         string query = "UPDATE posts SET is_visible = FALSE WHERE id = @Id AND on_post_id = @OnPostId;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
-            messageId = con.ExecuteScalar<int>(query, param: obj);
+            messageId = con.ExecuteScalar<int>(query, param: comment);
         }
         return messageId;
     }
@@ -52,13 +52,13 @@ public class CommentsDB : IData<Comment>, IDataToList<Comment, User>
         }
         return commentsOnPost;
     }
-    public int? Update(Comment obj)
+    public int? Update(Comment comment)
     {
         int rowsEffected = 0;
         string query = "UPDATE posts SET content = @Content WHERE id = @Id;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
-            rowsEffected = con.ExecuteScalar<int>(query, param: obj);
+            rowsEffected = con.ExecuteScalar<int>(query, param: comment);
         }
         return rowsEffected;
     }
