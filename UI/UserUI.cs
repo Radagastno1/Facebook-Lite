@@ -20,6 +20,7 @@ public class UserUI
     public Action<int, User> OnStart;
     List<ConsoleKey> keys = new();
     // public Action<int> OnStartDelegate;
+    public Action<User> CheckFriendship;
 
     public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IIdManager<Conversation> idManager, IManager<Message, User> messageManager, IManager<Comment, User> commentManager, IDeletionManager<User> deletionManager, IMultipleDataGetter<User, int> multipleUserData, IFriendManager friendManager)
     {
@@ -47,6 +48,10 @@ public class UserUI
     }
     public void InteractWithUser(User user, int id)
     {
+        //kan det räcka med denna checkfriends?
+        CheckFriendship?.Invoke(user);
+        // och att detta under händer beroende på vännerna i listan useer har här
+
         FriendsUI friendsUI = new(_friendManager, user);
         //dessa här under behövs inte pga delegaterna men blir konstigt
         // MessageUI messageUI = new(_messageManager);
@@ -60,6 +65,7 @@ public class UserUI
                 if (key == ConsoleKey.F)
                 {
                     friendsUI.FriendRequest(user, id);
+                    CheckFriendship?.Invoke(user);
                 }
             }
         }

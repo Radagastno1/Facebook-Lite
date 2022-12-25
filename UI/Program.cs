@@ -37,6 +37,8 @@ internal class Program
         userManager.OnDelete += usersDB.UpdateToDeleted;
         logInUI.OnLoggedIn += friendManager.SetToFriends;
         logInUI.OnLoggedIn += friendManager.LoadMyFriends;
+        userUI.CheckFriendship += friendManager.SetToFriends;
+        userUI.CheckFriendship += friendManager.LoadMyFriends;
 
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.BackgroundColor = ConsoleColor.White;

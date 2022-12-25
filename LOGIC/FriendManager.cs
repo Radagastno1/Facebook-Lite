@@ -9,13 +9,21 @@ public class FriendManager : IFriendManager
     }
     public bool FriendRequest(User user, int friendId)
     {
-        _friendData.CreateFriendRequest(user, friendId);
-        // en delegat som kollar om man är vänner än eller ej, som kör denna och ändrar till att det står att man är vän? 
-        if (_friendData.CheckIfFriendAccepted(user, friendId) > 0)
+        try
         {
+            _friendData.CreateFriendRequest(user, friendId);
             return true;
         }
-        else return false;
+        catch(InvalidOperationException)
+        {
+            return false;
+        }
+        // // en delegat som kollar om man är vänner än eller ej, som kör denna och ändrar till att det står att man är vän? 
+        // if (_friendData.CheckIfFriendAccepted(user, friendId) > 0)
+        // {
+        //     return true;
+        // }
+        // else return false;
     }
     public int CheckIfBefriended(User user, int friendId)
     {
