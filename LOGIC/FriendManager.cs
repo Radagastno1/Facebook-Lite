@@ -34,7 +34,11 @@ public class FriendManager : IFriendManager
         List<int> friendsToBeAccepted = new();
         foreach (int id in friendRequestsIds)
         {
-            if (_friendData.CheckIfFriendAccepted(user, id) > 0)
+            if (_friendData.CheckIfFriendAccepted(user, id) < 1)
+            {
+                break;
+            }
+            else
             {
                 friendsToBeAccepted.Add(id);
             }

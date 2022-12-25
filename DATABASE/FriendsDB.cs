@@ -47,10 +47,17 @@ public class FriendsDB : IFriendData<User>
     }
     public int CheckIfFriendAccepted(User user, int friendId)
     {
-        using MySqlConnection connection = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
-        string query = "SELECT id FROM users_friends WHERE users_id1 = @friendId AND users_id2 = @userId";
-        int id = connection.QuerySingle<int>(query, new { @userId = user.ID, @friendId = friendId });
-        return id;
+        try
+        {
+            using MySqlConnection connection = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+            string query = "SELECT id FROM users_friends WHERE users_id1 = @friendId AND users_id2 = @userId";
+            int id = connection.QuerySingle<int>(query, new { @userId = user.ID, @friendId = friendId });
+            return id;
+        }
+        catch (InvalidOperationException)
+        {
+            return 0;
+        }
     }
 
     public int CheckIfBefriended(User user, int friendId)
@@ -67,7 +74,7 @@ public class FriendsDB : IFriendData<User>
         "UPDATE users_friends SET is_accepted = TRUE WHERE users_id1 = @userId AND users_id2 = @friendId;" +
         "UPDATE users_friends SET is_accepted = TRUE WHERE users_id1 = @friendId AND users_id2 = @userId;" +
         "COMMIT;";
-        int row = connection.ExecuteScalar<int>(query, new{@userId = user.ID, @friendId = friendId});
+        int row = connection.ExecuteScalar<int>(query, new { @userId = user.ID, @friendId = friendId });
         return row;
     }
 }
