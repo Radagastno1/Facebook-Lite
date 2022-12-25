@@ -39,7 +39,7 @@ public class ConversationManager : IManager<Conversation,User>, IConnectingMulti
     {
         throw new NotImplementedException();    //ska kunna söka efter konversationer via namn i sin chatt
     }
-    public Conversation GetOne(int data)
+    public Conversation GetOne(int data, User user)
     {
         return new Conversation();
     }

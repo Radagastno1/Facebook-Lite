@@ -47,11 +47,11 @@ public class UserUI
     }
     public void InteractWithUser(User user, int id)
     {
-        FriendsUI friendsUI = new(_friendManager);
+        FriendsUI friendsUI = new(_friendManager, user);
         //dessa här under behövs inte pga delegaterna men blir konstigt
         // MessageUI messageUI = new(_messageManager);
         // ConversationUI conversationUI = new(_conversationManager, _messageManager, _idManager);
-        ShowProfile(id);
+        if (!ShowProfile(id, user)) return;
         if (!FriendsUI.IsFriends(user, id))
         {
             if (!friendsUI.IsFriendRequestSent(user, id))
@@ -77,7 +77,7 @@ public class UserUI
                 {
                     List<int> ids = new();
                     ids.Add(id);
-                    List<User> participants = _multipleUserData.GetUsersById(ids);
+                    List<User> participants = _multipleUserData.GetUsersById(ids, user);
                     // DELEGAT HÄR GJORT
                     // conversationId = _connectionManager.MakeNew(participants, user).GetValueOrDefault();
                     conversationId = (int)OnMakeConversation?.Invoke(participants, user);
@@ -137,7 +137,7 @@ public class UserUI
                 userIds.Add(id);
             }
         } while (pressedKey != ConsoleKey.D);
-        List<User> participants = _multipleUserData.GetUsersById(userIds);
+        List<User> participants = _multipleUserData.GetUsersById(userIds, user);
         // DENNA DELEGAT ANVÄNDS ANDRA GÅNGEN HÄR
         conversationId = (int)OnMakeConversation?.Invoke(participants, user);
         // conversationId = _connectionManager.MakeNew(participants, user);
@@ -146,7 +146,7 @@ public class UserUI
     public void MyPage(User user)
     {
         PostUI postUI = new(_postManager, _commentManager);
-        ShowProfile(user.ID);
+        ShowProfile(user.ID, user);
         Console.WriteLine("[Press any key]");
         Console.ReadLine();
         string[] overviewOptions = new string[]
@@ -192,7 +192,7 @@ public class UserUI
         if (pressedKey == ConsoleKey.E)
         {
             EditInformation(user);
-            user = _userManager.GetOne(user.ID);
+            user = _userManager.GetOne(user.ID, user);
         }
         else
         {
@@ -219,26 +219,28 @@ public class UserUI
         }
         return isResult;
     }
-    public void ShowProfile(int id)
+    public bool ShowProfile(int id, User user)
     {
-        User user = _userManager.GetOne(id);
-        Console.Title = $"{user.FirstName} {user.LastName}";
+        User userToShow = _userManager.GetOne(id, user);
+        if (userToShow == null) return false;
+        Console.Title = $"{userToShow.FirstName} {userToShow.LastName}";
         string[] userData = new string[]
            {
                 $"\n\t{Console.Title}                 ",
                 $"                                ",
                 $"\tI N F O R M A T I O N            ",
-                $"\tGender: {user.Gender}            ",
-                $"\tAbout me: {user.AboutMe}          ",
+                $"\tGender: {userToShow.Gender}            ",
+                $"\tAbout me: {userToShow.AboutMe}          ",
                 $"                                    ",
            };
-        if (user != null)
+        if (userToShow != null)
         {
             foreach (string row in userData)
             {
                 Console.WriteLine(row);
             }
         }
+        return true;
     }
     public void ShowConversationParticipants(List<int> ids)
     {

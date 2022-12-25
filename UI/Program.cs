@@ -16,7 +16,7 @@ internal class Program
     static SignUpUI signUpUI = new(userManager);
     static LogInManager logInManager = new(new LogInDB());
     static LogInUI logInUI = new(logInManager);
-    static UserUI userUI = new(userManager, postsManager, conversationManager,conversationManager, messageManager, commentsManager, userManager, userManager, friendManager);
+    static UserUI userUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, commentsManager, userManager, userManager, friendManager);
     static PostUI postUI = new(postsManager, commentsManager);
     static ConversationUI conversationUI = new(conversationManager, messageManager, conversationManager, conversationManager);
     static MessageUI messageUI = new(messageManager);
@@ -29,12 +29,13 @@ internal class Program
         FriendManager friendManager = new(new FriendsDB());
         userUI.OnDialogue += conversationUI.ShowDialogue;
         userUI.OnMakeMessage += messageUI.MakeMessage;
-        // userUI.OnMakeConversation += conversationUI.MakeNewConversation;
+                // userUI.OnMakeConversation += conversationUI.MakeNewConversation;
         // userUI.OnShow += postUI.ShowPosts;
         UsersDB usersDB = new();
         userManager.OnDelete += usersDB.UpdateToDeleted;
-        logInUI.OnLoggedIn += friendManager.GetMyFriends;
-   
+        logInUI.OnLoggedIn += friendManager.SetToFriends;
+        logInUI.OnLoggedIn += friendManager.LoadMyFriends;
+
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.BackgroundColor = ConsoleColor.White;
         string title = @"   _____ _    ____ _____ ____   ___   ___  _  __  _     ___ _____ _____ 
@@ -91,6 +92,8 @@ internal class Program
     }
     public static void ShowMyFacebook(User user)
     {
+        // FriendsUI friendsUI = new(friendManager, user);
+        // friendsUI.OnFriendUI += friendManager.LoadMyFriends;
         string[] overviewOptions = new string[]
         { "[PUBLISH]","[SEARCH]","[MESSENGER]", "[MY PAGE]","[SETTINGS]", "[LOG OUT]" };
         int menuOptions = 0;

@@ -33,25 +33,33 @@ public class UserManager : IManager<User, User>, IDeletionManager<User>, IMultip
         }
         return usersAvailable;
     }
-    public User GetOne(int id)
+    public User GetOne(int id, User user)
     {
-        List<User> allUsers = _userData.GetAll();
-        User user = new();
-        foreach (User item in allUsers)
+        // List<User> allUsers = _userData.GetAll();
+        // User user = new();
+        // foreach (User item in allUsers)
+        // {
+        //     if (item.ID == id)
+        //     {
+        //         user = item;
+        //     }
+        // }
+        try
         {
-            if (item.ID == id)
-            {
-                user = item;
-            }
+            User foundUser = _userDataToObject.GetById(id, user);
+            return foundUser;
         }
-        return user;
+        catch(InvalidOperationException)
+        {
+            return null;
+        }
     }
-    public List<User> GetUsersById(List<int> ids)
+    public List<User> GetUsersById(List<int> ids, User user)
     {
         List<User> participants = new();
         foreach (int id in ids)
         {
-            User participant = GetOne(id);
+            User participant = GetOne(id, user);
             participants.Add(participant);
         }
         return participants;
@@ -83,7 +91,7 @@ public class UserManager : IManager<User, User>, IDeletionManager<User>, IMultip
         List<User> usersToDelete = _deletionData.GetInactive();
         int usersToDeletedTable = 0;
         // if (usersToDelete == null) throw new InvalidOperationException("No users to delete");
-        if(usersToDelete != null)
+        if (usersToDelete != null)
         {
             foreach (User item in usersToDelete)
             {

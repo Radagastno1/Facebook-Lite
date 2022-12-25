@@ -19,11 +19,11 @@ public class PostUI
     public void PublishPost(User user)
     {
         int postId = MakePost(user);
-        ShowPostById(postId);
+        ShowPostById(postId, user);
         ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[E] Edit  [P] Publish", LogicTool.NewKeyList(ConsoleKey.E, ConsoleKey.P));
         if (pressedKey == ConsoleKey.E)
         {
-            EditPost(postId);
+            EditPost(postId, user);
         }
         else return;
     }
@@ -44,9 +44,9 @@ public class PostUI
         }
         // int postId = ConsoleInput.GetInt("[0] Return   [ChoosePost] See Post");
     }
-    public void ShowPostById(int postId)
+    public void ShowPostById(int postId, User user)
     {
-        Post post = _postManager.GetOne(postId);
+        Post post = _postManager.GetOne(postId, user);
         Console.WriteLine(post.ToString());
     }
     public void CommentPost(int userId, int postId)
@@ -77,9 +77,9 @@ public class PostUI
             Console.WriteLine("No comments yet..");
         }
     }
-    public void EditPost(int postId)
+    public void EditPost(int postId, User user)
     {
-        Post post = _postManager.GetOne(postId);
+        Post post = _postManager.GetOne(postId, user);
         post.Content = ConsoleInput.GetString("Edit post: ");
         _postManager.Update(post);
     }
@@ -87,7 +87,7 @@ public class PostUI
     public void DeletePost(User user)
     {
         int postId = ConsoleInput.GetInt("Post to delete: ");
-        Post post = _postManager.GetOne(postId);
+        Post post = _postManager.GetOne(postId, user);
         ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[D] Delete post  [R] Return", LogicTool.NewKeyList(ConsoleKey.D, ConsoleKey.R));
         if (pressedKey == ConsoleKey.D)
         {

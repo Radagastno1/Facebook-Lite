@@ -5,7 +5,7 @@ namespace UI;
 public class LogInUI
 {
     ILogInManager<User> _logInManager;
-      public Func<User, List<User>> OnLoggedIn;
+      public Action<User> OnLoggedIn;
     public LogInUI(ILogInManager<User> logInManager)
     {
         _logInManager = logInManager;

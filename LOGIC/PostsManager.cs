@@ -29,7 +29,7 @@ public class PostsManager : IManager<Post, User>
         }
         return searchedPosts;
     }
-    public Post GetOne(int postId)  //ska lösas via sql
+    public Post GetOne(int postId, User user)  //ska lösas via sql
     {
          Post post = _postIdData.GetIds(postId);
         return post;

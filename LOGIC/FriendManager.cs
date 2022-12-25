@@ -11,7 +11,7 @@ public class FriendManager : IFriendManager
     {
         _friendData.CreateFriendRequest(user, friendId);
         // en delegat som kollar om man är vänner än eller ej, som kör denna och ändrar till att det står att man är vän? 
-        if (_friendData.CheckIfFriends(user, friendId).Count() == 2)
+        if (_friendData.CheckIfFriendAccepted(user, friendId) > 0)
         {
             return true;
         }
@@ -19,11 +19,40 @@ public class FriendManager : IFriendManager
     }
     public int CheckIfBefriended(User user, int friendId)
     {
-        return _friendData.CheckIfBefriended(user, friendId);
+        try
+        {
+            return _friendData.CheckIfBefriended(user, friendId);
+        }
+        catch (InvalidOperationException)
+        {
+            return 0;
+        }
     }
-    public List<User> GetMyFriends(User user)
+    public void SetToFriends(User user)
     {
-        user.MyFriends = _friendData.GetMyFriends(user);
-        return user.MyFriends;
+        List<int> friendRequestsIds = _friendData.GetMyFriendRequests(user);
+        List<int> friendsToBeAccepted = new();
+        foreach (int id in friendRequestsIds)
+        {
+            if (_friendData.CheckIfFriendAccepted(user, id) > 0)
+            {
+                friendsToBeAccepted.Add(id);
+            }
+        }
+        foreach (int id in friendsToBeAccepted)
+        {
+            _friendData.Update(user, id);
+        }
+    }
+    public void LoadMyFriends(User user)
+    {
+        try
+        {
+            user.MyFriends = _friendData.GetMyFriends(user);
+        }
+        catch (InvalidOperationException)
+        {
+            user.MyFriends = new();
+        }
     }
 }

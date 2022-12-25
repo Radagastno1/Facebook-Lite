@@ -4,23 +4,24 @@ namespace UI;
 public class FriendsUI
 {
     IFriendManager _friendManager;
-    public FriendsUI(IFriendManager friendManager)
+    // public Action<User> OnFriendUI;
+    public FriendsUI(IFriendManager friendManager, User user)
     {
         _friendManager = friendManager;
+        // OnFriendUI?.Invoke(user);
     }
-
     public static void ShowMyFriends(User user)
     {
-        foreach(User friend in user.MyFriends)
+        foreach (User friend in user.MyFriends)
         {
             Console.WriteLine(friend.ToString());
         }
     }
     public static bool IsFriends(User user, int friendId)
     {
-        foreach(User friend in user.MyFriends)
+        foreach (User friend in user.MyFriends)
         {
-            if(friend.ID == friendId)
+            if (friend.ID == friendId)
             {
                 Console.WriteLine("You are friends!");
                 return true;
@@ -30,7 +31,7 @@ public class FriendsUI
     }
     public bool IsFriendRequestSent(User user, int friendId)
     {
-        if(_friendManager.CheckIfBefriended(user, friendId) == null || _friendManager.CheckIfBefriended(user, friendId) < 0)
+        if (_friendManager.CheckIfBefriended(user, friendId) == null || _friendManager.CheckIfBefriended(user, friendId) < 1)
         {
             return false;
         }
@@ -43,6 +44,6 @@ public class FriendsUI
 
     public void FriendRequest(User user, int friendId)
     {
-        if(_friendManager.FriendRequest(user, friendId))Console.WriteLine("You are friends!");
+        if (_friendManager.FriendRequest(user, friendId)) Console.WriteLine("You are friends!");
     }
 }

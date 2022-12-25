@@ -1,6 +1,6 @@
 namespace LOGIC;
 public interface IMultipleDataGetter<Tone, Ttwo>
 {
-    public List<Tone> GetUsersById(List<Ttwo> data);
+    public List<Tone> GetUsersById(List<Ttwo> data, Tone obj);
 }
 

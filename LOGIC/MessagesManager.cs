@@ -53,7 +53,7 @@ public class MessgageManager : IManager<Message, User>
         throw new NotImplementedException();
     }
 
-    public Message GetOne(int data1)    //hämta specifikt medd? vet ej
+    public Message GetOne(int data1, User user)    //hämta specifikt medd? vet ej
     {
         throw new NotImplementedException();
     }

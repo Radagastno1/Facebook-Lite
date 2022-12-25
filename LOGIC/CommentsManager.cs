@@ -30,7 +30,7 @@ public class CommentsManager : IManager<Comment, User>
     {
         throw new NotImplementedException();  //sök efter kommentarer i en post via namn?
     }
-    public Comment GetOne(int data)
+    public Comment GetOne(int data, User user)
     {
         throw new NotImplementedException();  //hämta specifik kommentar
     }

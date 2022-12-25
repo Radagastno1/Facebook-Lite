@@ -34,16 +34,25 @@ public class FriendsDB : IFriendData<User>
         List<User> friends = connection.Query<User>(query, new { @userId = user.ID }).ToList();
         return friends;
     }
-    public List<int> CheckIfFriends(User user, int friendId)
+    public List<int> GetMyFriendRequests(User user)
     {
         //NÄSTA STEG, KOLLA OM MAN ÄR VÄN OCH ISÅFALL UPPDATERA TILL VÄNNER
         List<int> ids = new();
         using MySqlConnection connection = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
-        string query = "SELECT id FROM users_friends WHERE users_id1 = @userId AND users_id2 = @friendId " +
-        " OR users_id1 = @friendId AND users_id2 = @userId;";
-        ids = connection.Query<int>(query, new { @userId = user.ID, @friendId = friendId }).ToList();
+        string query = "SELECT users_id2 " +
+                "FROM users_friends  " +
+                "WHERE users_id1 = @userId;";
+        ids = connection.Query<int>(query, new { @userId = user.ID }).ToList();
         return ids;
     }
+    public int CheckIfFriendAccepted(User user, int friendId)
+    {
+        using MySqlConnection connection = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+        string query = "SELECT id FROM users_friends WHERE users_id1 = @friendId AND users_id2 = @userId";
+        int id = connection.QuerySingle<int>(query, new { @userId = user.ID, @friendId = friendId });
+        return id;
+    }
+
     public int CheckIfBefriended(User user, int friendId)
     {
         using MySqlConnection connection = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
@@ -53,10 +62,12 @@ public class FriendsDB : IFriendData<User>
     }
     public int? Update(User user, int friendId) //uppdaterar till att man har accepterat förfrågan
     {
+        using MySqlConnection connection = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
         string query = "START TRANSACTION;" +
         "UPDATE users_friends SET is_accepted = TRUE WHERE users_id1 = @userId AND users_id2 = @friendId;" +
         "UPDATE users_friends SET is_accepted = TRUE WHERE users_id1 = @friendId AND users_id2 = @userId;" +
         "COMMIT;";
-        throw new NotImplementedException();
+        int row = connection.ExecuteScalar<int>(query, new{@userId = user.ID, @friendId = friendId});
+        return row;
     }
 }
