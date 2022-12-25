@@ -14,26 +14,24 @@ public class FriendManager : IFriendManager
             _friendData.CreateFriendRequest(user, friendId);
             return true;
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             return false;
         }
-        // // en delegat som kollar om man är vänner än eller ej, som kör denna och ändrar till att det står att man är vän? 
-        // if (_friendData.CheckIfFriendAccepted(user, friendId) > 0)
-        // {
-        //     return true;
-        // }
-        // else return false;
     }
-    public int CheckIfBefriended(User user, int friendId)
+    public bool CheckIfBefriended(User user, int friendId)
     {
         try
         {
-            return _friendData.CheckIfBefriended(user, friendId);
+            if (_friendData.CheckIfBefriended(user, friendId) > 0)
+            {
+                return true;
+            }
+            else return false;
         }
         catch (InvalidOperationException)
         {
-            return 0;
+            return false;
         }
     }
     public void SetToFriends(User user)
@@ -54,6 +52,18 @@ public class FriendManager : IFriendManager
         foreach (int id in friendsToBeAccepted)
         {
             _friendData.Update(user, id);
+        }
+    }
+    public bool IsFriendRequestWaiting(User user, int friendId)
+    {
+        try
+        {
+            if(_friendData.CheckIfFriendAccepted(user, friendId) > 0) return true;
+            else return false;
+        }
+        catch(InvalidOperationException)
+        {
+            return false;
         }
     }
     public void LoadMyFriends(User user)

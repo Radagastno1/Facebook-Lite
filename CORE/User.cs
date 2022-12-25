@@ -12,6 +12,7 @@ public class User
     public Roles Role { get; private set; }
     public string AboutMe { get; set; }
     public List<User> MyFriends {get;set;}
+    public int FriendStatus{get;set;}
     public User() { }
     public User(string aFirstName, string aLastName, string aEmail, string aPassWord, string aBirthDate, string aGender)
     {

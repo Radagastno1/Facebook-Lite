@@ -20,7 +20,7 @@ public class UserUI
     public Action<int, User> OnStart;
     List<ConsoleKey> keys = new();
     // public Action<int> OnStartDelegate;
-    public Action<User> CheckFriendship;
+    public Action<User> LoadFriends;
 
     public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IIdManager<Conversation> idManager, IManager<Message, User> messageManager, IManager<Comment, User> commentManager, IDeletionManager<User> deletionManager, IMultipleDataGetter<User, int> multipleUserData, IFriendManager friendManager)
     {
@@ -48,64 +48,75 @@ public class UserUI
     }
     public void InteractWithUser(User user, int id)
     {
-        //kan det räcka med denna checkfriends?
-        CheckFriendship?.Invoke(user);
-        // och att detta under händer beroende på vännerna i listan useer har här
+        while (true)
+        {
+            if (!ShowProfile(id, user)) return;
+            ConsoleKey key = ConsoleInput.GetPressedKey("[C] Check out user   [R] Return", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.R));
+            if (key == ConsoleKey.R)
+            {
+                return;
+            }
+            string[] overviewOptions = new string[]
+              {"[POSTS]","[MESSAGE]","[RETURN]"};
+            int menuOptions = 0;
 
-        FriendsUI friendsUI = new(_friendManager, user);
-        //dessa här under behövs inte pga delegaterna men blir konstigt
-        // MessageUI messageUI = new(_messageManager);
-        // ConversationUI conversationUI = new(_conversationManager, _messageManager, _idManager);
-        if (!ShowProfile(id, user)) return;
-        if (!FriendsUI.IsFriends(user, id))
-        {
-            if (!friendsUI.IsFriendRequestSent(user, id))
+            FriendsUI friendsUI = new(_friendManager, user);
+            int status = friendsUI.GetFriendShipStatus(user, id);
+            if (status == 1) overviewOptions = overviewOptions.Concat(new string[] { "[ADD FRIEND]" }).ToArray();
+
+            menuOptions = ConsoleInput.GetMenuOptions(overviewOptions);
+            switch (menuOptions)
             {
-                ConsoleKey key = ConsoleInput.GetPressedKey("[F] Friendrequest  [N] Not now", LogicTool.NewKeyList(ConsoleKey.F, ConsoleKey.N));
-                if (key == ConsoleKey.F)
-                {
-                    friendsUI.FriendRequest(user, id);
-                    CheckFriendship?.Invoke(user);
-                }
+                case 0:
+                    PostUI postUI = new(_postManager, _commentManager);
+                    //DELEGAT HÄR GJORT
+                    postUI.ShowPosts(id, user);
+                    // OnShow?.Invoke(id, user);
+                    key = ConsoleInput.GetPressedKey("[C] Comments  [R] Return", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.R));
+                    if (key == ConsoleKey.C)
+                    {
+                        ChooseIfComment(id, user);
+                    }
+                    else return;
+                    Console.ReadKey();
+                    break;
+                case 1:
+                    int conversationId = (int)OnDialogue?.Invoke(user, id);
+                    if (conversationId < 1)
+                    {
+                        key = ConsoleInput.GetPressedKey("[S]Start conversation  [R] Return", LogicTool.NewKeyList(ConsoleKey.S, ConsoleKey.R));
+                        if (key == ConsoleKey.S)
+                        {
+                            List<int> ids = new();
+                            ids.Add(id);
+                            List<User> participants = _multipleUserData.GetUsersById(ids, user);
+                            // DELEGAT HÄR GJORT
+                            // conversationId = _connectionManager.MakeNew(participants, user).GetValueOrDefault();
+                            conversationId = (int)OnMakeConversation?.Invoke(participants, user);
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+                    //DELEGAT HÄR GJORT
+                    OnMakeMessage?.Invoke(user, conversationId);
+                    // messageUI.MakeMessage(user, conversationId);
+                    Console.ReadKey();
+                    break;
+                case 2:
+                    continue;
+                case 3:
+                    if (status == 1)
+                    {
+                        //lägg till add friend i arrayen att välja på !! :) 
+                        //sen detta om man väljer att adda friend
+                        friendsUI.FriendRequest(user, id);
+                        LoadFriends?.Invoke(user);
+                    }
+                    Console.ReadKey();
+                    break;
             }
-        }
-        ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[M] Message  [P] Posts", LogicTool.NewKeyList(ConsoleKey.M, ConsoleKey.P));
-        if (pressedKey == ConsoleKey.M)
-        {
-            // ConversationUI conversationUI = new(_conversationManager, _messageManager, _idManager, _multipleUserData);
-            //DELEGAT HÄR GJORT
-            int conversationId = (int)OnDialogue?.Invoke(user, id);
-            // int conversationId = conversationUI.ShowDialogue(user, id);
-            if (conversationId < 1)
-            {
-                pressedKey = ConsoleInput.GetPressedKey("[S]Start conversation  [R] Return", LogicTool.NewKeyList(ConsoleKey.S, ConsoleKey.R));
-                if (pressedKey == ConsoleKey.S)
-                {
-                    List<int> ids = new();
-                    ids.Add(id);
-                    List<User> participants = _multipleUserData.GetUsersById(ids, user);
-                    // DELEGAT HÄR GJORT
-                    // conversationId = _connectionManager.MakeNew(participants, user).GetValueOrDefault();
-                    conversationId = (int)OnMakeConversation?.Invoke(participants, user);
-                }
-                else
-                {
-                    return;
-                }
-            }
-            //DELEGAT HÄR GJORT
-            OnMakeMessage?.Invoke(user, conversationId);
-            // messageUI.MakeMessage(user, conversationId);
-        }
-        else
-        {
-            PostUI postUI = new(_postManager, _commentManager);
-            //DELEGAT HÄR GJORT
-            postUI.ShowPosts(id, user);
-            // OnShow?.Invoke(id, user);
-            pressedKey = ConsoleInput.GetPressedKey("[C] Comments  [R] Return", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.R));
-            if (pressedKey == ConsoleKey.C) ChooseIfComment(id, user);
-            else return;
         }
     }
     public void Messenger(User user)

@@ -31,14 +31,14 @@ internal class Program
         FriendManager friendManager = new(new FriendsDB());
         userUI.OnDialogue += conversationUI.ShowDialogue;
         userUI.OnMakeMessage += messageUI.MakeMessage;
-                // userUI.OnMakeConversation += conversationUI.MakeNewConversation;
+        // userUI.OnMakeConversation += conversationUI.MakeNewConversation;
         // userUI.OnShow += postUI.ShowPosts;
         UsersDB usersDB = new();
         userManager.OnDelete += usersDB.UpdateToDeleted;
         logInUI.OnLoggedIn += friendManager.SetToFriends;
         logInUI.OnLoggedIn += friendManager.LoadMyFriends;
-        userUI.CheckFriendship += friendManager.SetToFriends;
-        userUI.CheckFriendship += friendManager.LoadMyFriends;
+        userUI.LoadFriends += friendManager.SetToFriends;
+        userUI.LoadFriends += friendManager.LoadMyFriends;
 
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.BackgroundColor = ConsoleColor.White;
