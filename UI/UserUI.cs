@@ -43,7 +43,7 @@ public class UserUI
         }
         return id;
     }
-    public void InteractWithUser(User user, int id)
+    public void InteractWithUser(User user, int id)  //döpa till meny? sätta som statisk i program?
     {
         while (true)
         {
@@ -60,6 +60,7 @@ public class UserUI
             FriendsUI friendsUI = new(_friendManager, user);
             int status = friendsUI.GetFriendShipStatus(user, id);
             if (status == 1) overviewOptions = overviewOptions.Concat(new string[] { "[ADD FRIEND]" }).ToArray();
+            else if (status == 3) overviewOptions = overviewOptions.Concat(new string[] { "[CONFIRM FRIEND REQUEST]" }).ToArray();
 
             menuOptions = ConsoleInput.GetMenuOptions(overviewOptions);
             switch (menuOptions)
@@ -72,7 +73,10 @@ public class UserUI
                     {
                         ChooseIfComment(user);
                     }
-                    else return;
+                    else if (key == ConsoleKey.R)
+                    {
+                        continue;
+                    }
                     Console.ReadKey();
                     break;
                 case 1:
@@ -98,7 +102,7 @@ public class UserUI
                 case 2:
                     continue;
                 case 3:
-                    if (status == 1)
+                    if (status == 1 || status == 3)
                     {
                         friendsUI.FriendRequest(user, id);
                         LoadFriends?.Invoke(user);
@@ -222,11 +226,23 @@ public class UserUI
         }
         return isResult;
     }
-    public bool ShowProfile(int id, User user)
+    public string MakeViewName(string firstName, string lastName)
     {
+        string joinedNames = firstName + " " + lastName;
+        string viewName = string.Empty;
+        for(int i = 0; i < joinedNames.Length; i++)
+        {
+            viewName += joinedNames[i] + " ";
+        }
+        return viewName;
+    }
+
+    public bool ShowProfile(int id, User user)
+    {   
+        FriendsUI friendsUI = new(_friendManager, user);
         User userToShow = _userManager.GetOne(id, user);
         if (userToShow == null) return false;
-        Console.Title = $"{userToShow.FirstName} {userToShow.LastName}";
+        Console.Title = $"{MakeViewName(userToShow.FirstName, userToShow.LastName)}";
         string[] userData = new string[]
            {
                 $"\n\t{Console.Title}                 ",
@@ -235,6 +251,7 @@ public class UserUI
                 $"\tGender: {userToShow.Gender}            ",
                 $"\tAbout me: {userToShow.AboutMe}          ",
                 $"                                    ",
+                $"{friendsUI.ShowFriendShipStatus(id, user)} ",
            };
         if (userToShow != null)
         {

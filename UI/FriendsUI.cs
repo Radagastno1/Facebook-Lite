@@ -72,4 +72,22 @@ public class FriendsUI
         }
         return status;
     }
+    public string ShowFriendShipStatus(int id, User user)
+    {
+        int status = GetFriendShipStatus(user, id);
+        string statusString = string.Empty;
+        switch (status)
+        {
+            case 2:
+                statusString = "[FriendRequest Sent]";
+                break;
+            case 3:
+                statusString = "[Confirm Request]";
+                break;
+            case 4:
+                statusString = "[Friends]";
+                break;
+        }
+        return statusString;
+    }
 }

@@ -29,9 +29,10 @@ internal class Program
     private static void Main(string[] args)
     {
         FriendManager friendManager = new(new FriendsDB());
+        // dessa under ska inte vara delegat, var bara som övning i början 
         userUI.OnDialogue += conversationUI.ShowDialogue;
         userUI.OnMakeMessage += messageUI.MakeMessage;
-        // userUI.OnMakeConversation += conversationUI.MakeNewConversation;
+        userUI.OnMakeConversation += conversationUI.MakeNewConversation;
         // userUI.OnShow += postUI.ShowPosts;
         UsersDB usersDB = new();
         userManager.OnDelete += usersDB.UpdateToDeleted;
