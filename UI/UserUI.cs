@@ -54,7 +54,7 @@ public class UserUI
                 return;
             }
             string[] overviewOptions = new string[]
-              {"[POSTS]","[MESSAGE]","[RETURN]"};
+              {"[POSTS]","[MESSAGE]","[RETURN]", "[BLOCK USER]"};
             int menuOptions = 0;
 
             FriendsUI friendsUI = new(_friendManager, user);
@@ -102,7 +102,11 @@ public class UserUI
                 case 2:
                     continue;
                 case 3:
-                    if (status == 1 || status == 3)
+                    Console.WriteLine("blockera");
+                    Console.ReadKey();
+                    break;
+                    case 4:
+                     if (status == 1 || status == 3)
                     {
                         friendsUI.FriendRequest(user, id);
                         LoadFriends?.Invoke(user);
