@@ -3,7 +3,7 @@ using LOGIC;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class BlockingsDB : IBlockingData<User>
+public class BlockingsDB : IRelationsData<User>
 {
     public int Create(User user, int blockedUserId)
     {
@@ -33,10 +33,10 @@ public class BlockingsDB : IBlockingData<User>
         List<User> blockedUsers = con.Query<User>(query, new{@userId = user.ID}).ToList();
         return blockedUsers;
     }
-    // public int? Update(User obj)
-    // {
-    //     throw new NotImplementedException();
-    // }
+    public int Update(User obj, int blockedUserId)
+    {
+        throw new NotImplementedException();
+    }
     //THIS NEEDS TO BE ADDED IN QUERY WHERE SELECTING MESSAGES, CONVERSATIONS, POSTS, COMMENTS ETC:
     //WHERE users_id not in 
     // (select blocked_user_id from users_blocked where users_id = 22);

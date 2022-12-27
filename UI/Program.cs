@@ -12,11 +12,12 @@ internal class Program
     static CommentsManager commentsManager = new(new CommentsDB(), new CommentsDB());
     static ConversationManager conversationManager = new(new ConversationDB(), new ConversationDB(), new MessagesDB(), new ConversationDB(), new ConversationDB());
     static MessgageManager messageManager = new(new MessagesDB(), new MessagesDB());
-    static FriendManager friendManager = new(new FriendsDB());
+    static FriendManager friendManager = new(new FriendsDB(), new FriendsDB());
+    static BlockingManager blockingManager = new(new BlockingsDB());
     static SignUpUI signUpUI = new(userManager);
     static LogInManager logInManager = new(new LogInDB());
     static LogInUI logInUI = new(logInManager);
-    static UserUI userUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, commentsManager, userManager, userManager, friendManager);
+    static UserUI userUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, commentsManager, userManager, userManager, friendManager, blockingManager);
     static PostUI postUI = new(postsManager, commentsManager);
     static ConversationUI conversationUI = new(conversationManager, messageManager, conversationManager, conversationManager);
     static MessageUI messageUI = new(messageManager);
@@ -26,9 +27,9 @@ internal class Program
     //2.5 lägg till is_visible på conversations table
     //3. fixa att man kollar om man är vänner direkt när man har skickat vänförfrågan!
     //4. om man blockar eller blir blockad ska vänskapen deletas från båda håll!
+    //5. fixa in string title som inparamter i menymetoden! så det blir som login sidan med title = facebook
     private static void Main(string[] args)
     {
-        FriendManager friendManager = new(new FriendsDB());
         // dessa under ska inte vara delegat, var bara som övning i början 
         userUI.OnDialogue += conversationUI.ShowDialogue;
         userUI.OnMakeMessage += messageUI.MakeMessage;

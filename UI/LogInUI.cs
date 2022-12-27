@@ -22,8 +22,6 @@ public class LogInUI
         }
         catch(Exception e)
         {
-            Console.WriteLine("Wrong email or password." + e.Message);
-            Console.ReadLine();
             return null;
         }
     }

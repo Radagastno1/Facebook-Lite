@@ -3,15 +3,17 @@ namespace LOGIC;
 public class FriendManager : IFriendManager
 {
     IFriendData<User> _friendData;
-    public FriendManager(IFriendData<User> friendData)
+    IRelationsData<User> _relationsData;
+    public FriendManager(IFriendData<User> friendData, IRelationsData<User> relationsData)
     {
         _friendData = friendData;
+        _relationsData = relationsData;
     }
     public bool FriendRequest(User user, int friendId)
     {
         try
         {
-            _friendData.CreateFriendRequest(user, friendId);
+            _relationsData.Create(user, friendId);
             return true;
         }
         catch (InvalidOperationException)
@@ -51,7 +53,7 @@ public class FriendManager : IFriendManager
         }
         foreach (int id in friendsToBeAccepted)
         {
-            _friendData.Update(user, id);
+            _relationsData.Update(user, id);
         }
     }
     public bool IsFriendRequestWaiting(User user, int friendId)
@@ -70,7 +72,7 @@ public class FriendManager : IFriendManager
     {
         try
         {
-            user.MyFriends = _friendData.GetMyFriends(user);
+            user.MyFriends =  _relationsData.GetMine(user);
         }
         catch (InvalidOperationException)
         {

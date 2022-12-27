@@ -9,7 +9,7 @@ public class LogInManager : ILogInManager<User>
     {
         _logInUser = logInUser;
     }
-    public User LogIn(string email, string passWord)  // ska ist prata med logindb!!
+    public User LogIn(string email, string passWord)  
     {
         try
         {

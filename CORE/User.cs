@@ -11,7 +11,7 @@ public class User
     public string Gender { get; private set; }
     public Roles Role { get; private set; }
     public string AboutMe { get; set; }
-    public List<User> MyFriends {get;set;}
+    public List<User> MyFriends {get;set;} = new();
     public int FriendStatus{get;set;}
     public User() { }
     public User(string aFirstName, string aLastName, string aEmail, string aPassWord, string aBirthDate, string aGender)
