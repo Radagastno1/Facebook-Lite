@@ -125,54 +125,35 @@ public class UserUI
     {
         List<int> ids = new();
         ids.Add(user.ID);
-        try
+        List<Conversation> foundConversations = new();
+        List<string> conversationToList = new();
+        conversationToList.Add("[Return]");
+
+        foundConversations = _idManager.GetParticipantsPerConversation(ids);
+        if (foundConversations != null)
         {
-            List<Conversation> foundConversations = _idManager.GetParticipantsPerConversation(ids);
-            List<string> conversationToList = new();
-            conversationToList.Add("[Return]");
             foreach (Conversation c in foundConversations)
             {
                 conversationToList.Add(c.ToString());
             }
-            string[] conversationsToArray = conversationToList.ToArray();
-            int amountOfChoices = conversationsToArray.Length;
-            int menuOptions = 0;
-            while (true)
+        }
+        string[] conversationsToArray = conversationToList.ToArray();
+        int amountOfChoices = conversationsToArray.Length;
+        int menuOptions = 0;
+        while (true)
+        {
+            menuOptions = ConsoleInput.GetMenuOptions(conversationsToArray);
+            switch (menuOptions)
             {
-                menuOptions = ConsoleInput.GetMenuOptions(conversationsToArray);
-                switch (menuOptions)
-                {
-                    case 0:
-                        return;
-                    case int n when (n > 0):
-                        int conversationsId = foundConversations[n - 1].ID;
-                        ShowMessages(conversationsId, user);
-                        Console.ReadKey();
-                        break;
-                }
+                case 0:
+                    return;
+                case int n when (n > 0):
+                    int conversationsId = foundConversations[n - 1].ID;
+                    ShowMessages(conversationsId, user);
+                    Console.ReadKey();
+                    break;
             }
         }
-        catch (NullReferenceException)
-        {
-            Console.WriteLine("No conversations yet..");
-        }
-        // MessageUI messageUI = new(_messageManager);
-        // List<int> ids = new();
-        // ids.Add(user.ID);
-        // ShowConversationParticipants(ids);
-        // ConsoleKey pressedKey = ConsoleInput.GetPressedKey($"[C] Choose conversation  [N] New Conversation", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.N));
-        // if (pressedKey == ConsoleKey.C)
-        // {
-        //     int conversationId = ConsoleInput.GetInt("Choose: ");
-        //     ShowMessages(conversationId, user);
-        //     messageUI.MakeMessage(user, conversationId);
-        // }
-        // else
-        // {
-        //     int newConversationId = AddPeopleToNewConversation(user);
-        //     ShowMessages(newConversationId, user);
-        //     messageUI.MakeMessage(user, newConversationId);
-        // }
     }
     public int AddPeopleToNewConversation(User user)
     {

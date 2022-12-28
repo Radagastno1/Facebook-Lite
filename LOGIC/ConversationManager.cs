@@ -107,6 +107,10 @@ public class ConversationManager : IManager<Conversation, User>, IConnectingMult
         {
             return null;
         }
+        catch(NullReferenceException)
+        {
+            return null;
+        }
     }
     public List<Conversation> GetById(List<int> ids)
     {
