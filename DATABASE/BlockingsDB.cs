@@ -26,7 +26,7 @@ public class BlockingsDB : IRelationsData<User>
     public List<User> GetMine(User user)
     {
         //hämta de men har blockerat till en lista
-        string query = "SELECT u.id, u.first_name, u.last_name FROM users u " +
+        string query = "SELECT u.id, u.first_name AS 'FirstName', u.last_name AS 'LastName' FROM users u " +
         "INNER JOIN users_blocked ub ON u.id = ub.blocked_user_id " +
         "WHERE ub.users_id = @userId;";
         using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");

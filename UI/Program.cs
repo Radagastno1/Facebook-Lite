@@ -25,7 +25,6 @@ internal class Program
     //1. Fixa mer i UI, rensa ut metoder till conversationservice osv
     //2. om man är inaktiv/raderad och har en dialog-konversation ska den stå som is_visible = false 
     //2.5 lägg till is_visible på conversations table
-    //3. fixa att man kollar om man är vänner direkt när man har skickat vänförfrågan!
     //4. om man blockar eller blir blockad ska vänskapen deletas från båda håll!
     //5. fixa in string title som inparamter i menymetoden! så det blir som login sidan med title = facebook
     private static void Main(string[] args)
@@ -36,11 +35,13 @@ internal class Program
         userUI.OnMakeConversation += conversationUI.MakeNewConversation;
         // userUI.OnShow += postUI.ShowPosts;
         UsersDB usersDB = new();
+        FriendsDB friendsDB = new();
         userManager.OnDelete += usersDB.UpdateToDeleted;
         logInUI.OnLoggedIn += friendManager.SetToFriends;
         logInUI.OnLoggedIn += friendManager.LoadMyFriends;
         userUI.LoadFriends += friendManager.SetToFriends;
         userUI.LoadFriends += friendManager.LoadMyFriends;
+        blockingManager.OnBlockUser += friendsDB.Delete;
 
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.BackgroundColor = ConsoleColor.White;
@@ -127,6 +128,7 @@ internal class Program
                     break;
                 case 4:
                     userUI.MySettings(user);
+                    Console.ReadKey();
                     break;
                 case 5:
                     return;

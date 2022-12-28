@@ -104,7 +104,8 @@ public class UserUI
                 case 2:
                     continue;
                 case 3:
-                    Console.WriteLine("blockera");
+                    BlockingsUI blockingsUI = new(_blockingsManager);
+                    blockingsUI.BlockUser(user, id);
                     Console.ReadKey();
                     break;
                 case 4:
@@ -201,10 +202,6 @@ public class UserUI
     }
     public void MySettings(User user)
     {
-        ConsoleKey pressedKey = ConsoleInput.GetPressedKey("[E] Edit profile  [B] Blocked users  [D] Delete account", LogicTool.NewKeyList(ConsoleKey.E, ConsoleKey.B, ConsoleKey.D));
-
-        // FriendsUI friendsUI = new(friendManager, user);
-        // friendsUI.OnFriendUI += friendManager.LoadMyFriends;
         string[] overviewOptions = new string[]
         { "[EDIT PROFILE]","[BLOCKED USERS]","[DELETE ACCOUNT]", "[RETURN]"};
         int menuOptions = 0;

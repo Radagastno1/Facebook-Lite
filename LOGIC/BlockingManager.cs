@@ -3,11 +3,11 @@ namespace LOGIC;
 public class BlockingManager : IBlockingsManager<User>
 {
     IRelationsData<User> _relationsData;
+    public Func<User, int, int> OnBlockUser;
     public BlockingManager(IRelationsData<User> relationsData)
     {
         _relationsData = relationsData;
     }
-
     public int BlockUser(User user, int id)
     {
         int blockedId = 0;
@@ -15,9 +15,10 @@ public class BlockingManager : IBlockingsManager<User>
         {
             try
             {
+                OnBlockUser?.Invoke(user, id);
                 blockedId = _relationsData.Create(user, id);
             }
-            catch(InvalidOperationException)
+            catch (InvalidOperationException)
             {
                 blockedId = 0;
             }
@@ -25,9 +26,16 @@ public class BlockingManager : IBlockingsManager<User>
         return blockedId;
     }
 
-    public List<User> GetMyBlockedUsers(User obj)
+    public List<User> GetMyBlockedUsers(User user)
     {
-        throw new NotImplementedException();
+        try
+        {
+            return _relationsData.GetMine(user);
+        }
+        catch (InvalidOperationException)
+        {
+            return null;
+        }
     }
 
     public int UnBlockUser(User obj, int id)
