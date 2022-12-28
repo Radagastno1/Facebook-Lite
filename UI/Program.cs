@@ -25,7 +25,7 @@ internal class Program
     //1. Fixa mer i UI, rensa ut metoder till conversationservice osv
     //2. om man är inaktiv/raderad och har en dialog-konversation ska den stå som is_visible = false 
     //2.5 lägg till is_visible på conversations table
-    //4. om man blockar eller blir blockad ska vänskapen deletas från båda håll!
+    //4. om man blockar eller blir blockad ska man ej kunna se meddelancen, konversationer, kommentarer osv
     //5. fixa in string title som inparamter i menymetoden! så det blir som login sidan med title = facebook
     private static void Main(string[] args)
     {
