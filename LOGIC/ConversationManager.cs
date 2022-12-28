@@ -1,14 +1,14 @@
 using CORE;
 namespace LOGIC;
 
-public class ConversationManager : IManager<Conversation,User>, IConnectingMultiple<User>, IIdManager<Conversation>
+public class ConversationManager : IManager<Conversation, User>, IConnectingMultiple<User>, IIdManager<Conversation>
 {
     IData<Conversation> _conversationData;
     IDataToList<Conversation, User> _conversationsDataToList;
     IData<Message> _messageData;
     IExtraData<Conversation> _extraData;
     IIdData<ConversationResult> _getIdData;
-    public ConversationManager(IData<Conversation> conversationData,IDataToList<Conversation, User> conversationsDataToList, IData<Message> messageData, IExtraData<Conversation> extraData, IIdData<ConversationResult> getIdData)
+    public ConversationManager(IData<Conversation> conversationData, IDataToList<Conversation, User> conversationsDataToList, IData<Message> messageData, IExtraData<Conversation> extraData, IIdData<ConversationResult> getIdData)
     {
         _conversationData = conversationData;
         _messageData = messageData;
@@ -90,6 +90,24 @@ public class ConversationManager : IManager<Conversation,User>, IConnectingMulti
         }
         return conversationId;
     }
+    public List<Conversation> GetParticipantsPerConversation(List<int> ids)
+    {
+        try
+        {
+            List<Conversation> conversations = GetIds(ids).Conversations;
+            List<int> conversationsIds = new();
+            foreach (Conversation c in conversations)
+            {
+                conversationsIds.Add(c.ID);
+            }
+            List<Conversation> foundConversations = GetById(conversationsIds);
+            return foundConversations;
+        }
+        catch (InvalidOperationException)
+        {
+            return null;
+        }
+    }
     public List<Conversation> GetById(List<int> ids)
     {
         ConversationResult result = new();
@@ -113,7 +131,7 @@ public class ConversationManager : IManager<Conversation,User>, IConnectingMulti
             Conversation dialogue = _extraData.GetDialogueId(userId, id);
             return dialogue;
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             return null;
         }

@@ -20,16 +20,28 @@ public class ConversationUI
         ids.Add(id);
         try
         {
-            List<Conversation> conversations = _idManager.GetIds(ids).Conversations;
-            List<int> conversationsIds = new();
-            foreach (Conversation c in conversations)
-            {
-                conversationsIds.Add(c.ID);
-            }
-            List<Conversation> foundConversations = _idManager.GetById(conversationsIds);
+            List<Conversation> foundConversations = _idManager.GetParticipantsPerConversation(ids);
+            List<string> conversationToList = new();
+            conversationToList.Add("[Return]");
             foreach (Conversation c in foundConversations)
             {
-                Console.WriteLine(c.ToString());
+                conversationToList.Add(c.ToString());
+            }
+            string [] conversationsToArray = conversationToList.ToArray();
+            int amountOfChoices = conversationsToArray.Length;
+            int menuOptions = 0;
+            while (true)
+            {
+                menuOptions = ConsoleInput.GetMenuOptions(conversationsToArray);
+                switch (menuOptions)
+                {
+                    case 0:
+                        return;
+                    case int n when (n > 0):
+                    Console.WriteLine("Show messages");
+                    Console.ReadKey();
+                        break;
+                }
             }
         }
         catch (NullReferenceException)
@@ -61,7 +73,7 @@ public class ConversationUI
     public int MakeNewConversation(List<User> participants, User user)
     {
         int conversationId = _connectingMultiple.MakeNew(participants, user);
-        if(conversationId > 0)return conversationId;
+        if (conversationId > 0) return conversationId;
         else Console.WriteLine("Something went wrong."); return 0;
     }
 

@@ -13,6 +13,7 @@ public class UserUI
     IDeletionManager<User> _deletionManager;
     IBlockingsManager<User> _blockingsManager;
     IMultipleDataGetter<User, int> _multipleUserData;
+    IConnectingMultiple<User> _connectingUserManager;
     IFriendManager _friendManager;
     public Func<User, int, int> OnDialogue;
     public Func<List<User>, User, int> OnMakeConversation;
@@ -21,7 +22,7 @@ public class UserUI
     List<ConsoleKey> keys = new();
     public Action<User> LoadFriends;
 
-    public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IIdManager<Conversation> idManager, IManager<Message, User> messageManager, IManager<Comment, User> commentManager, IDeletionManager<User> deletionManager, IMultipleDataGetter<User, int> multipleUserData, IFriendManager friendManager, IBlockingsManager<User> blockingsManager)
+    public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IIdManager<Conversation> idManager, IManager<Message, User> messageManager, IManager<Comment, User> commentManager, IDeletionManager<User> deletionManager, IMultipleDataGetter<User, int> multipleUserData, IFriendManager friendManager, IBlockingsManager<User> blockingsManager, IConnectingMultiple<User> connectingUserManager)
     {
         _userManager = userManager;
         _postManager = postManager;
@@ -34,6 +35,7 @@ public class UserUI
         deleted = _deletionManager.SetAsDeleted();  //deletar users som varit inaktiva i mer än 30 dagar när den startar
         _friendManager = friendManager;
         _blockingsManager = blockingsManager;
+        _connectingUserManager = connectingUserManager;
     }
     public int Searcher(User user)
     {
@@ -121,23 +123,56 @@ public class UserUI
     }
     public void Messenger(User user)
     {
-        MessageUI messageUI = new(_messageManager);
         List<int> ids = new();
         ids.Add(user.ID);
-        ShowConversationParticipants(ids);
-        ConsoleKey pressedKey = ConsoleInput.GetPressedKey($"[C] Choose conversation  [N] New Conversation", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.N));
-        if (pressedKey == ConsoleKey.C)
+        try
         {
-            int conversationId = ConsoleInput.GetInt("Choose: ");
-            ShowMessages(conversationId, user);
-            messageUI.MakeMessage(user, conversationId);
+            List<Conversation> foundConversations = _idManager.GetParticipantsPerConversation(ids);
+            List<string> conversationToList = new();
+            conversationToList.Add("[Return]");
+            foreach (Conversation c in foundConversations)
+            {
+                conversationToList.Add(c.ToString());
+            }
+            string[] conversationsToArray = conversationToList.ToArray();
+            int amountOfChoices = conversationsToArray.Length;
+            int menuOptions = 0;
+            while (true)
+            {
+                menuOptions = ConsoleInput.GetMenuOptions(conversationsToArray);
+                switch (menuOptions)
+                {
+                    case 0:
+                        return;
+                    case int n when (n > 0):
+                        int conversationsId = foundConversations[n - 1].ID;
+                        ShowMessages(conversationsId, user);
+                        Console.ReadKey();
+                        break;
+                }
+            }
         }
-        else
+        catch (NullReferenceException)
         {
-            int newConversationId = AddPeopleToNewConversation(user);
-            ShowMessages(newConversationId, user);
-            messageUI.MakeMessage(user, newConversationId);
+            Console.WriteLine("No conversations yet..");
         }
+        // MessageUI messageUI = new(_messageManager);
+        // List<int> ids = new();
+        // ids.Add(user.ID);
+        // ShowConversationParticipants(ids);
+        // ConsoleKey pressedKey = ConsoleInput.GetPressedKey($"[C] Choose conversation  [N] New Conversation", LogicTool.NewKeyList(ConsoleKey.C, ConsoleKey.N));
+        // if (pressedKey == ConsoleKey.C)
+        // {
+        //     int conversationId = ConsoleInput.GetInt("Choose: ");
+        //     ShowMessages(conversationId, user);
+        //     messageUI.MakeMessage(user, conversationId);
+        // }
+        // else
+        // {
+        //     int newConversationId = AddPeopleToNewConversation(user);
+        //     ShowMessages(newConversationId, user);
+        //     messageUI.MakeMessage(user, newConversationId);
+        // }
     }
     public int AddPeopleToNewConversation(User user)
     {
@@ -213,15 +248,15 @@ public class UserUI
                 EditInformation(user);
                 user = _userManager.GetOne(user.ID, user);
                 break;
-                case 1:
+            case 1:
                 BlockingsUI blockingsUI = new(_blockingsManager);
                 blockingsUI.ShowMyBlockedUsers(user);
                 break;
-                case 2:
-                  bool isDeleted = DeletingAccount(user);
-            if (isDeleted == true) Environment.Exit(0);
+            case 2:
+                bool isDeleted = DeletingAccount(user);
+                if (isDeleted == true) Environment.Exit(0);
                 break;
-                case 3:
+            case 3:
                 return;
         }
     }
@@ -284,13 +319,7 @@ public class UserUI
     {
         try
         {
-            List<Conversation> conversations = _idManager.GetIds(ids).Conversations;
-            List<int> conversationsIds = new();
-            foreach (Conversation c in conversations)
-            {
-                conversationsIds.Add(c.ID);
-            }
-            List<Conversation> foundConversations = _idManager.GetById(conversationsIds);
+            List<Conversation> foundConversations = _idManager.GetParticipantsPerConversation(ids);
             foreach (Conversation c in foundConversations)
             {
                 Console.WriteLine(c.ToString());
