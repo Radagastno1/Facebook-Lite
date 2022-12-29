@@ -17,7 +17,7 @@ internal class Program
     static SignUpUI signUpUI = new(userManager);
     static LogInManager logInManager = new(new LogInDB());
     static LogInUI logInUI = new(logInManager);
-    static UserUI userUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, commentsManager, userManager, userManager, friendManager, blockingManager,friendManager, conversationManager);
+    static UserUI userUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, commentsManager, userManager, userManager, friendManager, blockingManager, friendManager, conversationManager);
     static PostUI postUI = new(postsManager, commentsManager);
     static ConversationUI conversationUI = new(conversationManager, messageManager, conversationManager, conversationManager);
     static MessageUI messageUI = new(messageManager, conversationManager);
@@ -29,13 +29,14 @@ internal class Program
     //5. fixa in string title som inparamter i menymetoden! så det blir som login sidan med title = facebook
     private static void Main(string[] args)
     {
+        UsersDB usersDB = new();
+        FriendsDB friendsDB = new();
         // dessa under ska inte vara delegat, var bara som övning i början 
         userUI.OnDialogue += conversationUI.ShowDialogue;
         userUI.OnMakeMessage += messageUI.MakeMessage;
         userUI.OnMakeConversation += conversationUI.MakeNewConversation;
         // userUI.OnShow += postUI.ShowPosts;
-        UsersDB usersDB = new();
-        FriendsDB friendsDB = new();
+
         userManager.OnDelete += usersDB.UpdateToDeleted;
         logInUI.OnLoggedIn += friendManager.Update;
         logInUI.OnLoggedIn += friendManager.LoadFriends;

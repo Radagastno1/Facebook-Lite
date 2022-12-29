@@ -10,11 +10,17 @@ public class BlockingsUI
     }
     public void BlockUser(User user, int friendId)
     {
-        string answer = ConsoleInput.GetString("Are you sure you want to block this user? Friendships will be deleted. Y/N");
-        if (answer.ToLower() == "y")
+        ConsoleKey answerKey = ConsoleInput.GetPressedKey("Are you sure you want to block this user? Friendships will be deleted. Y/N", LogicTool.NewKeyList(ConsoleKey.Y, ConsoleKey.N));
+        if (answerKey == ConsoleKey.Y)
         {
             if (_blockingsManager.Create(user, friendId) > 0)
+            {
                 Console.WriteLine("User blocked.");
+            }
+            else
+            {
+                Console.WriteLine("Something went wrong.");
+            }
         }
         else return;
     }

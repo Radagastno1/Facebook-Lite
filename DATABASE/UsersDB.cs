@@ -86,9 +86,9 @@ public class UsersDB : IData<User>, IDataSearcher<User>, IDeletionData<User>, ID
         {
             string query = "SELECT u.id, u.first_name as 'FirstName', u.last_name as 'LastName', " +
                "DATE_FORMAT(u.birth_date, '%Y-%m-%d') as 'BirthDate', u.gender, " +
-               "u.about_me as 'AboutMe', r.name as 'Role' " +
-               "FROM users u LEFT JOIN users_roles ur ON ur.users_id = u.id " +
-               " WHERE u.role_id = 5 AND u.is_deleted = false " +
+               "u.about_me as 'AboutMe' " +
+               "FROM users u " +
+               "WHERE u.role_id = 5 AND u.is_deleted = false " +
                "AND u.id = @id " +
                "AND u.id not in (select blocked_user_id from users_blocked where users_id = @userId) " +
                "AND u.id not in (select users_id FROM users_blocked where blocked_user_id = @userId);";
