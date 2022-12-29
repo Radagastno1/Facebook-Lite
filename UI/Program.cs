@@ -20,7 +20,7 @@ internal class Program
     static UserUI userUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, commentsManager, userManager, userManager, friendManager, blockingManager, conversationManager);
     static PostUI postUI = new(postsManager, commentsManager);
     static ConversationUI conversationUI = new(conversationManager, messageManager, conversationManager, conversationManager);
-    static MessageUI messageUI = new(messageManager);
+    static MessageUI messageUI = new(messageManager, conversationManager);
     //ATT FIXA
     //1. Fixa mer i UI, rensa ut metoder till conversationservice osv
     //2. om man är inaktiv/raderad och har en dialog-konversation ska den stå som is_visible = false 
@@ -119,7 +119,7 @@ internal class Program
                     Console.ReadKey();
                     break;
                 case 2:
-                    userUI.Messenger(user);
+                    messageUI.Messenger(user);
                     Console.ReadKey();
                     break;
                 case 3:

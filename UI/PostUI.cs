@@ -29,6 +29,7 @@ public class PostUI
     }
     public void ShowPosts(int userId, User user)
     {
+        Console.Clear();
         List<Post> allPosts = new();
         try
         {

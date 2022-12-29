@@ -49,7 +49,11 @@ public class UserUI
     }
     public void InteractWithUser(User user, int id)  //döpa till meny? sätta som statisk i program?
     {
-        if(user.ID == id) MyPage(user);
+        if (user.ID == id)
+        {
+            MyPage(user);
+            return;
+        }
         while (true)
         {
             if (!ShowProfile(id, user)) return;
@@ -66,7 +70,7 @@ public class UserUI
             int status = friendsUI.GetFriendShipStatus(user, id);
             if (status == 1) overviewOptions = overviewOptions.Concat(new string[] { "[ADD FRIEND]" }).ToArray();
             else if (status == 3) overviewOptions = overviewOptions.Concat(new string[] { "[CONFIRM FRIEND REQUEST]" }).ToArray();
-            else if(status == 4) overviewOptions = overviewOptions.Concat(new string[] {"[DELETE FRIEND]"}).ToArray();
+            else if (status == 4) overviewOptions = overviewOptions.Concat(new string[] { "[DELETE FRIEND]" }).ToArray();
 
             menuOptions = ConsoleInput.GetMenuOptions(overviewOptions);
             switch (menuOptions)
@@ -118,44 +122,10 @@ public class UserUI
                         friendsUI.FriendRequest(user, id);
                         LoadFriends?.Invoke(user);
                     }
-                    else  if(status == 4)
+                    else if (status == 4)
                     {
                         friendsUI.DeleteFriendship(user, id);
                     }
-                    Console.ReadKey();
-                    break;
-            }
-        }
-    }
-    public void Messenger(User user)
-    {
-        List<int> ids = new();
-        ids.Add(user.ID);
-        List<Conversation> foundConversations = new();
-        List<string> conversationToList = new();
-        conversationToList.Add("[Return]");
-
-        foundConversations = _idManager.GetParticipantsPerConversation(ids);
-        if (foundConversations != null)
-        {
-            foreach (Conversation c in foundConversations)
-            {
-                conversationToList.Add(c.ToString());
-            }
-        }
-        string[] conversationsToArray = conversationToList.ToArray();
-        int amountOfChoices = conversationsToArray.Length;
-        int menuOptions = 0;
-        while (true)
-        {
-            menuOptions = ConsoleInput.GetMenuOptions(conversationsToArray);
-            switch (menuOptions)
-            {
-                case 0:
-                    return;
-                case int n when (n > 0):
-                    int conversationsId = foundConversations[n - 1].ID;
-                    ShowMessages(conversationsId, user);
                     Console.ReadKey();
                     break;
             }
@@ -364,21 +334,6 @@ public class UserUI
         else
         {
             return false;
-        }
-    }
-    public void ShowMessages(int conversationId, User user)
-    {
-        List<Message> messages = _messageManager.GetAll(conversationId, user);
-        if (messages == null || messages.Count() < 1)
-        {
-            Console.WriteLine("No messages here yet..");
-        }
-        else if (messages.Count() > 0)
-        {
-            foreach (Message item in messages)
-            {
-                Console.WriteLine(item.ToString());
-            }
         }
     }
 }

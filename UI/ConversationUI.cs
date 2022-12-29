@@ -51,7 +51,7 @@ public class ConversationUI
     }
     public int ShowDialogue(User user, int id)
     {
-        MessageUI messageUI = new(_messageManager);
+        MessageUI messageUI = new(_messageManager, _idManager);
         Conversation conversation = _idManager.GetDialogueId(user.ID, id);
         if (conversation != null)
         {
