@@ -17,7 +17,7 @@ internal class Program
     static SignUpUI signUpUI = new(userManager);
     static LogInManager logInManager = new(new LogInDB());
     static LogInUI logInUI = new(logInManager);
-    static UserUI userUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, commentsManager, userManager, userManager, friendManager, blockingManager, conversationManager);
+    static UserUI userUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, commentsManager, userManager, userManager, friendManager, blockingManager,friendManager, conversationManager);
     static PostUI postUI = new(postsManager, commentsManager);
     static ConversationUI conversationUI = new(conversationManager, messageManager, conversationManager, conversationManager);
     static MessageUI messageUI = new(messageManager, conversationManager);
@@ -37,10 +37,10 @@ internal class Program
         UsersDB usersDB = new();
         FriendsDB friendsDB = new();
         userManager.OnDelete += usersDB.UpdateToDeleted;
-        logInUI.OnLoggedIn += friendManager.SetToFriends;
-        logInUI.OnLoggedIn += friendManager.LoadMyFriends;
-        userUI.LoadFriends += friendManager.SetToFriends;
-        userUI.LoadFriends += friendManager.LoadMyFriends;
+        logInUI.OnLoggedIn += friendManager.Update;
+        logInUI.OnLoggedIn += friendManager.LoadFriends;
+        userUI.LoadFriends += friendManager.Update;
+        userUI.LoadFriends += friendManager.LoadFriends;
         blockingManager.OnBlockUser += friendsDB.Delete;
 
         Console.ForegroundColor = ConsoleColor.Blue;

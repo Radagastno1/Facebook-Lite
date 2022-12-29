@@ -43,7 +43,6 @@ public class PostUI
         {
             Console.WriteLine("\tNo posts yet..");
         }
-        // int postId = ConsoleInput.GetInt("[0] Return   [ChoosePost] See Post");
     }
     public void ShowPostById(int postId, User user)
     {

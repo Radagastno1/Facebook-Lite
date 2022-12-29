@@ -27,7 +27,7 @@ public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IId
         }
         return usersConversationId;
     }
-    public int? Delete(Conversation obj)   //HUR SKA MAN RADERA KONV OCH SKA MAN ELLER LÄGGA TILL BOOL ISVISIBLE?
+    public int? Delete(Conversation obj)   //HUR SKA MAN RADERA KONV OCH SKA MAN ELLER LÄGGA TILL BOOL ISDELETED?
     {
         throw new NotImplementedException();
     }
@@ -83,7 +83,7 @@ public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IId
         }
         return result;
     }
-    public List<Conversation> GetById(int id, User user)  //ANVÄNDS VÄL EJ?
+    public List<Conversation> GetById(int id, User user)  
     {
         List<Conversation> conversations = new();
         string query = $"SELECT uc.conversation_id as 'ID' FROM users_conversations uc WHERE uc.users_id = @id;";

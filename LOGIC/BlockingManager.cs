@@ -1,6 +1,6 @@
 using CORE;
 namespace LOGIC;
-public class BlockingManager : IBlockingsManager<User>
+public class BlockingManager : IRelationsManager<User>
 {
     IRelationsData<User> _relationsData;
     public Func<User, int, int> OnBlockUser;
@@ -8,7 +8,7 @@ public class BlockingManager : IBlockingsManager<User>
     {
         _relationsData = relationsData;
     }
-    public int BlockUser(User user, int id)
+    public int Create(User user, int id)
     {
         int blockedId = 0;
         if (user.ID != id)
@@ -26,7 +26,7 @@ public class BlockingManager : IBlockingsManager<User>
         return blockedId;
     }
 
-    public List<User> GetMyBlockedUsers(User user)
+    public List<User> GetMine(User user)
     {
         try
         {
@@ -38,13 +38,14 @@ public class BlockingManager : IBlockingsManager<User>
         }
     }
 
-    public int UnBlockUser(User obj, int id)
+    public int Delete(User obj, int id)  //unblock user
     {
         throw new NotImplementedException();
     }
 
-    public int Update(User obj, int id)
+    public void Update(User obj)
     {
         throw new NotImplementedException();
     }
+
 }

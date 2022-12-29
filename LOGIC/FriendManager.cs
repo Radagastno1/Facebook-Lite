@@ -1,6 +1,6 @@
 using CORE;
 namespace LOGIC;
-public class FriendManager : IFriendManager
+public class FriendManager : IRelationsManager<User>, IFriendManager<User>
 {
     IFriendData<User> _friendData;
     IRelationsData<User> _relationsData;
@@ -9,19 +9,19 @@ public class FriendManager : IFriendManager
         _friendData = friendData;
         _relationsData = relationsData;
     }
-    public bool FriendRequest(User user, int friendId)
+    public int Create(User user, int friendId)
     {
         try
         {
             _relationsData.Create(user, friendId);
-            return true;
+            return 1;
         }
         catch (InvalidOperationException)
         {
-            return false;
+            return 0;
         }
     }
-    public bool CheckIfBefriended(User user, int friendId)
+    public bool IsBefriended(User user, int friendId)
     {
         try
         {
@@ -36,7 +36,7 @@ public class FriendManager : IFriendManager
             return false;
         }
     }
-    public void SetToFriends(User user)
+    public void Update(User user)
     {
         List<int> friendRequestsIds = _friendData.GetMyFriendRequests(user);
         List<int> friendsToBeAccepted = new();
@@ -68,16 +68,22 @@ public class FriendManager : IFriendManager
             return false;
         }
     }
-    public void LoadMyFriends(User user)
+    public List<User> GetMine(User user)
     {
         try
         {
-            user.MyFriends =  _relationsData.GetMine(user);
+            return _relationsData.GetMine(user);
         }
         catch (InvalidOperationException)
         {
-            user.MyFriends = new();
+            List<User> users= new();
+            return users;
         }
+    }
+
+    public void LoadFriends(User user)
+    {
+        user.MyFriends = GetMine(user);
     }
     public int Delete(User user, int friendId)
     {   //FELHANTERA

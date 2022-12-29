@@ -3,7 +3,9 @@ using LOGIC;
 namespace UI;
 public class FriendsUI
 {
-    IFriendManager _friendManager;
+    IRelationsManager<User> _relationsManager;
+    IFriendManager<User> _friendManager;
+    
     // public Action<User> OnFriendUI;
     static Dictionary<int, string> FriendRequestStatus = new Dictionary<int, string>()
     {
@@ -12,8 +14,9 @@ public class FriendsUI
         [3] = "[Confirm friend request]",
         [4] = "[Friends]"
     };
-    public FriendsUI(IFriendManager friendManager, User user)
+    public FriendsUI(IRelationsManager<User> relationsManager, IFriendManager<User> friendManager, User user)
     {
+        _relationsManager = relationsManager;
         _friendManager = friendManager;
         // OnFriendUI?.Invoke(user);
     }
@@ -37,7 +40,7 @@ public class FriendsUI
     }
     public bool IsFriendRequestSent(User user, int friendId)
     {
-        if (!_friendManager.CheckIfBefriended(user, friendId))
+        if (!_friendManager.IsBefriended(user, friendId))
         {
             return false;
         }
@@ -48,7 +51,7 @@ public class FriendsUI
     }
     public void FriendRequest(User user, int friendId)
     {
-        _friendManager.FriendRequest(user, friendId);
+        _relationsManager.Create(user, friendId);
     }
     // FIXA SÅ ATT BEROENDE PÅ STATUSEN SÅ BLIR DET EN AV DESSA NEDANFÖR 
     public int GetFriendShipStatus(User user, int friendId)
@@ -94,7 +97,7 @@ public class FriendsUI
     public void DeleteFriendship(User user, int friendId)
     {
         ConsoleKey answerKey = ConsoleInput.GetPressedKey("Delete friendship? Y/N", LogicTool.NewKeyList(ConsoleKey.Y, ConsoleKey.N));
-        if(answerKey == ConsoleKey.Y) _friendManager.Delete(user, friendId);
+        if(answerKey == ConsoleKey.Y) _relationsManager.Delete(user, friendId);
         else return;
     }
 }

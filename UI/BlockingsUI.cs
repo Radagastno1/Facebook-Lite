@@ -3,8 +3,8 @@ using LOGIC;
 namespace UI;
 public class BlockingsUI
 {
-    IBlockingsManager<User> _blockingsManager;
-    public BlockingsUI(IBlockingsManager<User> blockingsManager)
+    IRelationsManager<User> _blockingsManager;
+    public BlockingsUI(IRelationsManager<User> blockingsManager)
     {
         _blockingsManager = blockingsManager;
     }
@@ -13,7 +13,7 @@ public class BlockingsUI
         string answer = ConsoleInput.GetString("Are you sure you want to block this user? Friendships will be deleted. Y/N");
         if (answer.ToLower() == "y")
         {
-            if (_blockingsManager.BlockUser(user, friendId) > 0)
+            if (_blockingsManager.Create(user, friendId) > 0)
                 Console.WriteLine("User blocked.");
         }
         else return;
@@ -22,7 +22,7 @@ public class BlockingsUI
     {
         try
         {
-            List<User> blockedUsers = _blockingsManager.GetMyBlockedUsers(user);
+            List<User> blockedUsers = _blockingsManager.GetMine(user);
             if (blockedUsers == null || blockedUsers.Count() < 1)
             {
                 throw new InvalidOperationException();

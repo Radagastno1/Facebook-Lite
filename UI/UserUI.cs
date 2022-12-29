@@ -11,10 +11,13 @@ public class UserUI
     IIdManager<Conversation> _idManager;
     IManager<Comment, User> _commentManager;
     IDeletionManager<User> _deletionManager;
-    IBlockingsManager<User> _blockingsManager;
+    // IBlockingsManager<User> _blockingsManager;
     IMultipleDataGetter<User, int> _multipleUserData;
     IConnectingMultiple<User> _connectingUserManager;
-    IFriendManager _friendManager;
+    // IFriendManager _friendManager;
+    IRelationsManager<User> _friendRelationsManager;
+    IRelationsManager<User> _blockRelationsManager;
+    IFriendManager<User> _friendManager;
     public Func<User, int, int> OnDialogue;
     public Func<List<User>, User, int> OnMakeConversation;
     public Action<User, int> OnMakeMessage;
@@ -22,7 +25,7 @@ public class UserUI
     List<ConsoleKey> keys = new();
     public Action<User> LoadFriends;
 
-    public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IIdManager<Conversation> idManager, IManager<Message, User> messageManager, IManager<Comment, User> commentManager, IDeletionManager<User> deletionManager, IMultipleDataGetter<User, int> multipleUserData, IFriendManager friendManager, IBlockingsManager<User> blockingsManager, IConnectingMultiple<User> connectingUserManager)
+    public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IIdManager<Conversation> idManager, IManager<Message, User> messageManager, IManager<Comment, User> commentManager, IDeletionManager<User> deletionManager, IMultipleDataGetter<User, int> multipleUserData, IRelationsManager<User> friendRelationsManager, IRelationsManager<User> blockRelationsManager, IFriendManager<User> friendManager, IConnectingMultiple<User> connectingUserManager)
     {
         _userManager = userManager;
         _postManager = postManager;
@@ -32,10 +35,11 @@ public class UserUI
         _commentManager = commentManager;
         _deletionManager = deletionManager;
         _multipleUserData = multipleUserData;
-        deleted = _deletionManager.SetAsDeleted();  //deletar users som varit inaktiva i mer än 30 dagar när den startar
         _friendManager = friendManager;
-        _blockingsManager = blockingsManager;
+        _friendRelationsManager = friendRelationsManager;
+        _blockRelationsManager = blockRelationsManager;
         _connectingUserManager = connectingUserManager;
+        deleted = _deletionManager.SetAsDeleted();  //deletar users som varit inaktiva i mer än 30 dagar när den startar
     }
     public int Searcher(User user)
     {
@@ -66,7 +70,7 @@ public class UserUI
               {"[POSTS]","[MESSAGE]","[RETURN]", "[BLOCK USER]"};
             int menuOptions = 0;
 
-            FriendsUI friendsUI = new(_friendManager, user);
+            FriendsUI friendsUI = new(_friendRelationsManager, _friendManager, user);
             int status = friendsUI.GetFriendShipStatus(user, id);
             if (status == 1) overviewOptions = overviewOptions.Concat(new string[] { "[ADD FRIEND]" }).ToArray();
             else if (status == 3) overviewOptions = overviewOptions.Concat(new string[] { "[CONFIRM FRIEND REQUEST]" }).ToArray();
@@ -112,7 +116,7 @@ public class UserUI
                 case 2:
                     continue;
                 case 3:
-                    BlockingsUI blockingsUI = new(_blockingsManager);
+                    BlockingsUI blockingsUI = new(_blockRelationsManager);
                     blockingsUI.BlockUser(user, id);
                     Console.ReadKey();
                     break;
@@ -206,7 +210,7 @@ public class UserUI
                 user = _userManager.GetOne(user.ID, user);
                 break;
             case 1:
-                BlockingsUI blockingsUI = new(_blockingsManager);
+                BlockingsUI blockingsUI = new(_blockRelationsManager);
                 blockingsUI.ShowMyBlockedUsers(user);
                 break;
             case 2:
@@ -249,7 +253,7 @@ public class UserUI
 
     public bool ShowProfile(int id, User user)
     {
-        FriendsUI friendsUI = new(_friendManager, user);
+        FriendsUI friendsUI = new(_friendRelationsManager, _friendManager, user);
         User userToShow = _userManager.GetOne(id, user);
         if (userToShow == null) return false;
         Console.Title = $"{MakeViewName(userToShow.FirstName, userToShow.LastName)}";
