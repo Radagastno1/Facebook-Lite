@@ -11,12 +11,10 @@ public class UsersDB : IData<User>, IDataSearcher<User>, IDeletionData<User>, ID
     public int? Create(User obj)  //IDATA
     {
         int userId = 0;
-        string query = "START TRANSACTION;" +
-        "INSERT INTO users(first_name, last_name, email, pass_word, birth_date, gender, about_me) " +
-        "VALUES(@FirstName, @LastName, @Email, @PassWord, @BirthDate, @Gender, @AboutMe); " +
-        "SET @usersId := LAST_INSERT_ID(); " +
-        "INSERT INTO users_roles (users_id, roles_id) VALUES(@usersId, 5);" +
-        "COMMIT; SELECT @users_id;";
+        string query =
+        "INSERT INTO users(first_name, last_name, email, pass_word, birth_date, gender, about_me, role_id) " +
+        "VALUES(@FirstName, @LastName, @Email, @PassWord, @BirthDate, @Gender, @AboutMe, 5); " +
+        " SELECT LAST_INSERT_ID();";
         try
         {
             using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=true;"))
@@ -50,8 +48,8 @@ public class UsersDB : IData<User>, IDataSearcher<User>, IDeletionData<User>, ID
         string query =
         "SELECT u.id, u.first_name as 'FirstName', u.last_name as 'LastName', u.email," +
         "u.pass_word as 'PassWord', DATE_FORMAT(u.birth_date, '%Y-%m-%d') as 'BirthDate', u.gender, u.about_me as 'AboutMe', r.name as 'Role' " +
-        "FROM users u LEFT JOIN users_roles ur ON ur.users_id = u.id " +
-        "LEFT JOIN roles r ON r.id = ur.roles_id WHERE u.is_deleted = false;";
+        "FROM users u " +
+        "INNER JOIN roles r ON r.id = ur.roles_id WHERE u.is_deleted = false;";
         //NU kan man ej logga in på sitt konto om man är inaktiv för att testa detta
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
@@ -59,7 +57,7 @@ public class UsersDB : IData<User>, IDataSearcher<User>, IDeletionData<User>, ID
         }
         return users;
     }
-    public int? Update(User user)  //IDATA
+    public int? Update(User user)
     {
         int rowsEffected = 0;
         string query = "Update users SET first_name = @FirstName, last_name = @LastName, " +
@@ -72,7 +70,7 @@ public class UsersDB : IData<User>, IDataSearcher<User>, IDeletionData<User>, ID
         return rowsEffected;
     }
     public List<User> GetSearches(string name)
-    {
+    {  //möjligt för injection?
         List<User> foundUsers = new();
         string query = "SELECT u.id as 'ID' FROM users u " +
         $"WHERE u.first_name LIKE '%{name}%' OR u.last_name LIKE '%{name}%' AND u.is_active = true;";
@@ -90,7 +88,7 @@ public class UsersDB : IData<User>, IDataSearcher<User>, IDeletionData<User>, ID
                "DATE_FORMAT(u.birth_date, '%Y-%m-%d') as 'BirthDate', u.gender, " +
                "u.about_me as 'AboutMe', r.name as 'Role' " +
                "FROM users u LEFT JOIN users_roles ur ON ur.users_id = u.id " +
-               "LEFT JOIN roles r ON r.id = ur.roles_id WHERE u.is_deleted = false " +
+               " WHERE u.role_id = 5 AND u.is_deleted = false " +
                "AND u.id = @id " +
                "AND u.id not in (select blocked_user_id from users_blocked where users_id = @userId) " +
                "AND u.id not in (select users_id FROM users_blocked where blocked_user_id = @userId);";
@@ -98,7 +96,7 @@ public class UsersDB : IData<User>, IDataSearcher<User>, IDeletionData<User>, ID
             foundUser = con.QuerySingle<User>(query, new { @id = id, @userId = user.ID });
             return foundUser;
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             return null;
         }
