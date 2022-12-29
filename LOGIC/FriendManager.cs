@@ -79,4 +79,8 @@ public class FriendManager : IFriendManager
             user.MyFriends = new();
         }
     }
+    public int Delete(User user, int friendId)
+    {   //FELHANTERA
+        return _relationsData.Delete(user, friendId);
+    }
 }

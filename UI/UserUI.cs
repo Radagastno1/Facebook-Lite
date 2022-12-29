@@ -49,6 +49,7 @@ public class UserUI
     }
     public void InteractWithUser(User user, int id)  //döpa till meny? sätta som statisk i program?
     {
+        if(user.ID == id) MyPage(user);
         while (true)
         {
             if (!ShowProfile(id, user)) return;
@@ -65,6 +66,7 @@ public class UserUI
             int status = friendsUI.GetFriendShipStatus(user, id);
             if (status == 1) overviewOptions = overviewOptions.Concat(new string[] { "[ADD FRIEND]" }).ToArray();
             else if (status == 3) overviewOptions = overviewOptions.Concat(new string[] { "[CONFIRM FRIEND REQUEST]" }).ToArray();
+            else if(status == 4) overviewOptions = overviewOptions.Concat(new string[] {"[DELETE FRIEND]"}).ToArray();
 
             menuOptions = ConsoleInput.GetMenuOptions(overviewOptions);
             switch (menuOptions)
@@ -115,6 +117,10 @@ public class UserUI
                     {
                         friendsUI.FriendRequest(user, id);
                         LoadFriends?.Invoke(user);
+                    }
+                    else  if(status == 4)
+                    {
+                        friendsUI.DeleteFriendship(user, id);
                     }
                     Console.ReadKey();
                     break;

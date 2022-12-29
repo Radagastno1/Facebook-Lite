@@ -90,4 +90,11 @@ public class FriendsUI
         }
         return statusString;
     }
+
+    public void DeleteFriendship(User user, int friendId)
+    {
+        ConsoleKey answerKey = ConsoleInput.GetPressedKey("Delete friendship? Y/N", LogicTool.NewKeyList(ConsoleKey.Y, ConsoleKey.N));
+        if(answerKey == ConsoleKey.Y) _friendManager.Delete(user, friendId);
+        else return;
+    }
 }

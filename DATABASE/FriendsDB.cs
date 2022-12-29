@@ -18,10 +18,11 @@ public class FriendsDB : IFriendData<User>, IRelationsData<User>
     {
         //däremot om en raderar relationen, så försvinner den från båda håll
         using MySqlConnection connection = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
-        string query = "START TRANSACTION;" +
-        "DELETE FROM users_friends WHERE users_id1 = @userId AND users_id2 = @friendId;" +
-        "DELETE FROM users_friends WHERE users_id1 = @friendId AND users_id2 = @userId;" +
-        "COMMIT;";
+        string query = "CALL DeleteFriendship(@userId, @friendId);";
+        // "START TRANSACTION;" +
+        // "DELETE FROM users_friends WHERE users_id1 = @userId AND users_id2 = @friendId;" +
+        // "DELETE FROM users_friends WHERE users_id1 = @friendId AND users_id2 = @userId;" +
+        // "COMMIT;";
         int rows = connection.ExecuteScalar<int>(query, new{@userId = user.ID, @friendId = friendId});
         return rows;
     }
