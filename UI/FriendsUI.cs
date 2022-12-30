@@ -6,7 +6,7 @@ public class FriendsUI
     IRelationsManager<User> _relationsManager;
     IFriendManager<User> _friendManager;
     
-    // public Action<User> OnFriendUI;
+    public Action<User> OnFriendUI;
     static Dictionary<int, string> FriendRequestStatus = new Dictionary<int, string>()
     {
         [1] = "[A] Add friend]",
@@ -18,9 +18,10 @@ public class FriendsUI
     {
         _relationsManager = relationsManager;
         _friendManager = friendManager;
-        // OnFriendUI?.Invoke(user);
+        OnFriendUI?.Invoke(user);
+        // _friendManager.LoadFriends(user);
     }
-    public static void ShowMyFriends(User user)
+    public void ShowMyFriends(User user)
     {
         foreach (User friend in user.MyFriends)
         {

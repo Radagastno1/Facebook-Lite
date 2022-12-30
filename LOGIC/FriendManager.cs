@@ -80,9 +80,9 @@ public class FriendManager : IRelationsManager<User>, IFriendManager<User>
             return users;
         }
     }
-
     public void LoadFriends(User user)
     {
+        user.MyFriends.Clear();
         user.MyFriends = GetMine(user);
     }
     public int Delete(User user, int friendId)

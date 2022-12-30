@@ -176,7 +176,8 @@ public class UserUI
                 else return;
                 break;
             case 1:
-                FriendsUI.ShowMyFriends(user);
+                FriendsUI friendsUI = new(_friendRelationsManager, _friendManager, user);
+                friendsUI.ShowMyFriends(user);
                 break;
             case 2:
                 return;

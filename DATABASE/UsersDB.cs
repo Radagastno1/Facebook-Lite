@@ -101,7 +101,6 @@ public class UsersDB : IData<User>, IDataSearcher<User>, IDeletionData<User>, ID
             return null;
         }
     }
-
     public List<User> GetInactive()
     {
         List<User> users = new();

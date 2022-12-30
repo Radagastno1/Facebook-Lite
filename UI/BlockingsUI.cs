@@ -4,6 +4,7 @@ namespace UI;
 public class BlockingsUI
 {
     IRelationsManager<User> _blockingsManager;
+    public Action<User> OnBlockUser;
     public BlockingsUI(IRelationsManager<User> blockingsManager)
     {
         _blockingsManager = blockingsManager;
@@ -15,6 +16,7 @@ public class BlockingsUI
         {
             if (_blockingsManager.Create(user, friendId) > 0)
             {
+                OnBlockUser?.Invoke(user);
                 Console.WriteLine("User blocked.");
             }
             else

@@ -42,10 +42,8 @@ public class BlockingManager : IRelationsManager<User>
     {
         throw new NotImplementedException();
     }
-
     public void Update(User obj)
     {
         throw new NotImplementedException();
     }
-
 }

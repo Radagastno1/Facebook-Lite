@@ -22,15 +22,16 @@ internal class Program
     static ConversationUI conversationUI = new(conversationManager, messageManager, conversationManager, conversationManager);
     static MessageUI messageUI = new(messageManager, conversationManager);
     //ATT FIXA
-    //1. Fixa mer i UI, rensa ut metoder till conversationservice osv
     //2. om man är inaktiv/raderad och har en dialog-konversation ska den stå som is_visible = false 
-    //2.5 lägg till is_visible på conversations table
-    //4. om man blockar eller blir blockad ska man ej kunna se meddelancen, konversationer, kommentarer osv
+    //2.5 lägg till is_visible på conversations tables
+    //4. om man blockar eller blir blockad ska man ej kunna se kommentarer osv + ladda in vänner på nytt
     //5. fixa in string title som inparamter i menymetoden! så det blir som login sidan med title = facebook
+    //6. när man är blockad/har blockat ska man kunna se konv. man haft men ej kunna skriva fler medd så länge
     private static void Main(string[] args)
     {
         UsersDB usersDB = new();
         FriendsDB friendsDB = new();
+        BlockingsUI blockingsUI = new(blockingManager);
         // dessa under ska inte vara delegat, var bara som övning i början 
         userUI.OnDialogue += conversationUI.ShowDialogue;
         userUI.OnMakeMessage += messageUI.MakeMessage;
@@ -38,11 +39,13 @@ internal class Program
         // userUI.OnShow += postUI.ShowPosts;
 
         userManager.OnDelete += usersDB.UpdateToDeleted;
-        logInUI.OnLoggedIn += friendManager.Update;
-        logInUI.OnLoggedIn += friendManager.LoadFriends;
+        // logInUI.OnLoggedIn += friendManager.Update;
+        // logInUI.OnLoggedIn += friendManager.LoadFriends;
         userUI.LoadFriends += friendManager.Update;
         userUI.LoadFriends += friendManager.LoadFriends;
         blockingManager.OnBlockUser += friendsDB.Delete;
+        // blockingsUI.OnBlockUser += friendManager.LoadFriends;
+
 
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.BackgroundColor = ConsoleColor.White;
@@ -82,7 +85,9 @@ internal class Program
                         user = logInUI.LogIn();
                         if (user != null)
                         {
-                            // userUI.ShowMyFacebook(user);
+                            FriendsUI friendsUI = new(friendManager, friendManager, user);
+                            friendsUI.OnFriendUI += friendManager.Update;
+                            friendsUI.OnFriendUI += friendManager.LoadFriends;
                             ShowMyFacebook(user);
                         }
                         break;
