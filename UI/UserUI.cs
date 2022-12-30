@@ -151,9 +151,7 @@ public class UserUI
             }
         } while (pressedKey != ConsoleKey.D);
         List<User> participants = _multipleUserData.GetUsersById(userIds, user);
-        // DENNA DELEGAT BORDE INTE VARA DELEGAT
-        // conversationId = (int)OnMakeConversation?.Invoke(participants, user);
-         conversationId = _connectingUserManager.MakeNew(participants, user);
+        conversationId = _connectingUserManager.MakeNew(participants, user);
         return conversationId;
     }
     public void MyPage(User user)

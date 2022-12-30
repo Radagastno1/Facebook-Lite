@@ -125,7 +125,7 @@ internal class Program
                     Console.ReadKey();
                     break;
                 case 2:
-                    messageUI.Messenger(user);
+                    Messenger(user);
                     Console.ReadKey();
                     break;
                 case 3:
@@ -138,6 +138,45 @@ internal class Program
                     break;
                 case 5:
                     return;
+            }
+        }
+    }
+    public static void Messenger(User user)
+    {
+        List<int> ids = new();
+        ids.Add(user.ID);
+        List<Conversation> foundConversations = new();
+        List<string> conversationToList = new();
+        conversationToList.Add("[New Conversation]");
+        conversationToList.Add("[Return]");
+
+        foundConversations = conversationManager.GetParticipantsPerConversation(ids);
+        if (foundConversations != null)
+        {
+            foreach (Conversation c in foundConversations)
+            {
+                conversationToList.Add(c.ToString());
+            }
+        }
+        string[] conversationsToArray = conversationToList.ToArray();
+        int amountOfChoices = conversationsToArray.Length;
+        int menuOptions = 0;
+        while (true)
+        {
+            menuOptions = ConsoleInput.GetMenuOptions(conversationsToArray);
+            switch (menuOptions)
+            {
+                case 0:
+                    userUI.AddPeopleToNewConversation(user);
+                    break;
+                case 1:
+                    return;
+                case int n when (n > 1):
+                    int conversationsId = foundConversations[n - 1].ID;
+                    messageUI.ShowMessages(conversationsId, user);
+                    messageUI.MakeMessage(user, conversationsId);
+                    Console.ReadKey();
+                    break;
             }
         }
     }

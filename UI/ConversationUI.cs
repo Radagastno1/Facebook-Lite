@@ -27,7 +27,7 @@ public class ConversationUI
             {
                 conversationToList.Add(c.ToString());
             }
-            string [] conversationsToArray = conversationToList.ToArray();
+            string[] conversationsToArray = conversationToList.ToArray();
             int amountOfChoices = conversationsToArray.Length;
             int menuOptions = 0;
             while (true)
@@ -38,8 +38,8 @@ public class ConversationUI
                     case 0:
                         return;
                     case int n when (n > 0):
-                    Console.WriteLine("Show messages");
-                    Console.ReadKey();
+                        Console.WriteLine("Show messages");
+                        Console.ReadKey();
                         break;
                 }
             }
@@ -76,6 +76,7 @@ public class ConversationUI
         if (conversationId > 0) return conversationId;
         else Console.WriteLine("Something went wrong."); return 0;
     }
+
 
 
     // public void ShowConversations(List<Conversation>conversations)

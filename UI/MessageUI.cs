@@ -5,7 +5,7 @@ namespace UI;
 public class MessageUI
 {
     IManager<Message, User> _messageManager;
-       IIdManager<Conversation> _idManager;
+    IIdManager<Conversation> _idManager;
 
     public MessageUI(IManager<Message, User> messageManager, IIdManager<Conversation> idManager)
     {
@@ -20,41 +20,6 @@ public class MessageUI
         string content = ConsoleInput.GetString("Message: ");
         Message message = new(content, user.ID, conversationId);
         _messageManager.Create(message);
-    }
-    public void Messenger(User user)
-    {
-        List<int> ids = new();
-        ids.Add(user.ID);
-        List<Conversation> foundConversations = new();
-        List<string> conversationToList = new();
-        conversationToList.Add("[Return]");
-
-        foundConversations = _idManager.GetParticipantsPerConversation(ids);
-        if (foundConversations != null)
-        {
-            foreach (Conversation c in foundConversations)
-            {
-                conversationToList.Add(c.ToString());
-            }
-        }
-        string[] conversationsToArray = conversationToList.ToArray();
-        int amountOfChoices = conversationsToArray.Length;
-        int menuOptions = 0;
-        while (true)
-        {
-            menuOptions = ConsoleInput.GetMenuOptions(conversationsToArray);
-            switch (menuOptions)
-            {
-                case 0:
-                    return;
-                case int n when (n > 0):
-                    int conversationsId = foundConversations[n - 1].ID;
-                    ShowMessages(conversationsId, user);
-                    MakeMessage(user, conversationsId);
-                    Console.ReadKey();
-                    break;
-            }
-        }
     }
     public void ShowMessages(int conversationId, User user)
     {
