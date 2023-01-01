@@ -3,17 +3,15 @@ namespace LOGIC;
 
 public class ConversationManager : IManager<Conversation, User>, IConnectingMultiple<User>, IIdManager<Conversation>
 {
-    IData<Conversation> _conversationData;
+    IData<Conversation, User> _conversationData;
     IDataToList<Conversation, User> _conversationsDataToList;
-    IData<Message> _messageData;
-    IExtraData<Conversation> _extraData;
-    IIdData<ConversationResult> _getIdData;
-    public ConversationManager(IData<Conversation> conversationData, IDataToList<Conversation, User> conversationsDataToList, IData<Message> messageData, IExtraData<Conversation> extraData, IIdData<ConversationResult> getIdData)
+    IData<Message,User> _messageData;
+    IConversationData<Conversation, ConversationResult> _specificConversationData;
+    public ConversationManager(IData<Conversation, User> conversationData, IDataToList<Conversation, User> conversationsDataToList, IData<Message, User> messageData, IConversationData<Conversation, ConversationResult> specificConversationData)
     {
         _conversationData = conversationData;
         _messageData = messageData;
-        _extraData = extraData;
-        _getIdData = getIdData;
+        _specificConversationData = specificConversationData;
         _conversationsDataToList = conversationsDataToList;
     }
     public int? Create(Conversation conversation)
@@ -64,7 +62,7 @@ public class ConversationManager : IManager<Conversation, User>, IConnectingMult
                 sql += $"{id}";
             }
         }
-        conversationHolder = _extraData.GetByIdAndText(amountOfParticipants, sql);
+        conversationHolder = _specificConversationData.GetConversationsOfSpecificParticipants(amountOfParticipants, sql);
         if (conversationHolder.Count > 0)
         {
             result.Conversations = conversationHolder;
@@ -119,8 +117,8 @@ public class ConversationManager : IManager<Conversation, User>, IConnectingMult
         bool success;
         foreach (int id in ids)
         {
-            result.Conversation = _getIdData.GetIds(id).Conversation;
-            success = _getIdData.GetIds(id).ConversationExists;
+            result.Conversation = _specificConversationData.GetConversationIdAndParticipantNames(id).Conversation;
+            success = _specificConversationData.GetConversationIdAndParticipantNames(id).ConversationExists;
             if (success == true)
             {
                 conversations.Add(result.Conversation);
@@ -132,7 +130,7 @@ public class ConversationManager : IManager<Conversation, User>, IConnectingMult
     {
         try
         {
-            Conversation dialogue = _extraData.GetDialogueId(userId, id);
+            Conversation dialogue = _specificConversationData.GetDialogueId(userId, id);
             return dialogue;
         }
         catch (InvalidOperationException)

@@ -3,18 +3,15 @@ using CORE;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class UsersDB : IData<User>, IDataSearcher<User>, IDeletionData<User>, IDataToObject<User>
+public class UsersDB : IData<User, User>, IDataSearcher<User>, IDeletionData<User>, IDataToObject<User, User>
 {
-    //1.fixa hur det ska se ut överallt om man är inaktiv
-    //namn ska synas som deleted user? ingen publik information osv
-    // när deletas man helt? eller om man ens gör det från fb
-    public int? Create(User obj)  //IDATA
+    public int? Create(User obj)  
     {
         int userId = 0;
         string query =
         "INSERT INTO users(first_name, last_name, email, pass_word, birth_date, gender, about_me, role_id) " +
         "VALUES(@FirstName, @LastName, @Email, @PassWord, @BirthDate, @Gender, @AboutMe, 5); " +
-        " SELECT LAST_INSERT_ID();";
+        "SELECT LAST_INSERT_ID();";
         try
         {
             using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=true;"))
@@ -42,7 +39,8 @@ public class UsersDB : IData<User>, IDataSearcher<User>, IDeletionData<User>, ID
         }
         return rowsEffected;
     }
-    public List<User> GetAll()  //IDATA
+    // denna queryn ska ändras
+    public List<User> GetAll(User user)  
     {
         List<User> users = new();
         string query =
@@ -70,7 +68,7 @@ public class UsersDB : IData<User>, IDataSearcher<User>, IDeletionData<User>, ID
         return rowsEffected;
     }
     public List<User> GetSearches(string name)
-    {  //möjligt för injection?
+    {  
         List<User> foundUsers = new();
         string query = "SELECT u.id as 'ID' FROM users u " +
         $"WHERE u.first_name LIKE '%{name}%' OR u.last_name LIKE '%{name}%' AND u.is_active = true;";
@@ -79,7 +77,7 @@ public class UsersDB : IData<User>, IDataSearcher<User>, IDeletionData<User>, ID
         foundUsers = con.Query<User>(query, new { @name = name }).ToList();
         return foundUsers;
     }
-    public User GetById(int id, User user)
+    public User GetOne(int id, User user)
     {
         User foundUser = new();
         try
@@ -120,7 +118,6 @@ public class UsersDB : IData<User>, IDataSearcher<User>, IDeletionData<User>, ID
             return null;
         }
     }
-
     public void UpdateToDeleted(User user)
     {
         string query = "START TRANSACTION; " +

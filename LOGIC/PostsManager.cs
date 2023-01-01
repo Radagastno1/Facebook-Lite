@@ -2,13 +2,14 @@ using CORE;
 namespace LOGIC;
 public class PostsManager : IManager<Post, User>
 {
-    IData<Post> _postData;
-    IIdData<Post> _postIdData;
+    // lägg till metod för att få vänners inlägg
+    IData<Post, User> _postData;
+    IDataToObject<Post, User> _postObject;
     IDataToList<Post, User> _postDataToList;
-    public PostsManager(IData<Post> postData, IIdData<Post> postIdData, IDataToList<Post, User> postDataToList)
+    public PostsManager(IData<Post, User> postData, IDataToObject<Post, User> postObject, IDataToList<Post, User> postDataToList)
     {
         _postData = postData;
-        _postIdData = postIdData;
+        _postObject = postObject;
         _postDataToList = postDataToList;
     }
     public int? Create(Post post)
@@ -20,7 +21,7 @@ public class PostsManager : IManager<Post, User>
         List<Post> searchedPosts = new();
         try
         {
-            List<Post> allPosts = _postData.GetAll();
+            List<Post> allPosts = _postData.GetAll(user);
             searchedPosts = allPosts.Where(p => p.Content == search).ToList();
         }
         catch (InvalidOperationException e)
@@ -31,7 +32,7 @@ public class PostsManager : IManager<Post, User>
     }
     public Post GetOne(int postId, User user)  //ska lösas via sql
     {
-         Post post = _postIdData.GetIds(postId);
+         Post post = _postObject.GetOne(postId, user);
         return post;
     }
     public int? Remove(Post post)   //man ska kunna radera sin post, alltså sätta till ej synlig

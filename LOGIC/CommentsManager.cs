@@ -3,9 +3,9 @@ using LOGIC;
 
 public class CommentsManager : IManager<Comment, User>
 {
-    IData<Comment> _commentsData;
+    IData<Comment, User> _commentsData;
     IDataToList<Comment, User> _commentsList;
-    public CommentsManager(IData<Comment> commentsData,  IDataToList<Comment, User> commentsList)
+    public CommentsManager(IData<Comment, User> commentsData,  IDataToList<Comment, User> commentsList)
     {
         _commentsData = commentsData;
         _commentsList = commentsList;

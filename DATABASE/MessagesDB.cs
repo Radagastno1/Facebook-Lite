@@ -3,7 +3,7 @@ using CORE;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class MessagesDB : IData<Message>, IDataToList<Message, User>
+public class MessagesDB : IData<Message, User>, IDataToList<Message, User>
 {
     public int? Create(Message obj)  //IDATA
     {
@@ -28,11 +28,11 @@ public class MessagesDB : IData<Message>, IDataToList<Message, User>
         }
         return rowsEffected;
     }
-    public List<Message> GetAll()   //IDATA
+    public List<Message> GetAll(User user)   
     {
         throw new NotImplementedException();
     }
-    public int? Update(Message obj)  //IDATA
+    public int? Update(Message obj)  
     {
         int rowsEffected = 0;
         //fixa så att du bara kan ändra dina egna meddelanden
@@ -45,7 +45,6 @@ public class MessagesDB : IData<Message>, IDataToList<Message, User>
     }
     public List<Message> GetById(int conversationId, User user) ///IDATA
     {
-        //MEDDE KOMMER INTE
         List<Message> messages = new();
         string query = "SELECT m.content as 'Content', concat(u.first_name, ' ', u.last_name) as 'Sender' " +
        "FROM messages m INNER JOIN conversations c ON m.conversations_id = c.id  " +

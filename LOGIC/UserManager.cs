@@ -2,13 +2,12 @@ using CORE;
 namespace LOGIC;
 public class UserManager : IManager<User, User>, IDeletionManager<User>, IMultipleDataGetter<User, int>
 {
-    IData<User> _userData;
+    IData<User, User> _userData;
     IDataSearcher<User> _dataSearcher;
     IDeletionData<User> _deletionData;
-    IDataToObject<User> _userDataToObject;
+    IDataToObject<User,User> _userDataToObject;
     public Action<User> OnDelete;
-
-    public UserManager(IData<User> userData, IDataSearcher<User> dataSearcher, IDeletionData<User> deletionData, IDataToObject<User> userDataToObject)
+    public UserManager(IData<User, User> userData, IDataSearcher<User> dataSearcher, IDeletionData<User> deletionData, IDataToObject<User, User> userDataToObject)
     {
         _userData = userData;
         _dataSearcher = dataSearcher;
@@ -25,7 +24,7 @@ public class UserManager : IManager<User, User>, IDeletionManager<User>, IMultip
         List<User> usersAvailable = new();
         foreach (User u in foundUsers)
         {
-            User availableUser = _userDataToObject.GetById(u.ID, user);
+            User availableUser = _userDataToObject.GetOne(u.ID, user);
             if (availableUser != null)
             {
                 usersAvailable.Add(availableUser);
@@ -46,7 +45,7 @@ public class UserManager : IManager<User, User>, IDeletionManager<User>, IMultip
         // }
         try
         {
-            User foundUser = _userDataToObject.GetById(id, user);
+            User foundUser = _userDataToObject.GetOne(id, user);
             return foundUser;
         }
         catch(InvalidOperationException)

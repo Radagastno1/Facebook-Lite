@@ -14,9 +14,6 @@ public class MessageUI
     }
     public void MakeMessage(User user, int conversationId)
     {
-        //man väljer en persons id
-        //startar en konversation direkt som är tom först OM inte det redan finns en konversation
-        //därefter kan man göra ett meddelande och skriva
         string content = ConsoleInput.GetString("Message: ");
         Message message = new(content, user.ID, conversationId);
         _messageManager.Create(message);

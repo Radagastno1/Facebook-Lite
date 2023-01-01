@@ -1,5 +1,5 @@
 namespace LOGIC;
-public interface IDataToObject<T>
+public interface IDataToObject<Tone, Ttwo>
 {
-    T GetById(int id, T bjo);
+    Tone GetOne(int id, Ttwo bjo);
 }

@@ -3,7 +3,7 @@ using CORE;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class PostsDB : IData<Post>, IIdData<Post>, IDataToList<Post, User>
+ public class PostsDB : IData<Post, User>, IDataToObject<Post, User>, IDataToList<Post, User>
 {
     public int? Create(Post obj)  
     {
@@ -27,11 +27,20 @@ public class PostsDB : IData<Post>, IIdData<Post>, IDataToList<Post, User>
         }
         return rowsEffected;
     }
-    public List<Post> GetAll() //IDATA
+    //hämtar alla inlägg som dina vänner har gjort och som är synliga 
+    public List<Post> GetAll(User user) 
     {
         List<Post> posts = new();
-        string query = $"SELECT p.id as 'Id', p.content as 'Content', p.date_created as 'DateCreated', u.first_name as 'FirstName', u.last_name as 'LastName', p.users_id as 'UserId' " +
-         $"FROM posts p INNER JOIN users u ON p.users_id = u.id WHERE p.posts_types_id = 1 AND p.is_visible = TRUE AND p.is_deleted = FALSE;";
+        string query = "SELECT p.id as 'Id', p.content as 'Content', p.date_created as 'DateCreated', " +
+        "u.first_name as 'FirstName', u.last_name as 'LastName', p.users_id as 'UserId' " +
+        "FROM posts p INNER JOIN users u " + 
+        "ON p.users_id = u.id " +
+        "INNER JOIN users_friends uf1 " +
+        "ON u.id = uf1.users_id1 " +
+        "WHERE p.posts_types_id = 1 " +
+        "AND p.is_visible = TRUE "+
+        "AND p.is_deleted = FALSE " +
+        "AND uf1.users_id2 = 30;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
             posts = con.Query<Post>(query).ToList();
@@ -77,7 +86,7 @@ public class PostsDB : IData<Post>, IIdData<Post>, IDataToList<Post, User>
             return null;
         }
     }
-    public Post GetIds(int postId)  //byt namn på metoden i interfacet iiddata
+    public Post GetOne(int postId, User user)  //byt namn på metoden 
     {
         Post post = new();
         string query = $"SELECT p.id as 'Id', p.content as 'Content', p.date_created as 'DateCreated', u.first_name as 'FirstName', u.last_name as 'LastName', p.users_id as 'UserId' " +

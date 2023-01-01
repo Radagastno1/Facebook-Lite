@@ -3,7 +3,7 @@ using LOGIC;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IIdData<ConversationResult>, IDataToList<Conversation, User>
+public class ConversationDB : IData<Conversation, User>, IConversationData<Conversation, ConversationResult>, IDataToList<Conversation, User>
 {
     public int? Create(Conversation conversation)  
     {
@@ -31,29 +31,31 @@ public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IId
     {
         throw new NotImplementedException();
     }
-    public List<Conversation> GetAll()   //ANVÄNDS INTE ?
+    public List<Conversation> GetAll(User user) 
     {
         List<Conversation> allConversations = new();
         string query = "SELECT uc.conversations_id as 'Id', c.date_created as 'DateCreated', c.creator_id as 'CreatorId', u.id as 'ParticipantId'" +
                        "FROM conversations c " +
-                       "LEFT JOIN users_conversations uc " +
+                       "INNER JOIN users_conversations uc " +
                        "ON c.id = uc.conversations_id " +
-                       "LEFT JOIN users u " +
+                       "INNER JOIN users u " +
                         "ON u.id = uc.users_id " +
-                        "WHERE u.is_active = true;";
+                        "WHERE u.is_active = true " + 
+                        "AND u.id = 38;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
             allConversations = con.Query<Conversation>(query).ToList();
         }
         return allConversations;
     }
-    public List<Conversation> GetByIdAndText(int amountOfUsers, string sql)
+    //denna ska användas för att hämta konv mellan specifika användare, inte implementerat det i c# än
+    public List<Conversation> GetConversationsOfSpecificParticipants(int amountOfUsers, string sql)
     {
         List<Conversation> conversations = new();
         string query = $"SELECT uc.conversations_id AS 'ID', " +
         "GROUP_CONCAT(uc.users_id) AS User_List " +
         "FROM users_conversations uc " +
-        $"WHERE  uc.users_id IN ({sql})" + //I SQL SKA IN IDS I EN PARANTES
+        $"WHERE  uc.users_id IN ({sql})" + 
         "GROUP BY uc.conversations_id " +
         "HAVING COUNT(DISTINCT uc.users_id) = @amountOfUsers;"; //2 is how many usersids HÄR SKA IN LÄNGD PÅ LISTAN
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
@@ -62,7 +64,7 @@ public class ConversationDB : IData<Conversation>, IExtraData<Conversation>, IId
         }
         return conversations;
     }
-    public ConversationResult GetIds(int conversationId)
+    public ConversationResult GetConversationIdAndParticipantNames(int conversationId)
     {
         List<User> users = new();
         ConversationResult result = new();

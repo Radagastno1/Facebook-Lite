@@ -1,8 +1,6 @@
 ﻿using CORE;
 using LOGIC;
 using DATABASE;
-using Dapper;
-using MySqlConnector;
 namespace UI;
 internal class Program
 {
@@ -10,7 +8,7 @@ internal class Program
     static UserManager userManager = new(new UsersDB(), new UsersDB(), new UsersDB(), new UsersDB());
     static PostsManager postsManager = new(new PostsDB(), new PostsDB(), new PostsDB());
     static CommentsManager commentsManager = new(new CommentsDB(), new CommentsDB());
-    static ConversationManager conversationManager = new(new ConversationDB(), new ConversationDB(), new MessagesDB(), new ConversationDB(), new ConversationDB());
+    static ConversationManager conversationManager = new(new ConversationDB(), new ConversationDB(), new MessagesDB(), new ConversationDB());
     static MessgageManager messageManager = new(new MessagesDB(), new MessagesDB());
     static FriendManager friendManager = new(new FriendsDB(), new FriendsDB());
     static BlockingManager blockingManager = new(new BlockingsDB());

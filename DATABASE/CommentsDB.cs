@@ -3,7 +3,7 @@ using LOGIC;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class CommentsDB : IData<Comment>, IDataToList<Comment, User>
+public class CommentsDB : IData<Comment, User>, IDataToList<Comment, User>
 {
     public int? Create(Comment comment)  //IDATA
     {
@@ -26,13 +26,13 @@ public class CommentsDB : IData<Comment>, IDataToList<Comment, User>
         }
         return messageId;
     }
-    public List<Comment> GetAll()
+    public List<Comment> GetAll(User user)
     {
         List<Comment> comments = new();
         string query = "SELECT p.id, p.content, p.date_created as 'DateCreated', p.users_id as 'UserId', " +
         "p.on_post_id as 'OnPostId', u.first_name as 'FirstName', u.last_name as 'LastName' FROM posts p " +
         "INNER JOIN users u ON p.users_id = u.id " +
-        "WHERE posts_types_id = 2 AND is_visible = TRUE;";
+        "WHERE p.posts_types_id = 2 AND p.is_visible = TRUE AND p.users_id = @userId;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
             comments = con.Query<Comment>(query).ToList();
