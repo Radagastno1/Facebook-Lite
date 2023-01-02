@@ -34,16 +34,14 @@ internal class Program
         userUI.OnDialogue += conversationUI.ShowDialogue;
         userUI.OnMakeMessage += messageUI.MakeMessage;
         userUI.OnMakeConversation += conversationUI.MakeNewConversation;
-        // userUI.OnShow += postUI.ShowPosts;
 
         userManager.OnDelete += usersDB.UpdateToDeleted;
-        // logInUI.OnLoggedIn += friendManager.Update;
-        // logInUI.OnLoggedIn += friendManager.LoadFriends;
+        logInUI.OnLoggedIn += friendManager.Update;
+        logInUI.OnLoggedIn += friendManager.LoadFriends;
         userUI.LoadFriends += friendManager.Update;
         userUI.LoadFriends += friendManager.LoadFriends;
         blockingManager.OnBlockUser += friendsDB.Delete;
         // blockingsUI.OnBlockUser += friendManager.LoadFriends;
-
 
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.BackgroundColor = ConsoleColor.White;
@@ -84,8 +82,8 @@ internal class Program
                         if (user != null)
                         {
                             FriendsUI friendsUI = new(friendManager, friendManager, user);
-                            friendsUI.OnFriendUI += friendManager.Update;
-                            friendsUI.OnFriendUI += friendManager.LoadFriends;
+                            friendsUI.LoadFriends += friendManager.Update;
+                            friendsUI.LoadFriends += friendManager.LoadFriends;
                             ShowMyFacebook(user);
                         }
                         break;

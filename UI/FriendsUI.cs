@@ -5,8 +5,7 @@ public class FriendsUI
 {
     IRelationsManager<User> _relationsManager;
     IFriendManager<User> _friendManager;
-    
-    public Action<User> OnFriendUI;
+    public Action<User> LoadFriends;
     static Dictionary<int, string> FriendRequestStatus = new Dictionary<int, string>()
     {
         [1] = "[A] Add friend]",
@@ -18,8 +17,7 @@ public class FriendsUI
     {
         _relationsManager = relationsManager;
         _friendManager = friendManager;
-        OnFriendUI?.Invoke(user);
-        // _friendManager.LoadFriends(user);
+        LoadFriends?.Invoke(user);
     }
     public void ShowMyFriends(User user)
     {
@@ -28,7 +26,7 @@ public class FriendsUI
             Console.WriteLine(friend.ToString());
         }
     }
-    public static bool IsFriends(User user, int friendId)
+    public bool IsFriends(User user, int friendId)
     {
         foreach (User friend in user.MyFriends)
         {
@@ -54,7 +52,6 @@ public class FriendsUI
     {
         _relationsManager.Create(user, friendId);
     }
-    // FIXA SÅ ATT BEROENDE PÅ STATUSEN SÅ BLIR DET EN AV DESSA NEDANFÖR 
     public int GetFriendShipStatus(User user, int friendId)
     {
         int status = 0;
@@ -94,11 +91,10 @@ public class FriendsUI
         }
         return statusString;
     }
-
     public void DeleteFriendship(User user, int friendId)
     {
         ConsoleKey answerKey = ConsoleInput.GetPressedKey("Delete friendship? Y/N", LogicTool.NewKeyList(ConsoleKey.Y, ConsoleKey.N));
-        if(answerKey == ConsoleKey.Y) _relationsManager.Delete(user, friendId);
+        if (answerKey == ConsoleKey.Y) _relationsManager.Delete(user, friendId);
         else return;
     }
 }

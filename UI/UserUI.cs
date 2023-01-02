@@ -69,7 +69,7 @@ public class UserUI
             string[] overviewOptions = new string[]
               {"[POSTS]","[MESSAGE]","[RETURN]", "[BLOCK USER]"};
             int menuOptions = 0;
-
+            //denna nedan i friendsui getfriendshipstatus, eller showfriendshipstatus?;
             FriendsUI friendsUI = new(_friendRelationsManager, _friendManager, user);
             int status = friendsUI.GetFriendShipStatus(user, id);
             if (status == 1) overviewOptions = overviewOptions.Concat(new string[] { "[ADD FRIEND]" }).ToArray();
@@ -103,6 +103,7 @@ public class UserUI
                             List<int> ids = new();
                             ids.Add(id);
                             List<User> participants = _multipleUserData.GetUsersById(ids, user);
+                            // fixa nedanför bort med delegaten
                             conversationId = (int)OnMakeConversation?.Invoke(participants, user);
                         }
                         else
