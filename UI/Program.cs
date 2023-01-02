@@ -170,7 +170,7 @@ internal class Program
                 case 1:
                     return;
                 case int n when (n > 1):
-                    int conversationsId = foundConversations[n - 1].ID;
+                    int conversationsId = foundConversations[n - 2].ID;
                     messageUI.ShowMessages(conversationsId, user);
                     messageUI.MakeMessage(user, conversationsId);
                     Console.ReadKey();
