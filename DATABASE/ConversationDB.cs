@@ -57,7 +57,7 @@ public class ConversationDB : IData<Conversation, User>, IConversationData<Conve
         "FROM users_conversations uc " +
         $"WHERE  uc.users_id IN ({sql})" + 
         "GROUP BY uc.conversations_id " +
-        "HAVING COUNT(DISTINCT uc.users_id) = @amountOfUsers;"; //2 is how many usersids HÄR SKA IN LÄNGD PÅ LISTAN
+        "HAVING COUNT(DISTINCT uc.users_id) = @amountOfUsers;"; //HÄR SKA IN LÄNGD PÅ LISTAN
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
             conversations = con.Query<Conversation>(query, new { @amountOfUsers = amountOfUsers }).ToList();
@@ -87,13 +87,14 @@ public class ConversationDB : IData<Conversation, User>, IConversationData<Conve
     }
     public List<Conversation> GetById(int id, User user)  
     {
-        List<Conversation> conversations = new();
-        string query = $"SELECT uc.conversation_id as 'ID' FROM users_conversations uc WHERE uc.users_id = @id;";
-        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
-        {
-            conversations = con.Query<Conversation>(query).ToList();
-        }
-        return conversations;
+        // List<Conversation> conversations = new();
+        // string query = $"SELECT uc.conversation_id as 'ID' FROM users_conversations uc WHERE uc.users_id = @id;";
+        // using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
+        // {
+        //     conversations = con.Query<Conversation>(query).ToList();
+        // }
+        // return conversations;
+        throw new NotImplementedException();
     }
     public Conversation GetDialogueId(int userId, int id)
     {

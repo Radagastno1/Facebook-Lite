@@ -14,21 +14,15 @@ public class ConversationUI
         _idManager = idManager;
         _connectingMultiple = connectingMultiple;
     }
-    public void ShowConversationParticipants(User user)
+    public void ShowMyConversations(User user)
     {
-        // List<int> ids = new();
-        // ids.Add(id);
-        
         try
         {
             List<int>ids = _idManager.GetAllMyConversationsIds(user);
             List<Conversation> foundConversations = _idManager.GetParticipantsPerConversation(ids);
             List<string> conversationToList = new();
             conversationToList.Add("[Return]");
-            foreach (Conversation c in foundConversations)
-            {
-                conversationToList.Add(c.ToString());
-            }
+            foundConversations.ForEach(c => conversationToList.Add(c.ToString()));
             string[] conversationsToArray = conversationToList.ToArray();
             int amountOfChoices = conversationsToArray.Length;
             int menuOptions = 0;
@@ -65,47 +59,14 @@ public class ConversationUI
             return 0;
         }
     }
-    // public void ShowConversations(List<Conversation> conversations)
-    // {
-    //     foreach (Conversation item in conversations)
-    //     {
-    //         Console.WriteLine(item.ToString());
-    //     }
-    // }
     public int MakeNewConversation(List<User> participants, User user)
     {
         int conversationId = _connectingMultiple.MakeNew(participants, user);
         if (conversationId > 0) return conversationId;
         else Console.WriteLine("Something went wrong."); return 0;
     }
-
-    // public void ShowConversations(List<Conversation>conversations)
-    // {
-    //     foreach (Conversation item in conversations)
-    //     {
-    //         Console.WriteLine($"Conversation [{item.ID}]");
-    //     }
-    // }
-    // public ConversationResult ConversationsExists(List<int> ids, User user)
-    // {
-    //     ConversationResult result = new();
-    //     List<int> participantIds = new();
-    //     participantIds.Add(user.ID);
-    //     foreach (int id in ids)
-    //     {
-    //         participantIds.Add(id);
-    //     }
-    //     List<Conversation> foundConversations = new();
-    //     foundConversations = _idManager.GetIds(participantIds);
-    //     if(foundConversations.Count > 0)
-    //     {
-    //         result.conversations = foundConversations;
-    //         result.ConversationExists = true;
-    //     }
-    //     else
-    //     {
-    //         result.ConversationExists = false;
-    //     }
-    //     return result;
-    // }
+    public void SearchConversation()
+    {
+        // användare söker om vissa personer är med i en konv 
+    }
 }

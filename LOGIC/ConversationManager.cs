@@ -18,7 +18,7 @@ public class ConversationManager : IManager<Conversation, User>, IConnectingMult
     {
         int? conversationId = _conversationData.Create(conversation);
         if (conversationId != null)
-        {             //använder jag för mycket nullable ints?
+        {         
             conversation.ID = conversationId.GetValueOrDefault();
         }
         return conversationId;
@@ -35,7 +35,7 @@ public class ConversationManager : IManager<Conversation, User>, IConnectingMult
     }
     public List<Conversation> GetBySearch(string name, User user)
     {
-        throw new NotImplementedException();    //ska kunna söka efter konversationer via namn i sin chatt
+        throw new NotImplementedException();//ska kunna söka efter konversationer via namn i sin chatt
     }
     public Conversation GetOne(int data, User user)
     {
@@ -43,7 +43,7 @@ public class ConversationManager : IManager<Conversation, User>, IConnectingMult
     }
     public int? Remove(Conversation obj)
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException();//man ska kunna lämna en konversation
     }
     public ConversationResult GetIds(List<int> participantIds)
     {
@@ -86,7 +86,6 @@ public class ConversationManager : IManager<Conversation, User>, IConnectingMult
         Conversation conversation = new();
         conversation.CreatorId = user.ID;
         int conversationId = Create(conversation).GetValueOrDefault();
-        //den som startar konversationen är en del av participants med:
         participants.Add(user);
         foreach (User item in participants)
         {
@@ -97,14 +96,14 @@ public class ConversationManager : IManager<Conversation, User>, IConnectingMult
     }
     public List<Conversation> GetParticipantsPerConversation(List<int> ids)
     {
+        //användares id ska komma in och det ska kollas mot db om det finns en konv mellan dessa
         try
         {
             List<Conversation> conversations = GetIds(ids).Conversations;
             List<int> conversationsIds = new();
-            foreach (Conversation c in conversations)
-            {
-                conversationsIds.Add(c.ID);
-            }
+            //konversations id läggs i en lista
+            conversations.ForEach(c => conversationsIds.Add(c.ID));
+            //konversationerna som fanns med alla deltarares namn hämtas 
             List<Conversation> foundConversations = GetById(conversationsIds);
             return foundConversations;
         }
