@@ -8,7 +8,7 @@ public class UserUI
     IManager<Post, User> _postManager;
     IManager<Conversation, User> _conversationManager;
     IManager<Message, User> _messageManager;
-    IIdManager<Conversation> _idManager;
+    IIdManager<Conversation, User> _idManager;
     IManager<Comment, User> _commentManager;
     IDeletionManager<User> _deletionManager;
     // IBlockingsManager<User> _blockingsManager;
@@ -25,7 +25,7 @@ public class UserUI
     List<ConsoleKey> keys = new();
     public Action<User> LoadFriends;
 
-    public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IIdManager<Conversation> idManager, IManager<Message, User> messageManager, IManager<Comment, User> commentManager, IDeletionManager<User> deletionManager, IMultipleDataGetter<User, int> multipleUserData, IRelationsManager<User> friendRelationsManager, IRelationsManager<User> blockRelationsManager, IFriendManager<User> friendManager, IConnectingMultiple<User> connectingUserManager)
+    public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IIdManager<Conversation, User> idManager, IManager<Message, User> messageManager, IManager<Comment, User> commentManager, IDeletionManager<User> deletionManager, IMultipleDataGetter<User, int> multipleUserData, IRelationsManager<User> friendRelationsManager, IRelationsManager<User> blockRelationsManager, IFriendManager<User> friendManager, IConnectingMultiple<User> connectingUserManager)
     {
         _userManager = userManager;
         _postManager = postManager;

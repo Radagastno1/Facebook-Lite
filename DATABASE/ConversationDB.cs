@@ -41,10 +41,10 @@ public class ConversationDB : IData<Conversation, User>, IConversationData<Conve
                        "INNER JOIN users u " +
                         "ON u.id = uc.users_id " +
                         "WHERE u.is_active = true " + 
-                        "AND u.id = 38;";
+                        "AND u.id = @ID;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
         {
-            allConversations = con.Query<Conversation>(query).ToList();
+            allConversations = con.Query<Conversation>(query, param : user).ToList();
         }
         return allConversations;
     }

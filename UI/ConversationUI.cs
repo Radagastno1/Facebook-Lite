@@ -5,21 +5,23 @@ public class ConversationUI
 {
     IManager<Conversation, User> _conversationManager;
     IManager<Message, User> _messageManager;
-    IIdManager<Conversation> _idManager;
+    IIdManager<Conversation, User> _idManager;
     IConnectingMultiple<User> _connectingMultiple;
-    public ConversationUI(IManager<Conversation, User> conversationManager, IManager<Message, User> messageManager, IIdManager<Conversation> idManager, IConnectingMultiple<User> connectingMultiple)
+    public ConversationUI(IManager<Conversation, User> conversationManager, IManager<Message, User> messageManager, IIdManager<Conversation, User> idManager, IConnectingMultiple<User> connectingMultiple)
     {
         _conversationManager = conversationManager;
         _messageManager = messageManager;
         _idManager = idManager;
         _connectingMultiple = connectingMultiple;
     }
-    public void ShowConversationParticipants(int id)
+    public void ShowConversationParticipants(User user)
     {
-        List<int> ids = new();
-        ids.Add(id);
+        // List<int> ids = new();
+        // ids.Add(id);
+        
         try
         {
+            List<int>ids = _idManager.GetAllMyConversationsIds(user);
             List<Conversation> foundConversations = _idManager.GetParticipantsPerConversation(ids);
             List<string> conversationToList = new();
             conversationToList.Add("[Return]");
@@ -63,21 +65,19 @@ public class ConversationUI
             return 0;
         }
     }
-    public void ShowConversations(List<Conversation> conversations)
-    {
-        foreach (Conversation item in conversations)
-        {
-            Console.WriteLine(item.ToString());
-        }
-    }
+    // public void ShowConversations(List<Conversation> conversations)
+    // {
+    //     foreach (Conversation item in conversations)
+    //     {
+    //         Console.WriteLine(item.ToString());
+    //     }
+    // }
     public int MakeNewConversation(List<User> participants, User user)
     {
         int conversationId = _connectingMultiple.MakeNew(participants, user);
         if (conversationId > 0) return conversationId;
         else Console.WriteLine("Something went wrong."); return 0;
     }
-
-
 
     // public void ShowConversations(List<Conversation>conversations)
     // {

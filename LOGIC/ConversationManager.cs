@@ -1,7 +1,7 @@
 using CORE;
 namespace LOGIC;
 
-public class ConversationManager : IManager<Conversation, User>, IConnectingMultiple<User>, IIdManager<Conversation>
+public class ConversationManager : IManager<Conversation, User>, IConnectingMultiple<User>, IIdManager<Conversation, User>
 {
     IData<Conversation, User> _conversationData;
     IDataToList<Conversation, User> _conversationsDataToList;
@@ -74,6 +74,13 @@ public class ConversationManager : IManager<Conversation, User>, IConnectingMult
         }
         return result;
     }
+    public List<int> GetAllMyConversationsIds(User user)
+    {
+        List<Conversation> conversations = _conversationData.GetAll(user);
+        List<int> conversationIds = new();
+        conversations.ForEach(c => conversationIds.Add(c.ID));
+        return conversationIds;
+    }       
     public int MakeNew(List<User> participants, User user)
     {
         Conversation conversation = new();

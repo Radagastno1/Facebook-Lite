@@ -139,6 +139,7 @@ internal class Program
     }
     public static void Messenger(User user)
     {
+        // user.id ska in i metod som hämtar alla konv.id och sedan vilka som är med
         List<int> ids = new();
         ids.Add(user.ID);
         List<Conversation> foundConversations = new();
@@ -147,6 +148,7 @@ internal class Program
         conversationToList.Add("[Return]");
 
         foundConversations = conversationManager.GetParticipantsPerConversation(ids);
+        
         if (foundConversations != null)
         {
             foreach (Conversation c in foundConversations)
