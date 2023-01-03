@@ -27,7 +27,7 @@ public class ConversationDB : IData<Conversation, User>, IConversationData<Conve
         }
         return usersConversationId;
     }
-    public int? Delete(Conversation obj)   //HUR SKA MAN RADERA KONV OCH SKA MAN ELLER LÄGGA TILL BOOL ISDELETED?
+    public int? Delete(Conversation obj)  
     {
         throw new NotImplementedException();
     }

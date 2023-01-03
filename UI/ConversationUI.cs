@@ -18,7 +18,7 @@ public class ConversationUI
     {
         try
         {
-            List<int>ids = _idManager.GetAllMyConversationsIds(user);
+            List<int> ids = _idManager.GetAllMyConversationsIds(user);
             List<Conversation> foundConversations = _idManager.GetParticipantsPerConversation(ids);
             List<string> conversationToList = new();
             conversationToList.Add("[Return]");
@@ -43,6 +43,19 @@ public class ConversationUI
         catch (NullReferenceException)
         {
             Console.WriteLine("No conversations yet..");
+        }
+    }
+    public List<Conversation> GetAllMyConversations(User user)
+    {
+        try
+        {
+            List<int> conversationIds = _idManager.GetAllMyConversationsIds(user);
+            List<Conversation> myConversations = _idManager.GetById(conversationIds);
+            return myConversations;
+        }
+        catch(InvalidOperationException)
+        {
+            return null;
         }
     }
     public int ShowDialogue(User user, int id)

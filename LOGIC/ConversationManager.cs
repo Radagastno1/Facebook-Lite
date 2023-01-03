@@ -97,24 +97,25 @@ public class ConversationManager : IManager<Conversation, User>, IConnectingMult
     public List<Conversation> GetParticipantsPerConversation(List<int> ids)
     {
         //användares id ska komma in och det ska kollas mot db om det finns en konv mellan dessa
-        try
-        {
-            List<Conversation> conversations = GetIds(ids).Conversations;
-            List<int> conversationsIds = new();
-            //konversations id läggs i en lista
-            conversations.ForEach(c => conversationsIds.Add(c.ID));
-            //konversationerna som fanns med alla deltarares namn hämtas 
-            List<Conversation> foundConversations = GetById(conversationsIds);
-            return foundConversations;
-        }
-        catch (InvalidOperationException)
-        {
-            return null;
-        }
-        catch(NullReferenceException)
-        {
-            return null;
-        }
+        // try
+        // {
+        //     List<Conversation> conversations = GetIds(ids).Conversations;
+        //     List<int> conversationsIds = new();
+        //     //konversations id läggs i en lista
+        //     conversations.ForEach(c => conversationsIds.Add(c.ID));
+        //     //konversationerna som fanns med alla deltarares namn hämtas 
+        //     List<Conversation> foundConversations = GetById(conversationsIds);
+        //     return foundConversations;
+        // }
+        // catch (InvalidOperationException)
+        // {
+        //     return null;
+        // }
+        // catch(NullReferenceException)
+        // {
+        //     return null;
+        // }
+        throw new NotImplementedException();
     }
     public List<Conversation> GetById(List<int> ids)
     {

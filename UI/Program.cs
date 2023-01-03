@@ -25,6 +25,7 @@ internal class Program
     //4. om man blockar eller blir blockad ska man ej kunna se kommentarer osv + ladda in vänner på nytt
     //5. fixa in string title som inparamter i menymetoden! så det blir som login sidan med title = facebook
     //6. när man är blockad/har blockat ska man kunna se konv. man haft men ej kunna skriva fler medd så länge
+    //7. notiser plan
     private static void Main(string[] args)
     {
         UsersDB usersDB = new();
@@ -93,7 +94,7 @@ internal class Program
                         //userns mail sedan eventuellt för att validera
                         break;
                     case 2:
-                        //FORGOT PASSWORD - EMAIL-SERVICE för utveckling
+                        //FORGOT PASSWORD - EMAIL-SERVICE med delegat-övning för utveckling
                         break;
                 }
             }
@@ -101,8 +102,6 @@ internal class Program
     }
     public static void ShowMyFacebook(User user)
     {
-        // FriendsUI friendsUI = new(friendManager, user);
-        // friendsUI.OnFriendUI += friendManager.LoadMyFriends;
         string[] overviewOptions = new string[]
         { "[PUBLISH]","[SEARCH]","[MESSENGER]", "[MY PAGE]","[SETTINGS]", "[LOG OUT]" };
         int menuOptions = 0;
@@ -140,21 +139,18 @@ internal class Program
     public static void Messenger(User user)
     {
         // user.id ska in i metod som hämtar alla konv.id och sedan vilka som är med
-        List<int> ids = new();
-        ids.Add(user.ID);
+        // List<int> ids = new();
+        // ids.Add(user.ID);
         List<Conversation> foundConversations = new();
         List<string> conversationToList = new();
         conversationToList.Add("[New Conversation]");
         conversationToList.Add("[Return]");
-
-        foundConversations = conversationManager.GetParticipantsPerConversation(ids);
+        foundConversations = conversationUI.GetAllMyConversations(user);
+        // foundConversations = conversationManager.GetParticipantsPerConversation(ids);
         
         if (foundConversations != null)
         {
-            foreach (Conversation c in foundConversations)
-            {
-                conversationToList.Add(c.ToString());
-            }
+            foundConversations.ForEach(c => conversationToList.Add(c.ToString()));
         }
         string[] conversationsToArray = conversationToList.ToArray();
         int amountOfChoices = conversationsToArray.Length;

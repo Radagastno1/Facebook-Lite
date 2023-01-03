@@ -29,5 +29,15 @@ public class StatisticDB  //används inte i programmet än, men experimenterar m
         float averageAge = con.QuerySingle<float>(query);
         return averageAge;
     }
+    public Dictionary<DateTime, int> GetAmountOfNewUsersPerDate()
+    {
+        string query = "SELECT DATE(account_created) as 'Date', " +
+                        "COUNT(users.id) as 'Users' " +
+                        "FROM users " +
+                        "GROUP BY DAY(account_created);";
+        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+        Dictionary<DateTime, int> newAccountPerDate = con.Query<KeyValuePair<DateTime, int>>(query).ToDictionary(pair => pair.Key, pair => pair.Value);
+        return newAccountPerDate;
+    }
 
 }
