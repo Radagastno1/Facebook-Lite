@@ -137,24 +137,25 @@ internal class Program
     }
     public static void Messenger(User user)
     {
-        List<Conversation> foundConversations = new();
-        List<string> conversationToList = new();
-        conversationToList.Add("[New Conversation]");
-        conversationToList.Add("[Return]");
-        foundConversations = conversationUI.GetAllMyConversations(user);
-        if (foundConversations != null)
-        {
-            foundConversations.ForEach(c => conversationToList.Add(c.ToString()));
-        }
-        string[] conversationsToArray = conversationToList.ToArray();
-        int amountOfChoices = conversationsToArray.Length;
         while (true)
         {
+            List<Conversation> foundConversations = new();
+            List<string> conversationToList = new();
+            conversationToList.Add("[New Conversation]");
+            conversationToList.Add("[Return]");
+            foundConversations = conversationUI.GetAllMyConversations(user);
+            if (foundConversations != null)
+            {
+                foundConversations.ForEach(c => conversationToList.Add(c.ToString()));
+            }
+            string[] conversationsToArray = conversationToList.ToArray();
+            int amountOfChoices = conversationsToArray.Length;
             int menuOptions = ConsoleInput.GetMenuOptions(conversationsToArray);
             switch (menuOptions)
             {
                 case 0:
                     userUI.AddPeopleToNewConversation(user);
+                    conversationUI.GetAllMyConversations(user);
                     break;
                 case 1:
                     return;

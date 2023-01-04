@@ -7,17 +7,14 @@ public class UsersDB : IData<User, User>, IDataSearcher<User>, IDeletionData<Use
 {
     public int? Create(User obj)
     {
-        int userId = 0;
         string query =
         "INSERT INTO users(first_name, last_name, email, pass_word, birth_date, gender, about_me, role_id) " +
         "VALUES(@FirstName, @LastName, @Email, @PassWord, @BirthDate, @Gender, @AboutMe, 5); " +
         "SELECT LAST_INSERT_ID();";
         try
         {
-            using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
-
-                userId = con.ExecuteScalar<int>(query, param: obj);
-
+            using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+            int userId = con.ExecuteScalar<int>(query, param: obj);
             return userId;
         }
         catch (InvalidOperationException)
@@ -115,6 +112,6 @@ public class UsersDB : IData<User, User>, IDataSearcher<User>, IDeletionData<Use
         "UPDATE messages SET is_visible = false WHERE sender_id = @Id;" +
         "COMMIT;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=true;"))
-        con.ExecuteScalar<int>(query, param: user);
+            con.ExecuteScalar<int>(query, param: user);
     }
 }
