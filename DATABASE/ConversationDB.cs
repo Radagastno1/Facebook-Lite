@@ -5,33 +5,29 @@ using MySqlConnector;
 namespace DATABASE;
 public class ConversationDB : IData<Conversation, User>, IConversationData<Conversation, ConversationResult>, IDataToList<Conversation, User>
 {
-    public int? Create(Conversation conversation)  
+    public int? Create(Conversation conversation)
     {
         int conversationId = 0;
         string query = "INSERT INTO conversations(creator_id) VALUES(@CreatorId);" +
         "SELECT LAST_INSERT_ID();";
-        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
-        {
-            conversationId = con.ExecuteScalar<int>(query, param: conversation);
-        }
+        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+        conversationId = con.ExecuteScalar<int>(query, param: conversation);
         return conversationId;
     }
-    public int? Update(Conversation conversation) 
+    public int? Update(Conversation conversation)
     {
         int usersConversationId = 0;
         string query = "INSERT INTO users_conversations(users_id, conversations_id) VALUES (@participantId, @Id);" +
         "SELECT LAST_INSERT_ID();";
-        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
-        {
-            usersConversationId = con.ExecuteScalar<int>(query, param: conversation);
-        }
+        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+        usersConversationId = con.ExecuteScalar<int>(query, param: conversation);
         return usersConversationId;
     }
-    public int? Delete(Conversation obj)  
+    public int? Delete(Conversation obj)
     {
         throw new NotImplementedException();
     }
-    public List<Conversation> GetAll(User user) 
+    public List<Conversation> GetAll(User user)
     {
         List<Conversation> allConversations = new();
         string query = "SELECT uc.conversations_id as 'Id', c.date_created as 'DateCreated', c.creator_id as 'CreatorId', u.id as 'ParticipantId'" +
@@ -40,12 +36,10 @@ public class ConversationDB : IData<Conversation, User>, IConversationData<Conve
                        "ON c.id = uc.conversations_id " +
                        "INNER JOIN users u " +
                         "ON u.id = uc.users_id " +
-                        "WHERE u.is_active = true " + 
+                        "WHERE u.is_active = true " +
                         "AND u.id = @ID;";
-        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
-        {
-            allConversations = con.Query<Conversation>(query, param : user).ToList();
-        }
+        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+        allConversations = con.Query<Conversation>(query, param: user).ToList();
         return allConversations;
     }
     //denna ska användas för att hämta konv mellan specifika användare, inte implementerat det i c# än
@@ -55,13 +49,11 @@ public class ConversationDB : IData<Conversation, User>, IConversationData<Conve
         string query = $"SELECT uc.conversations_id AS 'ID', " +
         "GROUP_CONCAT(uc.users_id) AS User_List " +
         "FROM users_conversations uc " +
-        $"WHERE  uc.users_id IN ({sql})" + 
+        $"WHERE  uc.users_id IN ({sql})" +
         "GROUP BY uc.conversations_id " +
         "HAVING COUNT(DISTINCT uc.users_id) = @amountOfUsers;"; //HÄR SKA IN LÄNGD PÅ LISTAN
-        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
-        {
-            conversations = con.Query<Conversation>(query, new { @amountOfUsers = amountOfUsers }).ToList();
-        }
+        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+        conversations = con.Query<Conversation>(query, new { @amountOfUsers = amountOfUsers }).ToList();
         return conversations;
     }
     public ConversationResult GetConversationIdAndParticipantNames(int conversationId)
@@ -75,17 +67,15 @@ public class ConversationDB : IData<Conversation, User>, IConversationData<Conve
                        "INNER JOIN users u " +
                        "ON u.id = uc.users_id " +
                        "WHERE c.id = @id AND u.is_active = true;";
-        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
-        {
-            result.Conversation = con.QuerySingle<Conversation>(query, new { @id = conversationId });
-        }
+        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+        result.Conversation = con.QuerySingle<Conversation>(query, new { @id = conversationId });
         if (result.Conversation != null)
         {
             result.ConversationExists = true;
         }
         return result;
     }
-    public List<Conversation> GetById(int id, User user)  
+    public List<Conversation> GetById(int id, User user)
     {
         // List<Conversation> conversations = new();
         // string query = $"SELECT uc.conversation_id as 'ID' FROM users_conversations uc WHERE uc.users_id = @id;";
@@ -103,10 +93,8 @@ public class ConversationDB : IData<Conversation, User>, IConversationData<Conve
                         "from users_conversations uc " +
                         "group by uc.conversations_id " +
                         "having sum(uc.users_id in (@userId, @id)) = count(*);";
-        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
-        {
-            dialogue = con.QuerySingle<Conversation>(query, new{@userId = userId, @id = id});
-        }
+        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+        dialogue = con.QuerySingle<Conversation>(query, new { @userId = userId, @id = id });
         return dialogue;
     }
 }

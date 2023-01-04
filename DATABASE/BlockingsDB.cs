@@ -10,10 +10,8 @@ public class BlockingsDB : IRelationsData<User>
         int blockedId = 0;
         string query = "INSERT INTO users_blocked (users_id, blocked_user_id) VALUES(@userId, @blockedUserId);" +
         "SELECT LAST_INSERT_ID();";
-        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
-        {
-            blockedId = con.ExecuteScalar<int>(query, new { @userId = user.ID, @blockedUserId = blockedUserId });
-        }
+        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+        blockedId = con.ExecuteScalar<int>(query, new { @userId = user.ID, @blockedUserId = blockedUserId });
         return blockedId;
     }
     public int Delete(User user, int blockedUserId)
@@ -25,19 +23,15 @@ public class BlockingsDB : IRelationsData<User>
     }
     public List<User> GetMine(User user)
     {
-        //hämta de men har blockerat till en lista
         string query = "SELECT u.id, u.first_name AS 'FirstName', u.last_name AS 'LastName' FROM users u " +
         "INNER JOIN users_blocked ub ON u.id = ub.blocked_user_id " +
         "WHERE ub.users_id = @userId;";
         using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
-        List<User> blockedUsers = con.Query<User>(query, new{@userId = user.ID}).ToList();
+        List<User> blockedUsers = con.Query<User>(query, new { @userId = user.ID }).ToList();
         return blockedUsers;
     }
     public int Update(User obj, int blockedUserId)
     {
         throw new NotImplementedException();
     }
-    //THIS NEEDS TO BE ADDED IN QUERY WHERE SELECTING MESSAGES, CONVERSATIONS, POSTS, COMMENTS ETC:
-    //WHERE users_id not in 
-    // (select blocked_user_id from users_blocked where users_id = 22);
 }

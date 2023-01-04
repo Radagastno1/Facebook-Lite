@@ -5,7 +5,7 @@ using MySqlConnector;
 namespace DATABASE;
 public class UsersDB : IData<User, User>, IDataSearcher<User>, IDeletionData<User>, IDataToObject<User, User>
 {
-    public int? Create(User obj)  
+    public int? Create(User obj)
     {
         int userId = 0;
         string query =
@@ -14,7 +14,7 @@ public class UsersDB : IData<User, User>, IDataSearcher<User>, IDeletionData<Use
         "SELECT LAST_INSERT_ID();";
         try
         {
-            using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=true;"))
+            using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
 
                 userId = con.ExecuteScalar<int>(query, param: obj);
 
@@ -25,7 +25,7 @@ public class UsersDB : IData<User, User>, IDataSearcher<User>, IDeletionData<Use
             return null;
         }
     }
-    public int? Delete(User obj)  //IDATA
+    public int? Delete(User user)
     {
         int rowsEffected = 0;
         string query = "START TRANSACTION;" +
@@ -33,14 +33,11 @@ public class UsersDB : IData<User, User>, IDataSearcher<User>, IDeletionData<Use
         "UPDATE messages SET is_visible = FALSE WHERE sender_id = @id;" +
         "UPDATE posts SET is_visible = FALSE WHERE users_id = @id;" +
         "COMMIT;";
-        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
-        {
-            rowsEffected = con.ExecuteScalar<int>(query, param: obj);
-        }
+        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+        rowsEffected = con.ExecuteScalar<int>(query, param: user);
         return rowsEffected;
     }
-    // denna queryn ska ändras
-    public List<User> GetAll(User user)  
+    public List<User> GetAll(User user)
     {
         List<User> users = new();
         string query =
@@ -48,11 +45,8 @@ public class UsersDB : IData<User, User>, IDataSearcher<User>, IDeletionData<Use
         "u.pass_word as 'PassWord', DATE_FORMAT(u.birth_date, '%Y-%m-%d') as 'BirthDate', u.gender, u.about_me as 'AboutMe', r.name as 'Role' " +
         "FROM users u " +
         "INNER JOIN roles r ON r.id = ur.roles_id WHERE u.is_deleted = false;";
-        //NU kan man ej logga in på sitt konto om man är inaktiv för att testa detta
-        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
-        {
-            users = con.Query<User>(query).ToList();
-        }
+        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+        users = con.Query<User>(query).ToList();
         return users;
     }
     public int? Update(User user)
@@ -61,14 +55,12 @@ public class UsersDB : IData<User, User>, IDataSearcher<User>, IDeletionData<Use
         string query = "Update users SET first_name = @FirstName, last_name = @LastName, " +
         "email = @Email, pass_word = @PassWord, gender = @Gender, " +
         "about_me = @AboutMe WHERE id = @ID;";
-        using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;"))
-        {
-            rowsEffected = con.ExecuteScalar<int>(query, param: user);
-        }
+        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+        rowsEffected = con.ExecuteScalar<int>(query, param: user);
         return rowsEffected;
     }
     public List<User> GetSearches(string name)
-    {  
+    {
         List<User> foundUsers = new();
         string query = "SELECT u.id as 'ID' FROM users u " +
         $"WHERE u.first_name LIKE '%{name}%' OR u.last_name LIKE '%{name}%' AND u.is_active = true;";
@@ -107,10 +99,8 @@ public class UsersDB : IData<User, User>, IDataSearcher<User>, IDeletionData<Use
         "AND is_deleted = false;";
         try
         {
-            using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=true;"))
-
-                users = con.Query<User>(query).ToList();
-
+            using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=true;");
+            users = con.Query<User>(query).ToList();
             return users;
         }
         catch (InvalidOperationException)
@@ -125,6 +115,6 @@ public class UsersDB : IData<User, User>, IDataSearcher<User>, IDeletionData<Use
         "UPDATE messages SET is_visible = false WHERE sender_id = @Id;" +
         "COMMIT;";
         using (MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=true;"))
-            con.ExecuteScalar<int>(query, param: user);
+        con.ExecuteScalar<int>(query, param: user);
     }
 }

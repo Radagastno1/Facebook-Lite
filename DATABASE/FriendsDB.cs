@@ -6,24 +6,20 @@ namespace DATABASE;
 public class FriendsDB : IFriendData<User>, IRelationsData<User>
 {
     public int Create(User user, int friendId)
-    {   //om en skickar förfrågan så körs insert för den som skickar förfrågan.
-        //om den andra svarar ja, så körs insert även för den som svarar ja.
-        //på det viset blir båda satta som users_id1 och var och en har en relation med varandra
-        //när man SVARAR JA på en friendrequest så kommer table uppdateras för båda till is_accepted = TRUE via update
+    {
         using MySqlConnection connection = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
         string query = "INSERT INTO users_friends (users_id1, users_id2) VALUES(@userId, @friendId);";
         return connection.ExecuteScalar<int>(query, new { @userId = user.ID, @friendId = friendId });
     }
     public int Delete(User user, int friendId)
     {
-        //däremot om en raderar relationen, så försvinner den från båda håll
         using MySqlConnection connection = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
         string query = "CALL DeleteFriendship(@userId, @friendId);";
         // "START TRANSACTION;" +
         // "DELETE FROM users_friends WHERE users_id1 = @userId AND users_id2 = @friendId;" +
         // "DELETE FROM users_friends WHERE users_id1 = @friendId AND users_id2 = @userId;" +
         // "COMMIT;";
-        int rows = connection.ExecuteScalar<int>(query, new{@userId = user.ID, @friendId = friendId});
+        int rows = connection.ExecuteScalar<int>(query, new { @userId = user.ID, @friendId = friendId });
         return rows;
     }
     public List<User> GetMine(User user)
@@ -38,7 +34,6 @@ public class FriendsDB : IFriendData<User>, IRelationsData<User>
     }
     public List<int> GetMyFriendRequests(User user)
     {
-        //NÄSTA STEG, KOLLA OM MAN ÄR VÄN OCH ISÅFALL UPPDATERA TILL VÄNNER
         List<int> ids = new();
         using MySqlConnection connection = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
         string query = "SELECT users_id2 " +
