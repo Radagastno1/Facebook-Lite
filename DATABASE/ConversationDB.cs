@@ -7,20 +7,18 @@ public class ConversationDB : IData<Conversation, User>, IConversationData<Conve
 {
     public int? Create(Conversation conversation)
     {
-        int conversationId = 0;
         string query = "INSERT INTO conversations(creator_id) VALUES(@CreatorId);" +
         "SELECT LAST_INSERT_ID();";
         using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
-        conversationId = con.ExecuteScalar<int>(query, param: conversation);
+        int conversationId = con.ExecuteScalar<int>(query, param: conversation);
         return conversationId;
     }
     public int? Update(Conversation conversation)
     {
-        int usersConversationId = 0;
         string query = "INSERT INTO users_conversations(users_id, conversations_id) VALUES (@participantId, @Id);" +
         "SELECT LAST_INSERT_ID();";
         using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
-        usersConversationId = con.ExecuteScalar<int>(query, param: conversation);
+        int usersConversationId = con.ExecuteScalar<int>(query, param: conversation);
         return usersConversationId;
     }
     public int? Delete(Conversation obj)
@@ -42,16 +40,16 @@ public class ConversationDB : IData<Conversation, User>, IConversationData<Conve
         allConversations = con.Query<Conversation>(query, param: user).ToList();
         return allConversations;
     }
-    //denna ska användas för att hämta konv mellan specifika användare, inte implementerat det i c# än
+    //denna ska användas för att hämta konv mellan specifika användare, inte implementerat det i c# nu
     public List<Conversation> GetConversationsOfSpecificParticipants(int amountOfUsers, string sql)
-    {
+    {   
         List<Conversation> conversations = new();
         string query = $"SELECT uc.conversations_id AS 'ID', " +
         "GROUP_CONCAT(uc.users_id) AS User_List " +
         "FROM users_conversations uc " +
         $"WHERE  uc.users_id IN ({sql})" +
         "GROUP BY uc.conversations_id " +
-        "HAVING COUNT(DISTINCT uc.users_id) = @amountOfUsers;"; //HÄR SKA IN LÄNGD PÅ LISTAN
+        "HAVING COUNT(uc.users_id) = @amountOfUsers;";
         using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
         conversations = con.Query<Conversation>(query, new { @amountOfUsers = amountOfUsers }).ToList();
         return conversations;

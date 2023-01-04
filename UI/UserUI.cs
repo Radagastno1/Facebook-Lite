@@ -315,13 +315,14 @@ public class UserUI
                 user.AboutMe = ConsoleInput.GetString("About me: ");
                 break;
         }
-        if (_userManager.Update(user) > 0)
+        try
         {
+            _userManager.Update(user);
             Console.WriteLine("Updated!");
         }
-        else
+        catch(Exception e)
         {
-            Console.WriteLine("Something went wrong.");
+            Console.WriteLine("Something went wrong. Error message: " + e);
         }
     }
     public bool DeletingAccount(User user)

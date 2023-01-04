@@ -19,14 +19,13 @@ public class LogInDB : ILogInDB<User>
     }
     public int UpdateToActivated(int userId)
     {
-        int rows = 0;
         string query = "START TRANSACTION;" +
         "UPDATE users SET is_active = TRUE WHERE id = @id;" +
         "UPDATE messages SET is_visible = TRUE WHERE sender_id = @id; " +
         "UPDATE posts SET is_visible = TRUE WHERE users_id = @id; " +
         "COMMIT;";
         using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;Allow User Variables=True;");
-        rows = con.ExecuteScalar<int>(query, new { @id = userId });
+        int rows = con.ExecuteScalar<int>(query, new { @id = userId });
         return rows;   //returnerar ej rows
     }
 }

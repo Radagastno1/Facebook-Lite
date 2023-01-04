@@ -43,7 +43,6 @@ internal class Program
         userUI.LoadFriends += friendManager.LoadFriends;
         blockingManager.OnBlockUser += friendsDB.Delete;
         // blockingsUI.OnBlockUser += friendManager.LoadFriends;
-
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.BackgroundColor = ConsoleColor.White;
         string title = @"   _____ _    ____ _____ ____   ___   ___  _  __  _     ___ _____ _____ 
@@ -138,26 +137,20 @@ internal class Program
     }
     public static void Messenger(User user)
     {
-        // user.id ska in i metod som hämtar alla konv.id och sedan vilka som är med
-        // List<int> ids = new();
-        // ids.Add(user.ID);
         List<Conversation> foundConversations = new();
         List<string> conversationToList = new();
         conversationToList.Add("[New Conversation]");
         conversationToList.Add("[Return]");
         foundConversations = conversationUI.GetAllMyConversations(user);
-        // foundConversations = conversationManager.GetParticipantsPerConversation(ids);
-        
         if (foundConversations != null)
         {
             foundConversations.ForEach(c => conversationToList.Add(c.ToString()));
         }
         string[] conversationsToArray = conversationToList.ToArray();
         int amountOfChoices = conversationsToArray.Length;
-        int menuOptions = 0;
         while (true)
         {
-            menuOptions = ConsoleInput.GetMenuOptions(conversationsToArray);
+            int menuOptions = ConsoleInput.GetMenuOptions(conversationsToArray);
             switch (menuOptions)
             {
                 case 0:
