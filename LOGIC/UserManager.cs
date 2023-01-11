@@ -2,12 +2,12 @@ using CORE;
 namespace LOGIC;
 public class UserManager : IManager<User, User>, IDeletionManager<User>, IMultipleDataGetter<User, int>
 {
-    IData<User, User> _userData;
+    IData<User> _userData;
     IDataSearcher<User> _dataSearcher;
     IDeletionData<User> _deletionData;
     IDataToObject<User,User> _userDataToObject;
     public Action<User> OnDelete;
-    public UserManager(IData<User, User> userData, IDataSearcher<User> dataSearcher, IDeletionData<User> deletionData, IDataToObject<User, User> userDataToObject)
+    public UserManager(IData<User> userData, IDataSearcher<User> dataSearcher, IDeletionData<User> deletionData, IDataToObject<User, User> userDataToObject)
     {
         _userData = userData;
         _dataSearcher = dataSearcher;
@@ -16,7 +16,7 @@ public class UserManager : IManager<User, User>, IDeletionManager<User>, IMultip
     }
     public int? Create(User user)
     {
-        return _userData.Create(user);
+        return _userData.Create(user, QueryGenerator<User>.InsertQuery(user));
     }
     public List<User> GetBySearch(string name, User user)
     {
@@ -65,11 +65,11 @@ public class UserManager : IManager<User, User>, IDeletionManager<User>, IMultip
     }
     public int? Remove(User user)
     {
-        return _userData.Delete(user);
+        return _userData.Delete(user, QueryGenerator<User>.DeleteQuery(user));
     }
     public int? Update(User user)
     {
-        int? rows = _userData.Update(user);
+        int? rows = _userData.Update(user, QueryGenerator<User>.UpdateQuery(user));
         if (rows > 0)
         {
             return rows;

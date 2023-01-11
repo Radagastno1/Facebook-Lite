@@ -3,11 +3,11 @@ namespace LOGIC;
 
 public class ConversationManager : IManager<Conversation, User>, IConnectingMultiple<User>, IIdManager<Conversation, User>
 {
-    IData<Conversation, User> _conversationData;
+    IData<Conversation> _conversationData;
     IDataToList<Conversation, User> _conversationsDataToList;
-    IData<Message,User> _messageData;
+    IData<Message> _messageData;
     IConversationData<Conversation, ConversationResult> _specificConversationData;
-    public ConversationManager(IData<Conversation, User> conversationData, IDataToList<Conversation, User> conversationsDataToList, IData<Message, User> messageData, IConversationData<Conversation, ConversationResult> specificConversationData)
+    public ConversationManager(IData<Conversation> conversationData, IDataToList<Conversation, User> conversationsDataToList, IData<Message> messageData, IConversationData<Conversation, ConversationResult> specificConversationData)
     {
         _conversationData = conversationData;
         _messageData = messageData;
@@ -16,7 +16,7 @@ public class ConversationManager : IManager<Conversation, User>, IConnectingMult
     }
     public int? Create(Conversation conversation)
     {
-        int? conversationId = _conversationData.Create(conversation);
+        int? conversationId = _conversationData.Create(conversation, QueryGenerator<Conversation>.InsertQuery(conversation));
         if (conversationId != null)
         {         
             conversation.ID = conversationId.GetValueOrDefault();
@@ -25,7 +25,7 @@ public class ConversationManager : IManager<Conversation, User>, IConnectingMult
     }
     public int? Update(Conversation conversation)
     {
-        int? usersConversationId = _conversationData.Update(conversation);
+        int? usersConversationId = _conversationData.Update(conversation, QueryGenerator<Conversation>.UpdateQuery(conversation));
         return usersConversationId;
     }
     public List<Conversation> GetAll(int data, User user)
@@ -76,7 +76,7 @@ public class ConversationManager : IManager<Conversation, User>, IConnectingMult
     }
     public List<int> GetAllMyConversationsIds(User user)
     {
-        List<Conversation> conversations = _conversationData.GetAll(user);
+        List<Conversation> conversations = _conversationData.GetAll(user, QueryGenerator<Conversation>.SelectQuery(new Conversation()));
         List<int> conversationIds = new();
         conversations.ForEach(c => conversationIds.Add(c.ID));
         return conversationIds;

@@ -5,11 +5,11 @@ namespace UI;
 internal class Program
 {
     //KOLLA UPP EV TRIGGER ELLER ANNAT SOM KOLLAR AUTOMATISKT OM MAN ÄR BLOCKAD/INAKTIV/DELETED
-    static UserManager userManager = new(new UsersDB(), new UsersDB(), new UsersDB(), new UsersDB());
-    static PostsManager postsManager = new(new PostsDB(), new PostsDB(), new PostsDB());
-    static CommentsManager commentsManager = new(new CommentsDB(), new CommentsDB());
-    static ConversationManager conversationManager = new(new ConversationDB(), new ConversationDB(), new MessagesDB(), new ConversationDB());
-    static MessgageManager messageManager = new(new MessagesDB(), new MessagesDB());
+    static UserManager userManager = new(new Data<User>(), new UsersDB(), new UsersDB(), new UsersDB());
+    static PostsManager postsManager = new(new Data<Post>(), new PostsDB(), new PostsDB());
+    static CommentsManager commentsManager = new(new Data<Comment>(), new CommentsDB());
+    static ConversationManager conversationManager = new(new Data<Conversation>(), new ConversationDB(), new Data<Message>(), new ConversationDB());
+    static MessgageManager messageManager = new(new Data<Message>(), new MessagesDB());
     static FriendManager friendManager = new(new FriendsDB(), new FriendsDB());
     static BlockingManager blockingManager = new(new BlockingsDB());
     static SignUpUI signUpUI = new(userManager);

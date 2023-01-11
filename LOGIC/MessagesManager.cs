@@ -3,16 +3,16 @@ namespace LOGIC;
 
 public class MessgageManager : IManager<Message, User>
 {
-    IData<Message, User> _messageManager;
+    IData<Message> _messageManager;
     IDataToList<Message, User> _messageDataToList;
-    public MessgageManager(IData<Message, User> messageManager, IDataToList<Message, User> messageDataToList)
+    public MessgageManager(IData<Message> messageManager, IDataToList<Message, User> messageDataToList)
     {
         _messageManager = messageManager;
         _messageDataToList = messageDataToList;
     }
     public int? Create(Message message)
     {
-        return _messageManager.Create(message);
+        return _messageManager.Create(message, QueryGenerator<Message>.InsertQuery(message));
     }
 
     public List<Message> GetAll(int conversationId, User user)

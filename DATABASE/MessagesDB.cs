@@ -3,38 +3,38 @@ using CORE;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class MessagesDB : IData<Message, User>, IDataToList<Message, User>
+public class MessagesDB : IDataToList<Message, User>
 {
-    public int? Create(Message obj) 
-    {
-        int rowsEffected = 0;
-        string query = "INSERT INTO messages (content, sender_id, conversations_id) " +
-        "VALUES(@Content, @SenderId, @ConversationId);";
-        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
-        rowsEffected = con.ExecuteScalar<int>(query, param: obj);
-        return rowsEffected;
-    }
-    public int? Delete(Message message)
-    {
-        int rowsEffected = 0;
-        string query = "UPDATE messages m SET m.is_visible = false " +
-        "WHERE id = @Id;";
-        // du ska kunna deleta dina medd. samt dig själv från konversationen
-        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
-        rowsEffected = con.ExecuteScalar<int>(query, new { @id = message.ID });
-        return rowsEffected;
-    }
-    public List<Message> GetAll(User user)
-    {
-        throw new NotImplementedException();
-    }
-    public int? Update(Message obj)
-    {
-        string query = "UPDATE messages SET content = @Content WHERE id = @Id;";
-        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
-        int rowsEffected = con.ExecuteScalar<int>(query, param: obj);
-        return rowsEffected;
-    }
+    // public int? Create(Message obj, string testar) 
+    // {
+    //     int rowsEffected = 0;
+    //     string query = "INSERT INTO messages (content, sender_id, conversations_id) " +
+    //     "VALUES(@Content, @SenderId, @ConversationId);";
+    //     using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+    //     rowsEffected = con.ExecuteScalar<int>(query, param: obj);
+    //     return rowsEffected;
+    // }
+    // public int? Delete(Message message, string testar)
+    // {
+    //     int rowsEffected = 0;
+    //     string query = "UPDATE messages m SET m.is_visible = false " +
+    //     "WHERE id = @Id;";
+    //     // du ska kunna deleta dina medd. samt dig själv från konversationen
+    //     using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+    //     rowsEffected = con.ExecuteScalar<int>(query, new { @id = message.ID });
+    //     return rowsEffected;
+    // }
+    // public List<Message> GetAll(User user, string testar)
+    // {
+    //     throw new NotImplementedException();
+    // }
+    // public int? Update(Message obj, string testar)
+    // {
+    //     string query = "UPDATE messages SET content = @Content WHERE id = @Id;";
+    //     using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+    //     int rowsEffected = con.ExecuteScalar<int>(query, param: obj);
+    //     return rowsEffected;
+    // }
     public List<Message> GetById(int conversationId, User user) ///IDATA
     {
         List<Message> messages = new();

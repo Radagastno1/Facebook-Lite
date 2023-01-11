@@ -3,60 +3,60 @@ using CORE;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class PostsDB : IData<Post, User>, IDataToObject<Post, User>, IDataToList<Post, User>
+public class PostsDB : IDataToObject<Post, User>, IDataToList<Post, User>
 {
-    public int? Create(Post obj)
-    {
-        int id = 0;
-        string query = "INSERT INTO posts (content, users_id, posts_types_id) " +
-        "VALUES(@Content, @UserId, 1); SELECT LAST_INSERT_ID()";
-        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
-        id = con.ExecuteScalar<int>(query, param: obj);
-        return id;
-    }
-    public int? Delete(Post post)  //om man väljer att deleta en post, så kommer den bli visible när du loggar in
-    // därför behövs en tilll bool is_deleted som sätts när man deletar istället! 
-    {
-        int rowsEffected = 0;
-        string query = "Update posts SET is_deleted = TRUE WHERE id = @Id;";
-        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
-        rowsEffected = con.ExecuteScalar<int>(query, new { @Id = post.ID });
-        return rowsEffected;
-    }
-    //hämtar alla inlägg som dina vänner har gjort och som är synliga 
-    public List<Post> GetAll(User user)
-    {
-        List<Post> posts = new();
-        string query = "SELECT p.id as 'Id', p.content as 'Content', p.date_created as 'DateCreated', " +
-        "u.first_name as 'FirstName', u.last_name as 'LastName', p.users_id as 'UserId' " +
-        "FROM posts p INNER JOIN users u " +
-        "ON p.users_id = u.id " +
-        "INNER JOIN users_friends uf1 " +
-        "ON u.id = uf1.users_id1 " +
-        "WHERE p.posts_types_id = 1 " +
-        "AND p.is_visible = TRUE " +
-        "AND p.is_deleted = FALSE " +
-        "AND uf1.users_id2 = 30;";
-        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
-        posts = con.Query<Post>(query).ToList();
-        if (posts.Count > 0)
-        {
-            return posts;
-        }
-        else
-        {
-            return null;
-        }
-    }
-    public int? Update(Post obj)
-    {
-        int rowsEffected = 0;
-        string query = "UPDATE posts SET content = @Content, is_edited = True WHERE id = @Id;";
-        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+    // public int? Create(Post obj)
+    // {
+    //     int id = 0;
+    //     string query = "INSERT INTO posts (content, users_id, posts_types_id) " +
+    //     "VALUES(@Content, @UserId, 1); SELECT LAST_INSERT_ID()";
+    //     using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+    //     id = con.ExecuteScalar<int>(query, param: obj);
+    //     return id;
+    // }
+    // public int? Delete(Post post)  //om man väljer att deleta en post, så kommer den bli visible när du loggar in
+    // // därför behövs en tilll bool is_deleted som sätts när man deletar istället! 
+    // {
+    //     int rowsEffected = 0;
+    //     string query = "Update posts SET is_deleted = TRUE WHERE id = @Id;";
+    //     using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+    //     rowsEffected = con.ExecuteScalar<int>(query, new { @Id = post.ID });
+    //     return rowsEffected;
+    // }
+    // //hämtar alla inlägg som dina vänner har gjort och som är synliga 
+    // public List<Post> GetAll(User user)
+    // {
+    //     List<Post> posts = new();
+    //     string query = "SELECT p.id as 'Id', p.content as 'Content', p.date_created as 'DateCreated', " +
+    //     "u.first_name as 'FirstName', u.last_name as 'LastName', p.users_id as 'UserId' " +
+    //     "FROM posts p INNER JOIN users u " +
+    //     "ON p.users_id = u.id " +
+    //     "INNER JOIN users_friends uf1 " +
+    //     "ON u.id = uf1.users_id1 " +
+    //     "WHERE p.posts_types_id = 1 " +
+    //     "AND p.is_visible = TRUE " +
+    //     "AND p.is_deleted = FALSE " +
+    //     "AND uf1.users_id2 = @Id;";
+    //     using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+    //     posts = con.Query<Post>(query, param : user).ToList();
+    //     if (posts.Count > 0)
+    //     {
+    //         return posts;
+    //     }
+    //     else
+    //     {
+    //         return null;
+    //     }
+    // }
+    // public int? Update(Post obj)
+    // {
+    //     int rowsEffected = 0;
+    //     string query = "UPDATE posts SET content = @Content, is_edited = True WHERE id = @Id;";
+    //     using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
 
-        rowsEffected = con.ExecuteScalar<int>(query, new { @Content = obj.Content, @Id = obj.ID });
-        return rowsEffected;
-    }
+    //     rowsEffected = con.ExecuteScalar<int>(query, new { @Content = obj.Content, @Id = obj.ID });
+    //     return rowsEffected;
+    // }
     public List<Post> GetById(int userId, User user)
     {
         List<Post> posts = new();

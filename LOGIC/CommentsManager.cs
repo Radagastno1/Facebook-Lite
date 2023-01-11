@@ -3,16 +3,16 @@ using LOGIC;
 
 public class CommentsManager : IManager<Comment, User>
 {
-    IData<Comment, User> _commentsData;
+    IData<Comment> _commentsData;
     IDataToList<Comment, User> _commentsList;
-    public CommentsManager(IData<Comment, User> commentsData,  IDataToList<Comment, User> commentsList)
+    public CommentsManager(IData<Comment> commentsData,  IDataToList<Comment, User> commentsList)
     {
         _commentsData = commentsData;
         _commentsList = commentsList;
     }
     public int? Create(Comment obj)
     {
-        return _commentsData.Create(obj);
+        return _commentsData.Create(obj, QueryGenerator<Comment>.InsertQuery(obj));
     }
     public List<Comment> GetAll(int postId, User user)
     {

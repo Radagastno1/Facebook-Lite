@@ -3,43 +3,43 @@ using LOGIC;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class ConversationDB : IData<Conversation, User>, IConversationData<Conversation, ConversationResult>, IDataToList<Conversation, User>
+public class ConversationDB : IConversationData<Conversation, ConversationResult>, IDataToList<Conversation, User>
 {
-    public int? Create(Conversation conversation)
-    {
-        string query = "INSERT INTO conversations(creator_id) VALUES(@CreatorId);" +
-        "SELECT LAST_INSERT_ID();";
-        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
-        int conversationId = con.ExecuteScalar<int>(query, param: conversation);
-        return conversationId;
-    }
-    public int? Update(Conversation conversation)
-    {
-        string query = "INSERT INTO users_conversations(users_id, conversations_id) VALUES (@participantId, @Id);" +
-        "SELECT LAST_INSERT_ID();";
-        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
-        int usersConversationId = con.ExecuteScalar<int>(query, param: conversation);
-        return usersConversationId;
-    }
-    public int? Delete(Conversation obj)
-    {
-        throw new NotImplementedException();
-    }
-    public List<Conversation> GetAll(User user)
-    {
-        List<Conversation> allConversations = new();
-        string query = "SELECT uc.conversations_id as 'Id', c.date_created as 'DateCreated', c.creator_id as 'CreatorId', u.id as 'ParticipantId'" +
-                       "FROM conversations c " +
-                       "INNER JOIN users_conversations uc " +
-                       "ON c.id = uc.conversations_id " +
-                       "INNER JOIN users u " +
-                        "ON u.id = uc.users_id " +
-                        "WHERE u.is_active = true " +
-                        "AND u.id = @ID;";
-        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
-        allConversations = con.Query<Conversation>(query, param: user).ToList();
-        return allConversations;
-    }
+    // public int? Create(Conversation conversation)
+    // {
+    //     string query = "INSERT INTO conversations(creator_id) VALUES(@CreatorId);" +
+    //     "SELECT LAST_INSERT_ID();";
+    //     using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+    //     int conversationId = con.ExecuteScalar<int>(query, param: conversation);
+    //     return conversationId;
+    // }
+    // public int? Update(Conversation conversation)
+    // {
+    //     string query = "INSERT INTO users_conversations(users_id, conversations_id) VALUES (@participantId, @Id);" +
+    //     "SELECT LAST_INSERT_ID();";
+    //     using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+    //     int usersConversationId = con.ExecuteScalar<int>(query, param: conversation);
+    //     return usersConversationId;
+    // }
+    // public int? Delete(Conversation obj)
+    // {
+    //     throw new NotImplementedException();
+    // }
+    // public List<Conversation> GetAll(User user)
+    // {
+    //     List<Conversation> allConversations = new();
+    //     string query = "SELECT uc.conversations_id as 'Id', c.date_created as 'DateCreated', c.creator_id as 'CreatorId', u.id as 'ParticipantId'" +
+    //                    "FROM conversations c " +
+    //                    "INNER JOIN users_conversations uc " +
+    //                    "ON c.id = uc.conversations_id " +
+    //                    "INNER JOIN users u " +
+    //                     "ON u.id = uc.users_id " +
+    //                     "WHERE u.is_active = true " +
+    //                     "AND u.id = @ID;";
+    //     using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+    //     allConversations = con.Query<Conversation>(query, param: user).ToList();
+    //     return allConversations;
+    // }
     //denna ska användas för att hämta konv mellan specifika användare, inte implementerat det i c# nu
     public List<Conversation> GetConversationsOfSpecificParticipants(int amountOfUsers, string sql)
     {   
