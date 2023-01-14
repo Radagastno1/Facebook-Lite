@@ -3,23 +3,22 @@ using CORE;
 namespace UI;
 public class ConversationUI
 {
-    IManager<Conversation, User> _conversationManager;
+    IManager<Conversation, User> _manager;
     IManager<Message, User> _messageManager;
-    IIdManager<Conversation, User> _idManager;
-    IConnectingMultiple<User> _connectingMultiple;
-    public ConversationUI(IManager<Conversation, User> conversationManager, IManager<Message, User> messageManager, IIdManager<Conversation, User> idManager, IConnectingMultiple<User> connectingMultiple)
+    IConversationManager _conversationManager;
+    public ConversationUI(IManager<Conversation, User> manager, IManager<Message, User> messageManager, IConversationManager conversationManager)
     {
-        _conversationManager = conversationManager;
+        _manager = manager;
         _messageManager = messageManager;
-        _idManager = idManager;
-        _connectingMultiple = connectingMultiple;
+        _conversationManager = conversationManager;
+       
     }
     public void ShowMyConversations(User user)
     {
         try
         {
-            List<int> ids = _idManager.GetAllMyConversationsIds(user);
-            List<Conversation> foundConversations = _idManager.GetParticipantsPerConversation(ids);
+            List<int> ids = _conversationManager.GetAllMyConversationsIds(user);
+            List<Conversation> foundConversations = _conversationManager.GetParticipantsPerConversation(ids);
             List<string> conversationToList = new();
             conversationToList.Add("[Return]");
             foundConversations.ForEach(c => conversationToList.Add(c.ToString()));
@@ -49,8 +48,8 @@ public class ConversationUI
     {
         try
         {
-            List<int> conversationIds = _idManager.GetAllMyConversationsIds(user);
-            List<Conversation> myConversations = _idManager.GetById(conversationIds);
+            List<int> conversationIds = _conversationManager.GetAllMyConversationsIds(user);
+            List<Conversation> myConversations = _conversationManager.GetById(conversationIds);
             return myConversations;
         }
         catch(InvalidOperationException)
@@ -60,8 +59,8 @@ public class ConversationUI
     }
     public int ShowDialogue(User user, int id)
     {
-        MessageUI messageUI = new(_messageManager, _idManager);
-        Conversation conversation = _idManager.GetDialogueId(user.ID, id);
+        MessageUI messageUI = new(_messageManager);
+        Conversation conversation = _conversationManager.GetDialogueId(user.ID, id);
         if (conversation != null)
         {
             messageUI.ShowMessages(conversation.ID, user);
@@ -74,7 +73,7 @@ public class ConversationUI
     }
     public int MakeNewConversation(List<User> participants, User user)
     {
-        int conversationId = _connectingMultiple.MakeNew(participants, user);
+        int conversationId = _conversationManager.MakeNew(participants, user);
         if (conversationId > 0) return conversationId;
         else Console.WriteLine("Something went wrong."); return 0;
     }

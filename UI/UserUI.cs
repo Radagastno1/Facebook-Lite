@@ -8,13 +8,10 @@ public class UserUI
     IManager<Post, User> _postManager;
     IManager<Conversation, User> _conversationManager;
     IManager<Message, User> _messageManager;
-    IIdManager<Conversation, User> _idManager;
+    IConversationManager _conversationExtraManager;
     IManager<Comment, User> _commentManager;
     IDeletionManager<User> _deletionManager;
-    // IBlockingsManager<User> _blockingsManager;
     IMultipleDataGetter<User, int> _multipleUserData;
-    IConnectingMultiple<User> _connectingUserManager;
-    // IFriendManager _friendManager;
     IRelationsManager<User> _friendRelationsManager;
     IRelationsManager<User> _blockRelationsManager;
     IFriendManager<User> _friendManager;
@@ -25,12 +22,11 @@ public class UserUI
     List<ConsoleKey> keys = new();
     public Action<User> LoadFriends;
 
-    public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IIdManager<Conversation, User> idManager, IManager<Message, User> messageManager, IManager<Comment, User> commentManager, IDeletionManager<User> deletionManager, IMultipleDataGetter<User, int> multipleUserData, IRelationsManager<User> friendRelationsManager, IRelationsManager<User> blockRelationsManager, IFriendManager<User> friendManager, IConnectingMultiple<User> connectingUserManager)
+    public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IManager<Message, User> messageManager, IManager<Comment, User> commentManager, IDeletionManager<User> deletionManager, IMultipleDataGetter<User, int> multipleUserData, IRelationsManager<User> friendRelationsManager, IRelationsManager<User> blockRelationsManager, IFriendManager<User> friendManager, IConversationManager conversationExtraManager)
     {
         _userManager = userManager;
         _postManager = postManager;
         _conversationManager = conversationManager;
-        _idManager = idManager;
         _messageManager = messageManager;
         _commentManager = commentManager;
         _deletionManager = deletionManager;
@@ -38,7 +34,7 @@ public class UserUI
         _friendManager = friendManager;
         _friendRelationsManager = friendRelationsManager;
         _blockRelationsManager = blockRelationsManager;
-        _connectingUserManager = connectingUserManager;
+        _conversationExtraManager = conversationExtraManager;
         deleted = _deletionManager.SetAsDeleted();  //deletar users som varit inaktiva i mer än 30 dagar när den startar
     }
     public int Searcher(User user)
@@ -152,7 +148,7 @@ public class UserUI
             }
         } while (pressedKey != ConsoleKey.D);
         List<User> participants = _multipleUserData.GetUsersById(userIds, user);
-        conversationId = _connectingUserManager.MakeNew(participants, user);
+        conversationId = _conversationExtraManager.MakeNew(participants, user);
         return conversationId;
     }
     public void MyPage(User user)
@@ -280,7 +276,7 @@ public class UserUI
     {
         try
         {
-            List<Conversation> foundConversations = _idManager.GetParticipantsPerConversation(ids);
+            List<Conversation> foundConversations = _conversationExtraManager.GetParticipantsPerConversation(ids);
             foreach (Conversation c in foundConversations)
             {
                 Console.WriteLine(c.ToString());

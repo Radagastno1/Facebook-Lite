@@ -5,12 +5,9 @@ namespace UI;
 public class MessageUI
 {
     IManager<Message, User> _messageManager;
-    IIdManager<Conversation, User> _idManager;
-
-    public MessageUI(IManager<Message, User> messageManager, IIdManager<Conversation, User> idManager)
+    public MessageUI(IManager<Message, User> messageManager)
     {
         _messageManager = messageManager;
-        _idManager = idManager;
     }
     public void MakeMessage(User user, int conversationId)
     {

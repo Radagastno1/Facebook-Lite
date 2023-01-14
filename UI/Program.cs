@@ -4,7 +4,7 @@ using DATABASE;
 namespace UI;
 internal class Program
 {
-    //KOLLA UPP EV TRIGGER ELLER ANNAT SOM KOLLAR AUTOMATISKT OM MAN ÄR BLOCKAD/INAKTIV/DELETED
+    //KOLLA UPP EV TRIGGER ELLER ANNAT SOM KOLLAR AUTOMATISKT OM MAN ÄR BLOCKAD/INAKTIV/DELETED??
     static UserManager userManager = new(new Data<User>(), new UsersDB(), new UsersDB(), new UsersDB());
     static PostsManager postsManager = new(new Data<Post>(), new PostsDB(), new PostsDB());
     static CommentsManager commentsManager = new(new Data<Comment>(), new CommentsDB());
@@ -15,17 +15,17 @@ internal class Program
     static SignUpUI signUpUI = new(userManager);
     static LogInManager logInManager = new(new LogInDB());
     static LogInUI logInUI = new(logInManager);
-    static UserUI userUI = new(userManager, postsManager, conversationManager, conversationManager, messageManager, commentsManager, userManager, userManager, friendManager, blockingManager, friendManager, conversationManager);
+    static UserUI userUI = new(userManager, postsManager, conversationManager, messageManager, commentsManager, userManager, userManager, friendManager, blockingManager, friendManager, conversationManager);
     static PostUI postUI = new(postsManager, commentsManager);
-    static ConversationUI conversationUI = new(conversationManager, messageManager, conversationManager, conversationManager);
-    static MessageUI messageUI = new(messageManager, conversationManager);
+    static ConversationUI conversationUI = new(conversationManager, messageManager, conversationManager);
+    static MessageUI messageUI = new(messageManager);
     //ATT FIXA
     //2. om man är inaktiv/raderad och har en dialog-konversation ska den stå som is_visible = false 
     //2.5 lägg till is_visible på conversations tables
     //4. om man blockar eller blir blockad ska man ej kunna se kommentarer osv + ladda in vänner på nytt
     //5. fixa in string title som inparamter i menymetoden! så det blir som login sidan med title = facebook
     //6. när man är blockad/har blockat ska man kunna se konv. man haft men ej kunna skriva fler medd så länge
-    //7. notiser plan
+    //7. notiser plan 
     private static void Main(string[] args)
     {
         UsersDB usersDB = new();

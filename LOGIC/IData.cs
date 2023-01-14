@@ -1,6 +1,6 @@
 using CORE;
 namespace LOGIC;
-public interface IData<Tone>
+public interface IData<Tone>  //user, message, conversation, post, comment implementerar denna
 {
     List<Tone> GetAll(User user, string query);
     int? Create(Tone obj, string query);

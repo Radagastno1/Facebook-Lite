@@ -1,7 +1,7 @@
 using CORE;
 namespace LOGIC;
 
-public class ConversationManager : IManager<Conversation, User>, IConnectingMultiple<User>, IIdManager<Conversation, User>
+public class ConversationManager : IManager<Conversation, User>, IConversationManager
 {
     IData<Conversation> _conversationData;
     IDataToList<Conversation, User> _conversationsDataToList;
