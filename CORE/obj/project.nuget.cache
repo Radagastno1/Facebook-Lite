@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "kYG5dZ0N1E059wKI/VFp+/65fsvnPGNgAkTUrN2TTRDDqgbZctfhErL4IuesRb73vik4BehMi+RtxzSh03DaDA==",
+  "dgSpecHash": "cDzEbTt2QXioNgHjJfhqw8GavbXz7fp1lO+pdvkoWuQj+UaRMltDei+R8jE0iG4IR6cokGniR8Vn8+CW/IA5/w==",
   "success": true,
   "projectFilePath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\core\\core.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\angel\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.13\\microsoft.netcore.app.ref.6.0.13.nupkg.sha512",
+    "C:\\Users\\angel\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.13\\microsoft.windowsdesktop.app.ref.6.0.13.nupkg.sha512",
+    "C:\\Users\\angel\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.13\\microsoft.aspnetcore.app.ref.6.0.13.nupkg.sha512"
+  ],
   "logs": []
 }

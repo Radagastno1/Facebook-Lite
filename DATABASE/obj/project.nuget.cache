@@ -1,11 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "HPJ7SrNXm1fayG8WEW6X+6pKeR0MIRLFlE6T41oew00BgoL9aMoxpPydz5Fe1BX1rxtz9Sf1VRk+S5eJTzyvvw==",
+  "dgSpecHash": "IlvcVvpnvxy+dkvWPvGK53Idnh6NdJjDMUyDT8UxdAziZbdweh0DQOrft/XhNPBZQxzz8nmkmNUakL8kh4qQrQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\database\\database.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\angel\\.nuget\\packages\\dapper\\2.0.123\\dapper.2.0.123.nupkg.sha512",
-    "C:\\Users\\angel\\.nuget\\packages\\mysqlconnector\\2.2.1\\mysqlconnector.2.2.1.nupkg.sha512"
+    "C:\\Users\\angel\\.nuget\\packages\\mysqlconnector\\2.2.1\\mysqlconnector.2.2.1.nupkg.sha512",
+    "C:\\Users\\angel\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.13\\microsoft.netcore.app.ref.6.0.13.nupkg.sha512",
+    "C:\\Users\\angel\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.13\\microsoft.windowsdesktop.app.ref.6.0.13.nupkg.sha512",
+    "C:\\Users\\angel\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.13\\microsoft.aspnetcore.app.ref.6.0.13.nupkg.sha512"
   ],
   "logs": []
 }

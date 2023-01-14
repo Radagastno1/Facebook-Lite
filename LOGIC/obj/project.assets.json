@@ -32,11 +32,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\facebook-lite\\logic\\logic.csproj",
+      "projectUniqueName": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\logic\\logic.csproj",
       "projectName": "logic",
-      "projectPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\facebook-lite\\logic\\logic.csproj",
+      "projectPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\logic\\logic.csproj",
       "packagesPath": "C:\\Users\\angel\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\facebook-lite\\logic\\obj\\",
+      "outputPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\logic\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\angel\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -79,12 +79,26 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[6.0.13, 6.0.13]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[6.0.13, 6.0.13]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[6.0.13, 6.0.13]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   }
