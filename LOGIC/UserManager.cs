@@ -1,6 +1,6 @@
 using CORE;
 namespace LOGIC;
-public class UserManager : IManager<User, User>, IDeletionManager<User>, IMultipleDataGetter<User, int>
+public class UserManager : IManager<User, User>, IUserManager
 {
     IData<User> _userData;
     IDataSearcher<User> _dataSearcher;

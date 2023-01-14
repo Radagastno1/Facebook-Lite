@@ -15,7 +15,7 @@ internal class Program
     static SignUpUI signUpUI = new(userManager);
     static LogInManager logInManager = new(new LogInDB());
     static LogInUI logInUI = new(logInManager);
-    static UserUI userUI = new(userManager, postsManager, conversationManager, messageManager, commentsManager, userManager, userManager, friendManager, blockingManager, friendManager, conversationManager);
+    static UserUI userUI = new(userManager, postsManager, conversationManager, messageManager, commentsManager, userManager, friendManager, blockingManager, friendManager, conversationManager);
     static PostUI postUI = new(postsManager, commentsManager);
     static ConversationUI conversationUI = new(conversationManager, messageManager, conversationManager);
     static MessageUI messageUI = new(messageManager);

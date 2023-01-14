@@ -5,13 +5,12 @@ public class UserUI
 {
     static int? deleted = 0;
     IManager<User, User> _userManager;
+    IUserManager _userExtraManager;
     IManager<Post, User> _postManager;
     IManager<Conversation, User> _conversationManager;
     IManager<Message, User> _messageManager;
     IConversationManager _conversationExtraManager;
     IManager<Comment, User> _commentManager;
-    IDeletionManager<User> _deletionManager;
-    IMultipleDataGetter<User, int> _multipleUserData;
     IRelationsManager<User> _friendRelationsManager;
     IRelationsManager<User> _blockRelationsManager;
     IFriendManager<User> _friendManager;
@@ -22,20 +21,19 @@ public class UserUI
     List<ConsoleKey> keys = new();
     public Action<User> LoadFriends;
 
-    public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IManager<Message, User> messageManager, IManager<Comment, User> commentManager, IDeletionManager<User> deletionManager, IMultipleDataGetter<User, int> multipleUserData, IRelationsManager<User> friendRelationsManager, IRelationsManager<User> blockRelationsManager, IFriendManager<User> friendManager, IConversationManager conversationExtraManager)
+    public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IManager<Message, User> messageManager, IManager<Comment, User> commentManager, IUserManager userExtraManager, IRelationsManager<User> friendRelationsManager, IRelationsManager<User> blockRelationsManager, IFriendManager<User> friendManager, IConversationManager conversationExtraManager)
     {
         _userManager = userManager;
+        _userExtraManager = userExtraManager;
         _postManager = postManager;
         _conversationManager = conversationManager;
         _messageManager = messageManager;
         _commentManager = commentManager;
-        _deletionManager = deletionManager;
-        _multipleUserData = multipleUserData;
         _friendManager = friendManager;
         _friendRelationsManager = friendRelationsManager;
         _blockRelationsManager = blockRelationsManager;
         _conversationExtraManager = conversationExtraManager;
-        deleted = _deletionManager.SetAsDeleted();  //deletar users som varit inaktiva i mer än 30 dagar när den startar
+        deleted = _userExtraManager.SetAsDeleted();  //deletar users som varit inaktiva i mer än 30 dagar när den startar
     }
     public int Searcher(User user)
     {
@@ -98,7 +96,7 @@ public class UserUI
                         {
                             List<int> ids = new();
                             ids.Add(id);
-                            List<User> participants = _multipleUserData.GetUsersById(ids, user);
+                            List<User> participants = _userExtraManager.GetUsersById(ids, user);
                             // fixa nedanför bort med delegaten
                             conversationId = (int)OnMakeConversation?.Invoke(participants, user);
                         }
@@ -147,7 +145,7 @@ public class UserUI
                 userIds.Add(id);
             }
         } while (pressedKey != ConsoleKey.D);
-        List<User> participants = _multipleUserData.GetUsersById(userIds, user);
+        List<User> participants = _userExtraManager.GetUsersById(userIds, user);
         conversationId = _conversationExtraManager.MakeNew(participants, user);
         return conversationId;
     }
@@ -316,7 +314,7 @@ public class UserUI
             _userManager.Update(user);
             Console.WriteLine("Updated!");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             Console.WriteLine("Something went wrong. Error message: " + e);
         }
