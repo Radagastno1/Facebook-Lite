@@ -3,7 +3,7 @@ using CORE;
 using Dapper;
 using MySqlConnector;
 namespace DATABASE;
-public class UsersDB : IDataSearcher<User>, IDeletionData<User>, IDataToObject<User, User>
+public class UsersDB : IUserData, IDataToObject<User, User>
 {
     // public int? Create(User obj)
     // {

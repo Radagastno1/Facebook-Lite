@@ -5,7 +5,7 @@ namespace UI;
 internal class Program
 {
     //KOLLA UPP EV TRIGGER ELLER ANNAT SOM KOLLAR AUTOMATISKT OM MAN ÄR BLOCKAD/INAKTIV/DELETED??
-    static UserManager userManager = new(new Data<User>(), new UsersDB(), new UsersDB(), new UsersDB());
+    static UserManager userManager = new(new Data<User>(), new UsersDB(), new UsersDB());
     static PostsManager postsManager = new(new Data<Post>(), new PostsDB(), new PostsDB());
     static CommentsManager commentsManager = new(new Data<Comment>(), new CommentsDB());
     static ConversationManager conversationManager = new(new Data<Conversation>(), new ConversationDB(), new Data<Message>(), new ConversationDB());
