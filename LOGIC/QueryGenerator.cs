@@ -21,12 +21,12 @@ public class QueryGenerator<T>
         "SELECT LAST_INSERT_ID();";
                 break;
             case Comment:
-           query = "INSERT INTO posts (content, users_id, posts_types_id, on_post_id) " +
-         "VALUES (@Content, @UserId, 2, @OnPostId);";
+           query = "INSERT INTO posts (content, users_id, post_type, on_post_id) " +
+         "VALUES (@Content, @UserId, 'Comment', @OnPostId);";
                 break;
             case Post:
-            query = "INSERT INTO posts (content, users_id, posts_types_id) " +
-        "VALUES(@Content, @UserId, 1); SELECT LAST_INSERT_ID()";
+            query = "INSERT INTO posts (content, users_id, post_type) " +
+        "VALUES(@Content, @UserId, 'Post'); SELECT LAST_INSERT_ID()";
                 break;
         }
         return query;
@@ -58,7 +58,7 @@ public class QueryGenerator<T>
             query = "SELECT p.id, p.content, p.date_created as 'DateCreated', p.users_id as 'UserId', " +
          "p.on_post_id as 'OnPostId', u.first_name as 'FirstName', u.last_name as 'LastName' FROM posts p " +
          "INNER JOIN users u ON p.users_id = u.id " +
-         "WHERE p.posts_types_id = 2 AND p.is_visible = TRUE AND p.users_id = @userId;";
+         "WHERE p.post_type = 'Comment' AND p.is_visible = TRUE AND p.users_id = @userId;";
                 break;
             case Post:
             query = "SELECT p.id as 'Id', p.content as 'Content', p.date_created as 'DateCreated', " +
@@ -67,7 +67,7 @@ public class QueryGenerator<T>
         "ON p.users_id = u.id " +
         "INNER JOIN users_friends uf1 " +
         "ON u.id = uf1.users_id1 " +
-        "WHERE p.posts_types_id = 1 " +
+        "WHERE p.post_type = 'Post' " +
         "AND p.is_visible = TRUE " +
         "AND p.is_deleted = FALSE " +
         "AND uf1.users_id2 = @Id;";
