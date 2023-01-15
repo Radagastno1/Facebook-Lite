@@ -15,11 +15,23 @@ public class NotificationsDB : INotificationDB
                      "ON utn.notifications_id = n.id " +
                      "WHERE utn.to_user_id = @Id " +
                      "AND utn.is_read = false;";
-        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
-        List<Notification> notifications = con.Query<Notification>(query, param: user).ToList();
-        return notifications;
+        try
+        {
+            using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+            List<Notification> notifications = con.Query<Notification>(query, param: user).ToList();
+            return notifications;
+        }
+        catch(InvalidOperationException)
+        {
+            return null;
+        }
     }
-
+    public void UpdateToRead(User user)
+    {
+        string query = "UPDATE users_to_notification SET is_read = true WHERE to_user_id = @Id;";
+        using MySqlConnection con = new MySqlConnection($"Server=localhost;Database=facebook_lite;Uid=root;Pwd=;");
+        con.Execute(query, param: user);
+    }
     // string query = "UPDATE users_to_notification SET is_read = true WHERE to_user_id = @Id;";
 
     // string query = "UPDATE users_to_notification SET is_deleted = true WHERE id = @Id;";

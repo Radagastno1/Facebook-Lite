@@ -20,6 +20,7 @@ internal class Program
     static PostUI postUI = new(postsManager, commentsManager);
     static ConversationUI conversationUI = new(conversationManager, messageManager, conversationManager);
     static MessageUI messageUI = new(messageManager);
+    static NotificationUI notificationUI = new(notificationManager);
     //ATT FIXA
     //2. om man är inaktiv/raderad och har en dialog-konversation ska den stå som is_visible = false 
     //2.5 lägg till is_visible på conversations tables
@@ -32,6 +33,8 @@ internal class Program
         UsersDB usersDB = new();
         FriendsDB friendsDB = new();
         BlockingsUI blockingsUI = new(blockingManager);
+        notificationManager = new(new NotificationsDB());
+
         // dessa under ska inte vara delegat, var bara som övning i början 
         userUI.OnDialogue += conversationUI.ShowDialogue;
         userUI.OnMakeMessage += messageUI.MakeMessage;
@@ -43,7 +46,8 @@ internal class Program
         userUI.LoadFriends += friendManager.Update;
         userUI.LoadFriends += friendManager.LoadFriends;
         blockingManager.OnBlockUser += friendsDB.Delete;
-        // blockingsUI.OnBlockUser += friendManager.LoadFriends;
+        // // blockingsUI.OnBlockUser += friendManager.LoadFriends;
+        // notificationUI.OnShowNotifications += notificationManager.UpdateToRead;
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.BackgroundColor = ConsoleColor.White;
         string title = @"   _____ _    ____ _____ ____   ___   ___  _  __  _     ___ _____ _____ 
