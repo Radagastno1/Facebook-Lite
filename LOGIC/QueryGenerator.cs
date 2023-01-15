@@ -72,16 +72,6 @@ public class QueryGenerator<T>
         "AND p.is_deleted = FALSE " +
         "AND uf1.users_id2 = @Id;";
                 break;
-                case Notification:
-                query = "SELECT CONCAT_WS(' ',u.first_name, u.last_name) AS 'FromUser', n.description " +
-                "FROM users u " +
-                "INNER JOIN users_to_notification utn " +
-                "ON u.id = utn.from_user_id " +
-                "INNER JOIN notifications n " +
-                "ON utn.notifications_id = n.id " +
-                "WHERE utn.to_user_id = @Id " +
-                "AND utn.is_read = false;";
-                break;
         }
         return query;
     }
@@ -107,9 +97,6 @@ public class QueryGenerator<T>
                 break;
             case Post:
             query = "UPDATE posts SET content = @Content, is_edited = True WHERE id = @Id;";
-                break;
-                case Notification:
-                query = "UPDATE users_to_notification SET is_read = true WHERE to_user_id = @Id;";
                 break;
         }
         return query;
@@ -137,9 +124,6 @@ public class QueryGenerator<T>
                 break;
             case Post:
             query = "Update posts SET is_deleted = TRUE WHERE id = @Id;";
-                break;
-                case Notification:
-                query = "UPDATE users_to_notification SET is_deleted = true WHERE id = @Id;";
                 break;
         }
         return query;

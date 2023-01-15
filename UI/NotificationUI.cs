@@ -4,8 +4,8 @@ namespace UI;
 public class NotificationUI
 {
     public event EventHandler<User> OnShowNotifications;
-    IManager<Notification, User> _notificationManager;
-    public NotificationUI(IManager<Notification, User> notificationManager)
+   INotificationsManager _notificationManager;
+    public NotificationUI(INotificationsManager notificationManager)
     {
         _notificationManager = notificationManager;
     }
@@ -14,7 +14,7 @@ public class NotificationUI
         //imanager passar inte perfekt för notificationmanager, kolla upp?
         try
         {
-            List<Notification> notifications = _notificationManager.GetAll(0, user);
+            List<Notification> notifications = _notificationManager.GetUnreadNotifications(user);
             notifications.ForEach(n => Console.WriteLine(n.ToString()));
             //event som triggas här? att dom är lästa
             OnShowNotifications?.Invoke(this, user);

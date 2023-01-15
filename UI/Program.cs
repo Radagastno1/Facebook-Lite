@@ -14,7 +14,7 @@ internal class Program
     static BlockingManager blockingManager = new(new BlockingsDB());
     static SignUpUI signUpUI = new(userManager);
     static LogInManager logInManager = new(new LogInDB());
-    static NotificationManager notificationManager = new(new Data<Notification>());
+    static NotificationManager notificationManager = new(new NotificationsDB());
     static LogInUI logInUI = new(logInManager);
     static UserUI userUI = new(userManager, postsManager, conversationManager, messageManager, commentsManager, notificationManager, userManager, friendManager, blockingManager, friendManager, conversationManager);
     static PostUI postUI = new(postsManager, commentsManager);

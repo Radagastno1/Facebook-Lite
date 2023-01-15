@@ -1,39 +1,19 @@
 using CORE;
 namespace LOGIC;
-public class NotificationManager : IManager<Notification, User>
+public class NotificationManager : INotificationsManager
 {
     // i notificationui ett event som körs när man valt att läsa notiserna
     // denna klassen kan lyssna på det och då uppdatera notiserna till att de är lästa ?
-    IData<Notification> _notificationData;
-    public NotificationManager(IData<Notification> notificationData)
+    INotificationDB _notificationsData;
+    public NotificationManager(INotificationDB notificationsData)
     {
-        _notificationData = notificationData;
+        _notificationsData = notificationsData;
     }
-    public int? Create(Notification obj)
+    public List<Notification> GetUnreadNotifications(User user)
     {
-        throw new NotImplementedException();
+        return _notificationsData.GetUnread(user);
     }
-
-    public List<Notification> GetAll(int data, User user)
-    {
-       return  _notificationData.GetAll(user, QueryGenerator<Notification>.SelectQuery(new Notification(), user));
-    }
-    public List<Notification> GetBySearch(string search, User obj)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Notification GetOne(int data, User obj)
-    {
-        throw new NotImplementedException();
-    }
-
-    public int? Remove(Notification obj)
-    {
-        throw new NotImplementedException();
-    }
-
-    public int? Update(Notification obj)
+    public void UpdateToRead(User user)
     {
         throw new NotImplementedException();
     }

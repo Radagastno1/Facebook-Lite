@@ -9,7 +9,7 @@ public class UserUI
     IManager<Post, User> _postManager;
     IManager<Conversation, User> _conversationManager;
     IManager<Message, User> _messageManager;
-    IManager<Notification, User> _notificationManager;
+    INotificationsManager _notificationManager;
     IConversationManager _conversationExtraManager;
     IManager<Comment, User> _commentManager;
     IRelationsManager<User> _friendRelationsManager;
@@ -22,7 +22,7 @@ public class UserUI
     List<ConsoleKey> keys = new();
     public Action<User> LoadFriends;
 
-    public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IManager<Message, User> messageManager, IManager<Comment, User> commentManager, IManager<Notification, User> notificationManager, IUserManager userExtraManager, IRelationsManager<User> friendRelationsManager, IRelationsManager<User> blockRelationsManager, IFriendManager<User> friendManager, IConversationManager conversationExtraManager)
+    public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IManager<Message, User> messageManager, IManager<Comment, User> commentManager, INotificationsManager notificationManager, IUserManager userExtraManager, IRelationsManager<User> friendRelationsManager, IRelationsManager<User> blockRelationsManager, IFriendManager<User> friendManager, IConversationManager conversationExtraManager)
     {
         _userManager = userManager;
         _userExtraManager = userExtraManager;
