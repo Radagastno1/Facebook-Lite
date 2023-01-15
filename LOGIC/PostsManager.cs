@@ -21,7 +21,7 @@ public class PostsManager : IManager<Post, User>
         List<Post> searchedPosts = new();
         try
         {
-            List<Post> allPosts = _postData.GetAll(user, QueryGenerator<Post>.SelectQuery(new Post()));
+            List<Post> allPosts = _postData.GetAll(user, QueryGenerator<Post>.SelectQuery(new Post(), user));
             searchedPosts = allPosts.Where(p => p.Content == search).ToList();
         }
         catch (InvalidOperationException e)

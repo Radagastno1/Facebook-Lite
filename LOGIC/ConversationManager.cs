@@ -76,7 +76,7 @@ public class ConversationManager : IManager<Conversation, User>, IConversationMa
     }
     public List<int> GetAllMyConversationsIds(User user)
     {
-        List<Conversation> conversations = _conversationData.GetAll(user, QueryGenerator<Conversation>.SelectQuery(new Conversation()));
+        List<Conversation> conversations = _conversationData.GetAll(user, QueryGenerator<Conversation>.SelectQuery(new Conversation(), user));
         List<int> conversationIds = new();
         conversations.ForEach(c => conversationIds.Add(c.ID));
         return conversationIds;

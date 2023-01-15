@@ -9,6 +9,7 @@ public class UserUI
     IManager<Post, User> _postManager;
     IManager<Conversation, User> _conversationManager;
     IManager<Message, User> _messageManager;
+    IManager<Notification, User> _notificationManager;
     IConversationManager _conversationExtraManager;
     IManager<Comment, User> _commentManager;
     IRelationsManager<User> _friendRelationsManager;
@@ -17,11 +18,11 @@ public class UserUI
     public Func<User, int, int> OnDialogue;
     public Func<List<User>, User, int> OnMakeConversation;
     public Action<User, int> OnMakeMessage;
-    public Action<int, User> OnStart;
+    // public Action<int, User> OnStart;
     List<ConsoleKey> keys = new();
     public Action<User> LoadFriends;
 
-    public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IManager<Message, User> messageManager, IManager<Comment, User> commentManager, IUserManager userExtraManager, IRelationsManager<User> friendRelationsManager, IRelationsManager<User> blockRelationsManager, IFriendManager<User> friendManager, IConversationManager conversationExtraManager)
+    public UserUI(IManager<User, User> userManager, IManager<Post, User> postManager, IManager<Conversation, User> conversationManager, IManager<Message, User> messageManager, IManager<Comment, User> commentManager, IManager<Notification, User> notificationManager, IUserManager userExtraManager, IRelationsManager<User> friendRelationsManager, IRelationsManager<User> blockRelationsManager, IFriendManager<User> friendManager, IConversationManager conversationExtraManager)
     {
         _userManager = userManager;
         _userExtraManager = userExtraManager;
@@ -33,6 +34,7 @@ public class UserUI
         _friendRelationsManager = friendRelationsManager;
         _blockRelationsManager = blockRelationsManager;
         _conversationExtraManager = conversationExtraManager;
+        _notificationManager = notificationManager;
         deleted = _userExtraManager.SetAsDeleted();  //deletar users som varit inaktiva i mer än 30 dagar när den startar
     }
     public int Searcher(User user)
@@ -156,7 +158,7 @@ public class UserUI
         Console.WriteLine("[Press any key]");
         Console.ReadLine();
         string[] overviewOptions = new string[]
-        { "[MY POSTS]","[MY FRIENDS]","[RETURN]"};
+        { "[MY POSTS]","[MY FRIENDS]", "[NOTIFICATIONS]", "[RETURN]"};
         int menuOptions = 0;
         menuOptions = ConsoleInput.GetMenuOptions(overviewOptions);
         switch (menuOptions)
@@ -173,6 +175,10 @@ public class UserUI
                 friendsUI.ShowMyFriends(user);
                 break;
             case 2:
+            NotificationUI notificationUI = new(_notificationManager);
+            notificationUI.ShowMyNotifications(user);
+                break;
+            case 3:
                 return;
         }
     }

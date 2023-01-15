@@ -14,11 +14,10 @@ public class NotificationManager : IManager<Notification, User>
         throw new NotImplementedException();
     }
 
-    public List<Notification> GetAll(int data, User obj)
+    public List<Notification> GetAll(int data, User user)
     {
-        throw new NotImplementedException();
+       return  _notificationData.GetAll(user, QueryGenerator<Notification>.SelectQuery(new Notification(), user));
     }
-
     public List<Notification> GetBySearch(string search, User obj)
     {
         throw new NotImplementedException();

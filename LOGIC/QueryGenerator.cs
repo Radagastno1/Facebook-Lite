@@ -31,7 +31,7 @@ public class QueryGenerator<T>
         }
         return query;
     }
-    public static string SelectQuery(T obj)
+    public static string SelectQuery(T obj, User user)
     {
         string query = string.Empty;
         switch (obj)
@@ -52,13 +52,13 @@ public class QueryGenerator<T>
                         "INNER JOIN users u " +
                          "ON u.id = uc.users_id " +
                          "WHERE u.is_active = true " +
-                       "AND u.id = @ID;";
+                       "AND u.id = @Id;";
                 break;
             case Comment:
             query = "SELECT p.id, p.content, p.date_created as 'DateCreated', p.users_id as 'UserId', " +
          "p.on_post_id as 'OnPostId', u.first_name as 'FirstName', u.last_name as 'LastName' FROM posts p " +
          "INNER JOIN users u ON p.users_id = u.id " +
-         "WHERE p.post_type = 'Comment' AND p.is_visible = TRUE AND p.users_id = @userId;";
+         "WHERE p.post_type = 'Comment' AND p.is_visible = TRUE AND p.users_id = @Id;";
                 break;
             case Post:
             query = "SELECT p.id as 'Id', p.content as 'Content', p.date_created as 'DateCreated', " +
@@ -73,14 +73,14 @@ public class QueryGenerator<T>
         "AND uf1.users_id2 = @Id;";
                 break;
                 case Notification:
-                query = "SELECT CONCAT_WS(' ',u.first_name, u.last_name) AS 'Name', n.description " +
+                query = "SELECT CONCAT_WS(' ',u.first_name, u.last_name) AS 'FromUser', n.description " +
                 "FROM users u " +
                 "INNER JOIN users_to_notification utn " +
                 "ON u.id = utn.from_user_id " +
                 "INNER JOIN notifications n " +
                 "ON utn.notifications_id = n.id " +
-                "WHERE utn.to_user_id = 30 " +
-                "AND utn.is_read = false; ";
+                "WHERE utn.to_user_id = @Id " +
+                "AND utn.is_read = false;";
                 break;
         }
         return query;
