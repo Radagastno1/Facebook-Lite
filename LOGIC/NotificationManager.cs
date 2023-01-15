@@ -2,6 +2,7 @@ using CORE;
 namespace LOGIC;
 public class NotificationManager : INotificationsManager
 {
+    //utv: man ska kunna välja notis och komma till själva händelsen, tex vänförfråg-sida
     INotificationDB _notificationsData;
     public NotificationManager(INotificationDB notificationsData)
     {
