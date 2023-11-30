@@ -1,6 +1,5 @@
 using LOGIC;
 using DATABASE;
-using DTO;
 using CORE;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +8,11 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<ILogInDB<User>, LogInDB>();
 
+builder.Services.AddScoped<IDataToObject<User, User>, UsersDB>();
+
 builder.Services.AddScoped<ILogInManager<OutgoingLogInDTO>, LogInServiceForDTO>();
+
+builder.Services.AddScoped<UserServiceForDTO>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
