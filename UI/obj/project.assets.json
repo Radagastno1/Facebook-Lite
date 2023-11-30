@@ -28,43 +28,43 @@
           }
         }
       },
-      "core/1.0.0": {
+      "CORE/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "compile": {
-          "bin/placeholder/core.dll": {}
+          "bin/placeholder/CORE.dll": {}
         },
         "runtime": {
-          "bin/placeholder/core.dll": {}
+          "bin/placeholder/CORE.dll": {}
         }
       },
-      "database/1.0.0": {
+      "DATABASE/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
-          "core": "1.0.0",
+          "CORE": "1.0.0",
+          "LOGIC": "1.0.0",
           "dapper": "2.0.123",
-          "logic": "1.0.0",
           "mysqlconnector": "2.2.1"
         },
         "compile": {
-          "bin/placeholder/database.dll": {}
+          "bin/placeholder/DATABASE.dll": {}
         },
         "runtime": {
-          "bin/placeholder/database.dll": {}
+          "bin/placeholder/DATABASE.dll": {}
         }
       },
-      "logic/1.0.0": {
+      "LOGIC/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
-          "core": "1.0.0"
+          "CORE": "1.0.0"
         },
         "compile": {
-          "bin/placeholder/logic.dll": {}
+          "bin/placeholder/LOGIC.dll": {}
         },
         "runtime": {
-          "bin/placeholder/logic.dll": {}
+          "bin/placeholder/LOGIC.dll": {}
         }
       }
     }
@@ -115,27 +115,27 @@
         "mysqlconnector.nuspec"
       ]
     },
-    "core/1.0.0": {
+    "CORE/1.0.0": {
       "type": "project",
-      "path": "../core/core.csproj",
-      "msbuildProject": "../core/core.csproj"
+      "path": "../CORE/CORE.csproj",
+      "msbuildProject": "../CORE/CORE.csproj"
     },
-    "database/1.0.0": {
+    "DATABASE/1.0.0": {
       "type": "project",
-      "path": "../database/database.csproj",
-      "msbuildProject": "../database/database.csproj"
+      "path": "../DATABASE/DATABASE.csproj",
+      "msbuildProject": "../DATABASE/DATABASE.csproj"
     },
-    "logic/1.0.0": {
+    "LOGIC/1.0.0": {
       "type": "project",
-      "path": "../logic/logic.csproj",
-      "msbuildProject": "../logic/logic.csproj"
+      "path": "../LOGIC/LOGIC.csproj",
+      "msbuildProject": "../LOGIC/LOGIC.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
-      "core >= 1.0.0",
-      "database >= 1.0.0",
-      "logic >= 1.0.0"
+      "CORE >= 1.0.0",
+      "DATABASE >= 1.0.0",
+      "LOGIC >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -144,11 +144,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\ui\\UI.csproj",
+      "projectUniqueName": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\UI\\UI.csproj",
       "projectName": "UI",
-      "projectPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\ui\\UI.csproj",
+      "projectPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\UI\\UI.csproj",
       "packagesPath": "C:\\Users\\angel\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\ui\\obj\\",
+      "outputPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\UI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\angel\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -165,14 +165,14 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\core\\core.csproj": {
-              "projectPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\core\\core.csproj"
+            "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\CORE\\CORE.csproj": {
+              "projectPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\CORE\\CORE.csproj"
             },
-            "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\database\\database.csproj": {
-              "projectPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\database\\database.csproj"
+            "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\DATABASE\\DATABASE.csproj": {
+              "projectPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\DATABASE\\DATABASE.csproj"
             },
-            "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\logic\\logic.csproj": {
-              "projectPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\logic\\logic.csproj"
+            "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\LOGIC\\LOGIC.csproj": {
+              "projectPath": "C:\\Users\\angel\\Documents\\SUVNET22\\DATABAS\\inlämningar\\Facebook-Lite\\LOGIC\\LOGIC.csproj"
             }
           }
         }
@@ -200,19 +200,19 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[6.0.13, 6.0.13]"
+            "version": "[6.0.11, 6.0.11]"
           },
           {
             "name": "Microsoft.NETCore.App.Host.win-x64",
-            "version": "[6.0.13, 6.0.13]"
+            "version": "[6.0.11, 6.0.11]"
           },
           {
             "name": "Microsoft.NETCore.App.Ref",
-            "version": "[6.0.13, 6.0.13]"
+            "version": "[6.0.11, 6.0.11]"
           },
           {
             "name": "Microsoft.WindowsDesktop.App.Ref",
-            "version": "[6.0.13, 6.0.13]"
+            "version": "[6.0.11, 6.0.11]"
           }
         ],
         "frameworkReferences": {
@@ -220,7 +220,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -8,8 +8,8 @@
     ".NETCoreApp,Version=v6.0": {
       "UI/1.0.0": {
         "dependencies": {
+          "DATABASE": "1.0.0",
           "core": "1.0.0",
-          "database": "1.0.0",
           "logic": "1.0.0"
         },
         "runtime": {
@@ -37,7 +37,7 @@
           "core.dll": {}
         }
       },
-      "database/1.0.0": {
+      "DATABASE/1.0.0": {
         "dependencies": {
           "core": "1.0.0",
           "Dapper": "2.0.123",
@@ -83,7 +83,7 @@
       "serviceable": false,
       "sha512": ""
     },
-    "database/1.0.0": {
+    "DATABASE/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
