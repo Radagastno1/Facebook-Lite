@@ -12,15 +12,17 @@ namespace Controllers
     [Route("login")]
     public class LogInController : ControllerBase
     {
-        private readonly ILogInManager<LogInDTO> _iLogInManager;
+        private readonly ILogInManager<OutgoingLogInDTO> _iLogInManager;
 
-        public LogInController(ILogInManager<LogInDTO> iLogInManager)
+        public LogInController(ILogInManager<OutgoingLogInDTO> iLogInManager)
         {
             _iLogInManager = iLogInManager;
         }
 
         [HttpPost]
-        public async Task<ActionResult<LogInDTO>> LogInUser([FromBody] LogInDTO loginData)
+        public async Task<ActionResult<OutgoingLogInDTO>> LogInUser(
+            [FromBody] IncomingLogInDTO loginData
+        )
         {
             try
             {
@@ -31,10 +33,7 @@ namespace Controllers
                     return BadRequest("Failed to log in.");
                 }
 
-                // Implementera logiken för att generera och returnera JWT här.
-
-                // Exempel: return Ok(new { Token = "your_generated_token" });
-                return Ok();
+                return Ok(loggedInUser);
             }
             catch (Exception e)
             {

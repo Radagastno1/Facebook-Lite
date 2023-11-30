@@ -9,7 +9,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<ILogInDB<User>, LogInDB>();
 
-builder.Services.AddScoped<ILogInManager<LogInDTO>, LogInServiceForDTO>();
+builder.Services.AddScoped<ILogInManager<OutgoingLogInDTO>, LogInServiceForDTO>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
