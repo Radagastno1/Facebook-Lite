@@ -4,6 +4,7 @@ using LOGIC;
 using System;
 using System.Threading.Tasks;
 using CORE;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Controllers
 {
@@ -19,11 +20,22 @@ namespace Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserDTO>> GetUserDTO([FromBody] OutgoingLogInDTO loginData)
+        [Authorize]
+        public async Task<ActionResult<UserDTO>> GetUserDTO()
         {
+            Console.WriteLine("I GET USER");
             try
             {
-                var loggedInUser = _userService.GetByJWT(loginData.Jwt);
+                var jwt = HttpContext.Request.Headers["Authorization"]
+                    .ToString()
+                    .Replace("Bearer ", string.Empty);
+
+                Console.WriteLine(jwt);
+                if (string.IsNullOrWhiteSpace(jwt))
+                {
+                    return BadRequest("JWT token is missing.");
+                }
+                var loggedInUser = _userService.GetByJWT(jwt);
 
                 if (loggedInUser == null)
                 {
