@@ -19,6 +19,3 @@ Run App:
 cd fbliteapp
 npm start 
 
-Stuff to fix:
-
-- change manager to service in filenames
