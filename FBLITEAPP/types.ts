@@ -1,14 +1,18 @@
-interface SignInOutgoing {
+export interface AppState {
+  isLoading: boolean;
+}
+
+export interface SignInOutgoing {
   email: string;
   password: string;
 }
 
-interface SignInIncoming {
+export interface SignInIncoming {
   email: string;
   jwt: string;
 }
 
-interface User {
+export interface User {
   id: number;
   firstName: string;
   lastName: string;
