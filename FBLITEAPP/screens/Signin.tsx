@@ -4,7 +4,7 @@ import { Button, StyleSheet, Text, View } from "react-native";
 import { Input } from "react-native-elements";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { logInUserAsync } from "../store/userSlice";
-import { SignInIncoming, SignInOutgoing } from "../types";
+import { SignInOutgoing } from "../types";
 
 export default function SignIn() {
   const { user } = useAppSelector((state) => state.user);
@@ -36,6 +36,11 @@ export default function SignIn() {
 
   return (
     <View style={styles.container}>
+      {errorPopup ? (
+        <View>
+          <Text>{error}</Text>
+        </View>
+      ) : null}
       <Input
         placeholder="Email"
         onChangeText={(text) => setEmail(text)}

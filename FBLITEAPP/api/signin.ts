@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from "expo-constants";
-import jwt from "jsonwebtoken";
+import { SignInIncoming, SignInOutgoing, User } from "../types";
 
 //vet ej om detta är korrekt sätt att se om produktion eller ej
 const isProduction = !__DEV__;
@@ -56,8 +56,7 @@ export async function signInAsync(
     }
     return null;
   } catch (error) {
-    console.error("An error occurred during sign in:", error);
-    return null;
+    throw error;
   }
 }
 
@@ -102,8 +101,7 @@ async function fetchLogInUser(signInOutgoing: SignInOutgoing) {
       return data as SignInIncoming;
     })
     .catch((error) => {
-      console.error(error);
-      return null;
+      throw error;
     });
 }
 
